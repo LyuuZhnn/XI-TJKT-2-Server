@@ -212,80 +212,137 @@
 
   <!-- DASHBOARD 3 -->
   <section class="view" id="dashboard3">
-    <div class="page-banner">
-      <div>
-        <div class="eyebrow">DASHBOARD 03</div>
+
+    <div class="apel-hero">
+      <div class="apel-hero-copy">
+        <div class="eyebrow">DASHBOARD 03 · WEEKLY SYSTEM</div>
         <h2>Apel & Baris-Berbaris</h2>
-        <p>Sistem pembagian otomatis untuk 36 siswa, dua apel setiap minggu.</p>
+        <p>
+          Pembagian otomatis dua siswa setiap minggu untuk apel hari ini
+          dan apel selanjutnya.
+        </p>
+
+        <div class="apel-badges">
+          <span>36 Siswa</span>
+          <span>18 Pasangan</span>
+          <span>2 Orang / Minggu</span>
+        </div>
+      </div>
+
+      <div class="apel-hero-mark">
+        <div class="hero-number">02</div>
+        <span>STUDENTS<br>PER WEEK</span>
       </div>
     </div>
 
-    <div class="section-grid two">
-      <div class="panel">
+    <div class="apel-current-grid">
+
+      <div class="apel-person-card today-card">
+        <div class="person-card-top">
+          <div>
+            <span class="eyebrow">APEL HARI INI</span>
+            <h3>Petugas Apel</h3>
+          </div>
+          <span class="status-dot"></span>
+        </div>
+
+        <div class="person-content" id="group1"></div>
+        <div class="person-card-footer">
+          <span id="group1Count">APEL HARI INI</span>
+        </div>
+      </div>
+
+      <div class="apel-arrow-card">
+        <div class="arrow-circle">→</div>
+        <span>NEXT</span>
+      </div>
+
+      <div class="apel-person-card next-card">
+        <div class="person-card-top">
+          <div>
+            <span class="eyebrow">APEL SELANJUTNYA</span>
+            <h3>Petugas Berikutnya</h3>
+          </div>
+          <span class="status-dot"></span>
+        </div>
+
+        <div class="person-content" id="group2"></div>
+        <div class="person-card-footer">
+          <span id="group2Count">APEL SELANJUTNYA</span>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="apel-control-grid">
+
+      <div class="panel apel-control-panel">
         <div class="panel-head">
           <div>
-            <div class="eyebrow">KONTROL ROTASI</div>
-            <h3>Atur Pembagian</h3>
+            <div class="eyebrow">ROTATION CONTROL</div>
+            <h3>Kontrol Mingguan</h3>
+          </div>
+          <span class="control-badge">AUTO</span>
+        </div>
+
+        <div class="week-display">
+          <div>
+            <span>MINGGU AKTIF</span>
+            <strong id="rotationWeekLabel">01</strong>
+          </div>
+          <div class="week-mini-info">
+            <span>FORMAT</span>
+            <b>1 + 1</b>
           </div>
         </div>
 
-        <div class="form-grid">
-          <label>
-            <span>Mulai Nomor</span>
-            <input id="rotationStart" type="number" min="1" max="36" value="23">
-          </label>
-
-          <label>
-            <span>Jumlah per Apel</span>
-            <input id="rotationSize" type="number" min="1" max="36" value="18">
-          </label>
-
+        <div class="form-grid apel-form-grid">
           <label>
             <span>Minggu ke</span>
-            <input id="rotationWeek" type="number" min="1" value="1">
+            <input id="rotationWeek" type="number" min="1" max="18" value="1">
           </label>
         </div>
 
         <div class="action-row">
-          <button id="generateRotation" class="primary-btn">Generate</button>
+          <button id="generateRotation" class="primary-btn">Muat Minggu</button>
           <button id="nextRotation" class="soft-btn">Minggu Berikutnya</button>
           <button id="resetRotation" class="soft-btn">Reset</button>
         </div>
 
-        <div class="rotation-info">
-          <strong id="rotationStatus">Pembagian dimulai dari nomor 23.</strong>
-          <span>Setelah kelompok sampai nomor 36, sistem kembali ke nomor 1.</span>
+        <div class="rotation-info premium-info">
+          <strong id="rotationStatus">
+            Minggu 1: Ahlif Annisa → Arina Maziya
+          </strong>
+          <span>
+            Sistem akan bergeser otomatis dua siswa setiap minggu.
+          </span>
         </div>
       </div>
 
-      <div class="panel">
+      <div class="panel timeline-panel">
         <div class="panel-head">
           <div>
-            <div class="eyebrow">URUTAN</div>
-            <h3>Rotasi Saat Ini</h3>
+            <div class="eyebrow">WEEKLY ROADMAP</div>
+            <h3>Urutan 18 Pasangan</h3>
           </div>
+          <span class="control-badge">36 SISWA</span>
         </div>
-        <div id="rotationSequence" class="sequence-grid"></div>
+
+        <div id="rotationSequence" class="sequence-grid premium-sequence"></div>
+      </div>
+
+    </div>
+
+    <div class="apel-note">
+      <div class="note-icon">✦</div>
+      <div>
+        <strong>Sistem rotasi otomatis</strong>
+        <span>
+          Setelah Minggu ke-18, pembagian kembali ke pasangan Minggu ke-1.
+        </span>
       </div>
     </div>
 
-    <div class="section-grid two">
-      <div class="panel group-panel">
-        <div class="group-top">
-          <span>APEL 1</span>
-          <strong id="group1Count">18 siswa</strong>
-        </div>
-        <div id="group1" class="member-list"></div>
-      </div>
-
-      <div class="panel group-panel">
-        <div class="group-top">
-          <span>APEL 2</span>
-          <strong id="group2Count">18 siswa</strong>
-        </div>
-        <div id="group2" class="member-list"></div>
-      </div>
-    </div>
   </section>
 
   <!-- DASHBOARD 4 -->

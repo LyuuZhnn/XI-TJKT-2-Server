@@ -327,113 +327,105 @@ function renderDuty() {
   });
 }
 
-function getRotationOrder() {
-  const startIndex = Math.max(0, Math.min(
-    STUDENTS.length - 1,
-    state.rotationStart - 1
-  ));
+function getRotationPair() {
+  const weekIndex = Math.max(0, state.rotationWeek - 1);
+  const firstIndex = (weekIndex * 2) % STUDENTS.length;
+  const secondIndex = (firstIndex + 1) % STUDENTS.length;
 
-  return Array.from({ length: STUDENTS.length }, (_, i) =>
-    STUDENTS[(startIndex + i) % STUDENTS.length]
-  );
-}
-
-function studentNumber(name) {
-  return STUDENTS.indexOf(name) + 1;
+  return {
+    today: STUDENTS[firstIndex],
+    next: STUDENTS[secondIndex]
+  };
 }
 
 function renderRotation() {
-  $("rotationStart").value = state.rotationStart;
-  $("rotationSize").value = state.rotationSize;
+  const pair = getRotationPair();
+
   $("rotationWeek").value = state.rotationWeek;
 
-  const order = getRotationOrder();
-  const size = Math.min(Math.max(1, state.rotationSize), STUDENTS.length);
+  if ($("rotationWeekLabel")) {
+    $("rotationWeekLabel").textContent =
+      String(state.rotationWeek).padStart(2, "0");
+  }
 
-  const group1 = order.slice(0, size);
-  const group2 = order.slice(size, Math.min(size * 2, STUDENTS.length));
+  $("group1Count").textContent = "APEL HARI INI";
+  $("group2Count").textContent = "APEL SELANJUTNYA";
 
-  $("group1Count").textContent = `${group1.length} siswa`;
-  $("group2Count").textContent = `${group2.length} siswa`;
-
-  $("group1").innerHTML = group1.map(name => `
-    <div class="member">
-      <span>${studentNumber(name)}</span>
-      <strong>${escapeHTML(name)}</strong>
+  $("group1").innerHTML = `
+    <div class="member featured-member">
+      <span>${studentNumber(pair.today)}</span>
+      <strong>${escapeHTML(pair.today)}</strong>
     </div>
-  `).join("");
+  `;
 
-  $("group2").innerHTML = group2.map(name => `
-    <div class="member">
-      <span>${studentNumber(name)}</span>
-      <strong>${escapeHTML(name)}</strong>
+  $("group2").innerHTML = `
+    <div class="member featured-member">
+      <span>${studentNumber(pair.next)}</span>
+      <strong>${escapeHTML(pair.next)}</strong>
     </div>
-  `).join("");
+  `;
 
-  $("rotationSequence").innerHTML = order.map((name, i) => `
-    <div class="seq-chip ${i < size ? "group1" : "group2"}">
-      ${studentNumber(name)}
-    </div>
-  `).join("");
+  const pairs = [];
+  for (let i = 0; i < STUDENTS.length; i += 2) {
+    const first = STUDENTS[i];
+    const second = STUDENTS[(i + 1) % STUDENTS.length];
 
-  const firstNo = studentNumber(group1[0]);
-  const lastNo = studentNumber(group1[group1.length - 1]);
+    pairs.push(`
+      <div class="seq-chip ${i / 2 === (state.rotationWeek - 1) % 18 ? "active-pair" : ""}">
+        <b>M${Math.floor(i / 2) + 1}</b>
+        <span>${studentNumber(first)} · ${studentNumber(second)}</span>
+      </div>
+    `);
+  }
+
+  $("rotationSequence").innerHTML = pairs.join("");
 
   $("rotationStatus").textContent =
-    `Minggu ${state.rotationWeek}: Apel 1 mulai nomor ${firstNo}, kelompok berakhir di nomor ${lastNo}.`;
+    `Minggu ${state.rotationWeek}: ${pair.today} → ${pair.next}`;
 }
 
 function initRotation() {
-  $("rotationStart").addEventListener("change", () => {
-    const value = Number($("rotationStart").value);
-    if (value >= 1 && value <= 36) state.rotationStart = value;
-    saveState();
-    renderRotation();
-  });
-
-  $("rotationSize").addEventListener("change", () => {
-    const value = Number($("rotationSize").value);
-    if (value >= 1 && value <= 36) state.rotationSize = value;
-    saveState();
-    renderRotation();
-  });
-
   $("rotationWeek").addEventListener("change", () => {
     const value = Number($("rotationWeek").value);
-    if (value >= 1) state.rotationWeek = value;
+
+    if (value >= 1) {
+      state.rotationWeek = value;
+    }
+
     saveState();
     renderRotation();
   });
 
   $("generateRotation").addEventListener("click", () => {
-    state.rotationStart = Math.min(36, Math.max(1, Number($("rotationStart").value) || 23));
-    state.rotationSize = Math.min(36, Math.max(1, Number($("rotationSize").value) || 18));
-    state.rotationWeek = Math.max(1, Number($("rotationWeek").value) || 1);
+    state.rotationWeek =
+      Math.max(1, Number($("rotationWeek").value) || 1);
 
     saveState();
     renderRotation();
-    showToast("Pembagian apel diperbarui");
+
+    showToast(`Minggu ${state.rotationWeek} dimuat`);
   });
 
   $("nextRotation").addEventListener("click", () => {
-    const size = Math.min(36, Math.max(1, state.rotationSize));
-
-    state.rotationStart = ((state.rotationStart - 1 + size) % STUDENTS.length) + 1;
     state.rotationWeek += 1;
+
+    if (state.rotationWeek > 18) {
+      state.rotationWeek = 1;
+    }
 
     saveState();
     renderRotation();
+
     showToast(`Masuk minggu ${state.rotationWeek}`);
   });
 
   $("resetRotation").addEventListener("click", () => {
-    state.rotationStart = 23;
-    state.rotationSize = 18;
     state.rotationWeek = 1;
 
     saveState();
     renderRotation();
-    showToast("Rotasi dikembalikan ke nomor 23");
+
+    showToast("Rotasi kembali ke Minggu 1");
   });
 
   renderRotation();
