@@ -1,1291 +1,750 @@
-/* =========================================================
-   XI TJKT 2 — CLEAN FRONTEND CONTROLLER
-   Rebuilt to be defensive: missing elements won't crash
-   the whole page.
-========================================================= */
+"use strict";
 
-(() => {
-  "use strict";
+const STUDENTS = [
+  "AHLIF ANNISA",
+  "ARINA MAZIYA",
+  "AULA SHABIRINA",
+  "BAITI CAHAYA ANDINI",
+  "CANDRA NILA OKTAVIANA",
+  "DAFFI AL HAMMAMI",
+  "DANIKA FARHANI",
+  "DONISAH",
+  "FARADILA MAULA",
+  "FARHAN AZHAR",
+  "HAFIZH AKMAL RIYADI",
+  "HANA MAHEERA MUTHIANIQA",
+  "LUTFIANAZWA RAMADHAN N",
+  "M. FAHRI JAVIER SATYA PRADITA",
+  "M. RAHMATUL ARIFIN",
+  "MISHEL RAMADHANI",
+  "MUHAMMAD RIFQI FAIZAL",
+  "MUHAMMAD RIZKI AKBAR",
+  "MUSYAFFA HANIF SUNNI",
+  "NADYA SHAFWAH",
+  "NASYA ANAYA PUTRI",
+  "NAWAL FAUZIATUL AWLIYA",
+  "NAYRA CELLIA ANKADIRA",
+  "NAZLIZA ARLIANA PUTRI",
+  "NUR NADYA ULYA",
+  "NURLIA AZIZAH",
+  "NURUL QONITA ASRIYA",
+  "RAFA ADITYA",
+  "RIFFI GUNAWAN",
+  "SELINAFYA ELDIANA",
+  "SITI NUR HIKMAH",
+  "SYIFA FADILLAH MURTONO",
+  "TALITA YUMNA AL - MUDZAKIRAH",
+  "TIARA ZENITA SARI",
+  "TITIN SOFIYATUN NISA",
+  "WAFIYATU SYAFA MAULIDA"
+];
 
-  /* =========================
-     DATA KELAS
-  ========================= */
+const SCHEDULE = {
+  A: {
+    Senin: ["Matematika", "PAI BP", "Bahasa Inggris"],
+    Selasa: ["Bahasa Indonesia", "Bahasa Jawa", "Sejarah", "PP"],
+    Rabu: ["Sejarah", "PAI BP", "Bahasa Jawa", "Bahasa Inggris"],
+    Kamis: ["Matematika", "Bahasa Indonesia", "KIK"],
+    Jumat: ["KIK"]
+  },
+  B: {
+    Senin: ["Kejuruan"],
+    Selasa: ["Kejuruan", "Mapil", "PJOK"],
+    Rabu: ["Kejuruan"],
+    Kamis: ["Kejuruan Infra"],
+    Jumat: ["Bahasa Jepang"]
+  }
+};
 
-  const STUDENTS = [
+const DUTY = {
+  Senin: [
+    "DAFFI AL HAMMAMI",
+    "FARHAN AZHAR",
     "AHLIF ANNISA",
     "ARINA MAZIYA",
     "AULA SHABIRINA",
     "BAITI CAHAYA ANDINI",
-    "CANDRA NILA OKTAVIANA",
-    "DAFFI AL HAMMAMI",
+    "CANDRA NILA OKTAVIANA"
+  ],
+  Selasa: [
+    "HAFIZH AKMAL RIYADI",
+    "M. FAHRI JAVIER SATYA PRADITA",
     "DANIKA FARHANI",
     "DONISAH",
     "FARADILA MAULA",
-    "FARHAN AZHAR",
-    "HAFIZH AKMAL RIYADI",
     "HANA MAHEERA MUTHIANIQA",
-    "LUTFIANAZWA RAMADHAN N",
-    "M. FAHRI JAVIER SATYA PRADITA",
+    "LUTFIANAZWA RAMADHAN N"
+  ],
+  Rabu: [
     "M. RAHMATUL ARIFIN",
     "MISHEL RAMADHANI",
-    "MUHAMMAD RIFQI FAIZAL",
-    "MUHAMMAD RIZKI AKBAR",
-    "MUSYAFFA HANIF SUNNI",
     "NADYA SHAFWAH",
     "NASYA ANAYA PUTRI",
     "NAWAL FAUZIATUL AWLIYA",
     "NAYRA CELLIA ANKADIRA",
-    "NAZLIZA ARLIANA PUTRI",
+    "NAZLIZA ARLIANA PUTRI"
+  ],
+  Kamis: [
+    "MUHAMMAD RIFQI FAIZAL",
+    "MUHAMMAD RIZKI AKBAR",
     "NUR NADYA ULYA",
     "NURLIA AZIZAH",
     "NURUL QONITA ASRIYA",
-    "RAFA ADITYA",
     "RIFFI GUNAWAN",
-    "SELINAFYA ELDIANA",
+    "SELINAFYA ELDIANA"
+  ],
+  Jumat: [
+    "MUSYAFFA HANIF SUNNI",
+    "RAFA ADITYA",
     "SITI NUR HIKMAH",
     "SYIFA FADILLAH MURTONO",
     "TALITA YUMNA AL - MUDZAKIRAH",
     "TIARA ZENITA SARI",
     "TITIN SOFIYATUN NISA",
     "WAFIYATU SYAFA MAULIDA"
-  ];
+  ]
+};
 
-  const SCHEDULE_A = {
-    Senin: ["Matematika", "PAI BP", "Bahasa Inggris"],
-    Selasa: ["Bahasa Indonesia", "Bahasa Jawa", "Sejarah", "PP"],
-    Rabu: ["Sejarah", "PAI BP", "Bahasa Jawa", "Bahasa Inggris"],
-    Kamis: ["Matematika", "Bahasa Indonesia", "KIK"],
-    Jumat: ["KIK"]
+const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+
+const state = {
+  view: localStorage.getItem("tjkt2-view") || "dashboard1",
+  theme: localStorage.getItem("tjkt2-theme") || "light",
+  scheduleBlock: localStorage.getItem("tjkt2-schedule-block") || "A",
+  dutyDay: localStorage.getItem("tjkt2-duty-day") || "Senin",
+  rotationStart: Number(localStorage.getItem("tjkt2-rotation-start") || 23),
+  rotationSize: Number(localStorage.getItem("tjkt2-rotation-size") || 18),
+  rotationWeek: Number(localStorage.getItem("tjkt2-rotation-week") || 1),
+  dutyChecks: JSON.parse(localStorage.getItem("tjkt2-duty-checks") || "{}"),
+  notes: localStorage.getItem("tjkt2-notes") || ""
+};
+
+let timer = null;
+let timerRemaining = 0;
+
+const $ = (id) => document.getElementById(id);
+
+function showToast(message) {
+  const toast = $("toast");
+  toast.textContent = message;
+  toast.classList.add("show");
+  clearTimeout(showToast._timer);
+  showToast._timer = setTimeout(() => {
+    toast.classList.remove("show");
+  }, 1800);
+}
+
+function saveState() {
+  localStorage.setItem("tjkt2-view", state.view);
+  localStorage.setItem("tjkt2-theme", state.theme);
+  localStorage.setItem("tjkt2-schedule-block", state.scheduleBlock);
+  localStorage.setItem("tjkt2-duty-day", state.dutyDay);
+  localStorage.setItem("tjkt2-rotation-start", state.rotationStart);
+  localStorage.setItem("tjkt2-rotation-size", state.rotationSize);
+  localStorage.setItem("tjkt2-rotation-week", state.rotationWeek);
+  localStorage.setItem("tjkt2-duty-checks", JSON.stringify(state.dutyChecks));
+  localStorage.setItem("tjkt2-notes", state.notes);
+}
+
+function updateClock() {
+  const now = new Date();
+
+  $("clock").textContent = now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+
+  $("date").textContent = now.toLocaleDateString("id-ID", {
+    weekday: "short",
+    day: "2-digit",
+    month: "short",
+    year: "numeric"
+  });
+}
+
+function initTheme() {
+  document.body.classList.toggle("dark", state.theme === "dark");
+
+  $("themeToggle").addEventListener("click", () => {
+    state.theme = state.theme === "dark" ? "light" : "dark";
+    document.body.classList.toggle("dark", state.theme === "dark");
+    saveState();
+    showToast(state.theme === "dark" ? "Mode gelap aktif" : "Mode terang aktif");
+  });
+}
+
+function switchView(view) {
+  state.view = view;
+  saveState();
+
+  document.querySelectorAll(".view").forEach(el => {
+    el.classList.toggle("active", el.id === view);
+  });
+
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.view === view);
+  });
+
+  const titles = {
+    dashboard1: "Class Hub",
+    dashboard2: "Jadwal & Piket",
+    dashboard3: "Apel & Baris",
+    dashboard4: "TJKT Tools"
   };
 
-  const SCHEDULE_B = {
-    Senin: ["Kejuruan"],
-    Selasa: ["Kejuruan", "Mapil", "PJOK"],
-    Rabu: ["Kejuruan"],
-    Kamis: ["Kejuruan Infra"],
-    Jumat: ["Bahasa Jepang"]
-  };
-
-  const DUTY = {
-    Senin: [
-      "DAFFI AL HAMMAMI",
-      "FARHAN AZHAR",
-      "AHLIF ANNISA",
-      "ARINA MAZIYA",
-      "AULA SHABIRINA",
-      "BAITI CAHAYA ANDINI",
-      "CANDRA NILA OKTAVIANA"
-    ],
-    Selasa: [
-      "HAFIZH AKMAL RIYADI",
-      "M. FAHRI JAVIER SATYA PRADITA",
-      "DANIKA FARHANI",
-      "DONISAH",
-      "FARADILA MAULA",
-      "HANA MAHEERA MUTHIANIQA",
-      "LUTFIANAZWA RAMADHAN N"
-    ],
-    Rabu: [
-      "M. RAHMATUL ARIFIN",
-      "MISHEL RAMADHANI",
-      "NADYA SHAFWAH",
-      "NASYA ANAYA PUTRI",
-      "NAWAL FAUZIATUL AWLIYA",
-      "NAYRA CELLIA ANKADIRA",
-      "NAZLIZA ARLIANA PUTRI"
-    ],
-    Kamis: [
-      "MUHAMMAD RIFQI FAIZAL",
-      "MUHAMMAD RIZKI AKBAR",
-      "NUR NADYA ULYA",
-      "NURLIA AZIZAH",
-      "NURUL QONITA ASRIYA",
-      "RIFFI GUNAWAN",
-      "SELINAFYA ELDIANA"
-    ],
-    Jumat: [
-      "MUSYAFFA HANIF SUNNI",
-      "RAFA ADITYA",
-      "SITI NUR HIKMAH",
-      "SYIFA FADILLAH MURTONO",
-      "TALITA YUMNA AL - MUDZAKIRAH",
-      "TIARA ZENITA SARI",
-      "TITIN SOFIYATUN NISA",
-      "WAFIYATU SYAFA MAULIDA"
-    ]
-  };
-
-  /* =========================
-     HELPERS
-  ========================= */
-
-  const $ = (selector, root = document) => {
-    try {
-      return root.querySelector(selector);
-    } catch {
-      return null;
-    }
-  };
-
-  const $$ = (selector, root = document) => {
-    try {
-      return [...root.querySelectorAll(selector)];
-    } catch {
-      return [];
-    }
-  };
-
-  function byIds(...ids) {
-    for (const id of ids) {
-      const el = document.getElementById(id);
-      if (el) return el;
-    }
-    return null;
-  }
-
-  function setText(el, value) {
-    if (el) el.textContent = value;
-  }
-
-  function esc(value) {
-    return String(value)
-      .replaceAll("&", "&amp;")
-      .replaceAll("<", "&lt;")
-      .replaceAll(">", "&gt;")
-      .replaceAll('"', "&quot;")
-      .replaceAll("'", "&#039;");
-  }
-
-  function save(key, value) {
-    try {
-      localStorage.setItem(key, JSON.stringify(value));
-    } catch {}
-  }
-
-  function load(key, fallback) {
-    try {
-      const raw = localStorage.getItem(key);
-      return raw === null ? fallback : JSON.parse(raw);
-    } catch {
-      return fallback;
-    }
-  }
-
-  function notify(message) {
-    let box = document.getElementById("tjkt-toast");
-
-    if (!box) {
-      box = document.createElement("div");
-      box.id = "tjkt-toast";
-      Object.assign(box.style, {
-        position: "fixed",
-        left: "50%",
-        bottom: "24px",
-        transform: "translateX(-50%)",
-        zIndex: "99999",
-        padding: "12px 18px",
-        borderRadius: "12px",
-        background: "rgba(10,10,20,.94)",
-        color: "#fff",
-        border: "1px solid rgba(255,255,255,.15)",
-        boxShadow: "0 12px 35px rgba(0,0,0,.35)",
-        pointerEvents: "none",
-        opacity: "0",
-        transition: "opacity .2s ease"
-      });
-      document.body.appendChild(box);
-    }
-
-    box.textContent = message;
-    box.style.opacity = "1";
-
-    clearTimeout(box._timer);
-    box._timer = setTimeout(() => {
-      box.style.opacity = "0";
-    }, 1800);
-  }
-
-  /* =========================
-     CLOCK
-  ========================= */
-
-  function updateClock() {
-    const now = new Date();
-
-    const time = now.toLocaleTimeString("id-ID", {
-      hour: "2-digit",
-      minute: "2-digit",
-      second: "2-digit"
-    });
-
-    const date = now.toLocaleDateString("id-ID", {
-      weekday: "long",
-      day: "2-digit",
-      month: "long",
-      year: "numeric"
-    });
-
-    const timeEls = [
-      byIds("clock", "liveClock", "currentTime", "topClock"),
-      $('[data-clock]')
-    ];
-
-    const dateEls = [
-      byIds("date", "currentDate", "todayDate"),
-      $('[data-date]')
-    ];
-
-    timeEls.filter(Boolean).forEach(el => setText(el, time));
-    dateEls.filter(Boolean).forEach(el => setText(el, date));
-
-    $$("[data-clock]").forEach(el => setText(el, time));
-    $$("[data-date]").forEach(el => setText(el, date));
-  }
-
-  /* =========================
-     THEME
-  ========================= */
-
-  function initTheme() {
-    const saved = load("tjkt2-theme", "dark");
-
-    document.documentElement.dataset.theme = saved;
-
-    if (saved === "light") {
-      document.body.classList.add("light");
-    } else {
-      document.body.classList.remove("light");
-    }
-
-    const toggle =
-      byIds("themeToggle", "theme-toggle", "toggleTheme") ||
-      $('[data-action="theme"]');
-
-    if (toggle) {
-      toggle.addEventListener("click", () => {
-        const isLight = document.body.classList.toggle("light");
-        const theme = isLight ? "light" : "dark";
-
-        document.documentElement.dataset.theme = theme;
-        save("tjkt2-theme", theme);
-        notify(`Mode ${theme === "light" ? "terang" : "gelap"} aktif`);
-      });
-    }
-  }
-
-  /* =========================
-     NAVIGASI DASHBOARD
-  ========================= */
-
-  function initNavigation() {
-    const panels = $$(
-      "[data-dashboard], .dashboard-panel, .dashboard, .workspace-panel"
-    );
-
-    const buttons = $$(
-      "[data-dashboard-target], [data-target-dashboard], .nav-btn, .menu-btn, .sidebar-btn"
-    );
-
-    if (!buttons.length) return;
-
-    function showDashboard(target) {
-      buttons.forEach(btn => {
-        const btnTarget =
-          btn.dataset.dashboardTarget ||
-          btn.dataset.targetDashboard ||
-          btn.dataset.dashboard;
-
-        btn.classList.toggle("active", btnTarget === target);
-      });
-
-      panels.forEach(panel => {
-        const panelTarget =
-          panel.dataset.dashboard ||
-          panel.dataset.dashboardId ||
-          panel.id;
-
-        if (
-          panelTarget === target ||
-          panel.id === target ||
-          panel.id === `dashboard-${target}`
-        ) {
-          panel.classList.add("active");
-          panel.hidden = false;
-          panel.style.display = "";
-        } else {
-          panel.classList.remove("active");
-          if (panel.dataset.dashboard || panel.dataset.dashboardId) {
-            panel.hidden = true;
-          }
-        }
-      });
-
-      save("tjkt2-dashboard", target);
-    }
-
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const target =
-          btn.dataset.dashboardTarget ||
-          btn.dataset.targetDashboard ||
-          btn.dataset.dashboard ||
-          btn.getAttribute("href")?.replace("#", "");
-
-        if (target) showDashboard(target);
-      });
-    });
-
-    const saved = load("tjkt2-dashboard", null);
-
-    if (saved) {
-      showDashboard(saved);
-    } else {
-      const first =
-        buttons[0]?.dataset.dashboardTarget ||
-        buttons[0]?.dataset.targetDashboard ||
-        buttons[0]?.dataset.dashboard ||
-        "dashboard1";
-
-      showDashboard(first);
-    }
-  }
-
-  /* =========================
-     SISWA
-  ========================= */
-
-  function findStudentContainer() {
-    return byIds(
-      "studentList",
-      "studentsList",
-      "roster",
-      "studentRoster",
-      "studentGrid",
-      "studentContainer"
-    ) || $("[data-students]");
-  }
-
-  function renderStudents(query = "") {
-    const container = findStudentContainer();
-    if (!container) return;
-
-    const q = query.trim().toLowerCase();
-
-    const filtered = STUDENTS
-      .map((name, index) => ({
-        no: index + 1,
-        name
-      }))
-      .filter(item => item.name.toLowerCase().includes(q));
-
-    container.innerHTML = filtered.map(item => `
-      <div class="student-card" data-student="${esc(item.name)}">
-        <div class="student-number">${item.no}</div>
-        <div class="student-name">${esc(item.name)}</div>
-      </div>
-    `).join("");
-
-    const count = byIds("studentCount", "totalStudents", "studentsCount");
-    setText(count, filtered.length);
-  }
-
-  function initStudents() {
-    renderStudents();
-
-    const search =
-      byIds(
-        "studentSearch",
-        "searchStudent",
-        "student-search",
-        "searchStudents"
-      ) || $('[data-student-search]');
-
-    if (search) {
-      search.addEventListener("input", e => {
-        renderStudents(e.target.value);
-      });
-    }
-
-    const randomButtons = $$(
-      '[data-action="random-student"], #randomStudent, #random-student'
-    );
-
-    randomButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const name = STUDENTS[Math.floor(Math.random() * STUDENTS.length)];
-        const output =
-          byIds("randomStudentResult", "studentRandomResult", "randomStudentName") ||
-          $('[data-random-student-result]');
-
-        setText(output, name);
-        notify(`Siswa terpilih: ${name}`);
-      });
-    });
-  }
-
-  /* =========================
-     STATISTIK
-  ========================= */
-
-  function updateStats() {
-    const values = {
-      total: STUDENTS.length,
-      days: 5,
-      duty: Object.values(DUTY).reduce((n, arr) => n + arr.length, 0),
-      subjects:
-        [...new Set([
-          ...Object.values(SCHEDULE_A).flat(),
-          ...Object.values(SCHEDULE_B).flat()
-        ])].length
-    };
-
-    setText(
-      byIds("totalStudents", "studentTotal", "statStudents"),
-      values.total
-    );
-
-    setText(
-      byIds("totalDays", "dayTotal", "statDays"),
-      values.days
-    );
-
-    setText(
-      byIds("totalDuty", "dutyTotal", "statDuty"),
-      values.duty
-    );
-
-    setText(
-      byIds("totalSubjects", "subjectTotal", "statSubjects"),
-      values.subjects
-    );
-
-    $$("[data-stat]").forEach(el => {
-      const key = el.dataset.stat;
-      if (key in values) el.textContent = values[key];
-    });
-  }
-
-  /* =========================
-     JADWAL
-  ========================= */
-
-  function renderScheduleBlock(data, selector) {
-    const container =
-      typeof selector === "string" ? $(selector) : selector;
-
-    if (!container) return;
-
-    container.innerHTML = Object.entries(data).map(([day, subjects]) => `
-      <div class="schedule-day">
-        <div class="schedule-day-title">${esc(day)}</div>
-        <div class="schedule-subjects">
-          ${subjects.map((subject, index) => `
-            <div class="schedule-item">
-              <span>${index + 1}</span>
-              <strong>${esc(subject)}</strong>
-            </div>
+  $("pageTitle").textContent = titles[view] || "Class Hub";
+
+  $("sidebar").classList.remove("open");
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function initNavigation() {
+  document.querySelectorAll(".nav-btn").forEach(btn => {
+    btn.addEventListener("click", () => switchView(btn.dataset.view));
+  });
+
+  $("mobileMenu").addEventListener("click", () => {
+    $("sidebar").classList.toggle("open");
+  });
+
+  switchView(state.view);
+}
+
+function renderStudents(query = "") {
+  const q = query.trim().toLowerCase();
+
+  const filtered = STUDENTS
+    .map((name, index) => ({ name, no: index + 1 }))
+    .filter(item => item.name.toLowerCase().includes(q));
+
+  $("studentGrid").innerHTML = filtered.map(item => `
+    <article class="student-card">
+      <div class="student-no">NO. ${item.no}</div>
+      <div class="student-name">${escapeHTML(item.name)}</div>
+    </article>
+  `).join("");
+}
+
+function escapeHTML(value) {
+  return String(value).replace(/[&<>"']/g, char => ({
+    "&":"&amp;",
+    "<":"&lt;",
+    ">":"&gt;",
+    '"':"&quot;",
+    "'":"&#039;"
+  }[char]));
+}
+
+function randomStudent(targetId = "toolRandomResult") {
+  const student = STUDENTS[Math.floor(Math.random() * STUDENTS.length)];
+  $(targetId).textContent = student;
+  showToast(`Terpilih: ${student}`);
+  return student;
+}
+
+function renderSchedule() {
+  document.querySelectorAll("#scheduleSwitch .seg").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.block === state.scheduleBlock);
+  });
+
+  $("scheduleDays").innerHTML = Object.entries(SCHEDULE[state.scheduleBlock])
+    .map(([day, subjects]) => `
+      <div class="schedule-card">
+        <h4>${day}</h4>
+        <div class="subject-list">
+          ${subjects.map((subject, i) => `
+            <div class="subject">${i + 1}. ${escapeHTML(subject)}</div>
           `).join("")}
         </div>
       </div>
     `).join("");
-  }
+}
 
-  function initSchedule() {
-    const a =
-      byIds("scheduleA", "jadwalA", "blockA", "scheduleBlockA") ||
-      $('[data-schedule="A"]');
-
-    const b =
-      byIds("scheduleB", "jadwalB", "blockB", "scheduleBlockB") ||
-      $('[data-schedule="B"]');
-
-    renderScheduleBlock(SCHEDULE_A, a);
-    renderScheduleBlock(SCHEDULE_B, b);
-
-    $$("[data-schedule-type]").forEach(el => {
-      const type = el.dataset.scheduleType;
-      renderScheduleBlock(
-        type === "B" ? SCHEDULE_B : SCHEDULE_A,
-        el
-      );
+function initSchedule() {
+  document.querySelectorAll("#scheduleSwitch .seg").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.scheduleBlock = btn.dataset.block;
+      saveState();
+      renderSchedule();
     });
-  }
+  });
 
-  /* =========================
-     PIKET
-  ========================= */
+  renderSchedule();
+}
 
-  function renderDuty() {
-    const containers = [
-      byIds("dutyGrid", "piketGrid", "dutySchedule", "piketSchedule"),
-      $('[data-duty]')
-    ].filter(Boolean);
+function renderDutyButtons() {
+  $("dutyDaySwitch").innerHTML = DAYS.map(day => `
+    <button class="day-chip ${day === state.dutyDay ? "active" : ""}" data-day="${day}">
+      ${day}
+    </button>
+  `).join("");
 
-    if (!containers.length) return;
+  document.querySelectorAll("#dutyDaySwitch .day-chip").forEach(btn => {
+    btn.addEventListener("click", () => {
+      state.dutyDay = btn.dataset.day;
+      saveState();
+      renderDutyButtons();
+      renderDuty();
+    });
+  });
+}
 
-    containers.forEach(container => {
-      container.innerHTML = Object.entries(DUTY).map(([day, students]) => `
-        <div class="duty-card">
-          <div class="duty-header">
-            <h3>${esc(day)}</h3>
-            <span>${students.length} siswa</span>
+function renderDuty() {
+  const list = DUTY[state.dutyDay];
+
+  $("dutyView").innerHTML = `
+    <div class="duty-meta">
+      ${state.dutyDay}: ${list.length} siswa piket.
+      Piket dilakukan sebelum dan sesudah jam pelajaran.
+    </div>
+
+    <div class="duty-list">
+      ${list.map((name, index) => {
+        const key = `${state.dutyDay}-${index}-${name}`;
+        const checked = !!state.dutyChecks[key];
+
+        return `
+          <div class="duty-item ${checked ? "done" : ""}">
+            <input
+              type="checkbox"
+              data-duty-key="${escapeHTML(key)}"
+              ${checked ? "checked" : ""}
+            >
+            <label>${index + 1}. ${escapeHTML(name)}</label>
           </div>
+        `;
+      }).join("")}
+    </div>
+  `;
 
-          <div class="duty-list">
-            ${students.map((name, index) => `
-              <label class="duty-row">
-                <input
-                  type="checkbox"
-                  data-duty-check="${esc(day)}"
-                  data-student-check="${esc(name)}"
-                />
-                <span>${index + 1}. ${esc(name)}</span>
-              </label>
-            `).join("")}
-          </div>
-        </div>
-      `).join("");
+  document.querySelectorAll("[data-duty-key]").forEach(box => {
+    box.addEventListener("change", () => {
+      state.dutyChecks[box.dataset.dutyKey] = box.checked;
+      saveState();
+      renderDuty();
     });
+  });
+}
 
-    restoreDutyChecks();
+function getRotationOrder() {
+  const startIndex = Math.max(0, Math.min(
+    STUDENTS.length - 1,
+    state.rotationStart - 1
+  ));
 
-    $$("[data-duty-check]").forEach(box => {
-      box.addEventListener("change", saveDutyChecks);
-    });
-  }
+  return Array.from({ length: STUDENTS.length }, (_, i) =>
+    STUDENTS[(startIndex + i) % STUDENTS.length]
+  );
+}
 
-  function saveDutyChecks() {
-    const state = {};
+function studentNumber(name) {
+  return STUDENTS.indexOf(name) + 1;
+}
 
-    $$("[data-duty-check]").forEach(el => {
-      const key = `${el.dataset.dutyCheck}|${el.dataset.studentCheck}`;
-      state[key] = el.checked;
-    });
+function renderRotation() {
+  $("rotationStart").value = state.rotationStart;
+  $("rotationSize").value = state.rotationSize;
+  $("rotationWeek").value = state.rotationWeek;
 
-    save("tjkt2-duty-checks", state);
-  }
+  const order = getRotationOrder();
+  const size = Math.min(Math.max(1, state.rotationSize), STUDENTS.length);
 
-  function restoreDutyChecks() {
-    const state = load("tjkt2-duty-checks", {});
+  const group1 = order.slice(0, size);
+  const group2 = order.slice(size, Math.min(size * 2, STUDENTS.length));
 
-    $$("[data-duty-check]").forEach(el => {
-      const key = `${el.dataset.dutyCheck}|${el.dataset.studentCheck}`;
-      el.checked = !!state[key];
-    });
-  }
+  $("group1Count").textContent = `${group1.length} siswa`;
+  $("group2Count").textContent = `${group2.length} siswa`;
 
-  /* =========================
-     APEL / BARIS
-  ========================= */
+  $("group1").innerHTML = group1.map(name => `
+    <div class="member">
+      <span>${studentNumber(name)}</span>
+      <strong>${escapeHTML(name)}</strong>
+    </div>
+  `).join("");
 
-  let rotationStart = Number(load("tjkt2-rotation-start", 23)) || 23;
-  let groupSize = Number(load("tjkt2-group-size", 18)) || 18;
+  $("group2").innerHTML = group2.map(name => `
+    <div class="member">
+      <span>${studentNumber(name)}</span>
+      <strong>${escapeHTML(name)}</strong>
+    </div>
+  `).join("");
 
-  function getRotationStudents(start = rotationStart) {
-    const normalized = ((start - 1) % STUDENTS.length + STUDENTS.length) % STUDENTS.length;
+  $("rotationSequence").innerHTML = order.map((name, i) => `
+    <div class="seq-chip ${i < size ? "group1" : "group2"}">
+      ${studentNumber(name)}
+    </div>
+  `).join("");
 
-    return Array.from({ length: STUDENTS.length }, (_, i) => {
-      return STUDENTS[(normalized + i) % STUDENTS.length];
-    });
-  }
+  const firstNo = studentNumber(group1[0]);
+  const lastNo = studentNumber(group1[group1.length - 1]);
 
-  function renderRotation() {
-    const ordered = getRotationStudents(rotationStart);
+  $("rotationStatus").textContent =
+    `Minggu ${state.rotationWeek}: Apel 1 mulai nomor ${firstNo}, kelompok berakhir di nomor ${lastNo}.`;
+}
 
-    const group1 = ordered.slice(0, groupSize);
-    const group2 = ordered.slice(groupSize, groupSize * 2);
-
-    const g1 =
-      byIds("group1", "apelGroup1", "rotationGroup1") ||
-      $('[data-rotation-group="1"]');
-
-    const g2 =
-      byIds("group2", "apelGroup2", "rotationGroup2") ||
-      $('[data-rotation-group="2"]');
-
-    const strip =
-      byIds("rotationSequence", "apelSequence", "rotationStrip") ||
-      $('[data-rotation-sequence]');
-
-    const startInput =
-      byIds("rotationStart", "startStudent", "apelStart");
-
-    const sizeInput =
-      byIds("groupSize", "apelGroupSize");
-
-    if (startInput) startInput.value = rotationStart;
-    if (sizeInput) sizeInput.value = groupSize;
-
-    const renderGroup = (container, group, title) => {
-      if (!container) return;
-
-      container.innerHTML = `
-        <div class="rotation-group-title">${title}</div>
-        <div class="rotation-count">${group.length} siswa</div>
-        <div class="rotation-list">
-          ${group.map(name => {
-            const no = STUDENTS.indexOf(name) + 1;
-            return `
-              <div class="rotation-student">
-                <span>${no}</span>
-                <strong>${esc(name)}</strong>
-              </div>
-            `;
-          }).join("")}
-        </div>
-      `;
-    };
-
-    renderGroup(g1, group1, "Kelompok 1");
-    renderGroup(g2, group2, "Kelompok 2");
-
-    if (strip) {
-      strip.innerHTML = ordered.map((name, i) => `
-        <span class="rotation-chip">
-          ${STUDENTS.indexOf(name) + 1}. ${esc(name)}
-        </span>
-      `).join("");
-    }
-  }
-
-  function initRotation() {
+function initRotation() {
+  $("rotationStart").addEventListener("change", () => {
+    const value = Number($("rotationStart").value);
+    if (value >= 1 && value <= 36) state.rotationStart = value;
+    saveState();
     renderRotation();
+  });
 
-    const start =
-      byIds("rotationStart", "startStudent", "apelStart");
+  $("rotationSize").addEventListener("change", () => {
+    const value = Number($("rotationSize").value);
+    if (value >= 1 && value <= 36) state.rotationSize = value;
+    saveState();
+    renderRotation();
+  });
 
-    const size =
-      byIds("groupSize", "apelGroupSize");
+  $("rotationWeek").addEventListener("change", () => {
+    const value = Number($("rotationWeek").value);
+    if (value >= 1) state.rotationWeek = value;
+    saveState();
+    renderRotation();
+  });
 
-    const generateButtons = $$(
-      "#generateRotation, #generateApel, [data-action='generate-rotation']"
-    );
+  $("generateRotation").addEventListener("click", () => {
+    state.rotationStart = Math.min(36, Math.max(1, Number($("rotationStart").value) || 23));
+    state.rotationSize = Math.min(36, Math.max(1, Number($("rotationSize").value) || 18));
+    state.rotationWeek = Math.max(1, Number($("rotationWeek").value) || 1);
 
-    const shiftButtons = $$(
-      "#shiftRotation, #shiftApel, [data-action='shift-rotation']"
-    );
+    saveState();
+    renderRotation();
+    showToast("Pembagian apel diperbarui");
+  });
 
-    const saveButtons = $$(
-      "#saveRotation, #saveApel, [data-action='save-rotation']"
-    );
+  $("nextRotation").addEventListener("click", () => {
+    const size = Math.min(36, Math.max(1, state.rotationSize));
 
-    const nextButtons = $$(
-      "#nextWeekRotation, #nextWeek, [data-action='next-week']"
-    );
+    state.rotationStart = ((state.rotationStart - 1 + size) % STUDENTS.length) + 1;
+    state.rotationWeek += 1;
 
-    function applyInputs() {
-      const s = Number(start?.value);
+    saveState();
+    renderRotation();
+    showToast(`Masuk minggu ${state.rotationWeek}`);
+  });
 
-      if (Number.isFinite(s) && s >= 1 && s <= STUDENTS.length) {
-        rotationStart = s;
-      }
+  $("resetRotation").addEventListener("click", () => {
+    state.rotationStart = 23;
+    state.rotationSize = 18;
+    state.rotationWeek = 1;
 
-      const g = Number(size?.value);
+    saveState();
+    renderRotation();
+    showToast("Rotasi dikembalikan ke nomor 23");
+  });
 
-      if (Number.isFinite(g) && g > 0 && g <= STUDENTS.length) {
-        groupSize = Math.min(Math.floor(g), STUDENTS.length);
-      }
+  renderRotation();
+}
 
-      save("tjkt2-rotation-start", rotationStart);
-      save("tjkt2-group-size", groupSize);
+function ipParts(ip) {
+  const parts = ip.trim().split(".");
+  if (parts.length !== 4) return null;
 
-      renderRotation();
-    }
+  const nums = parts.map(Number);
 
-    generateButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        applyInputs();
-        notify("Pembagian apel dibuat");
-      });
-    });
-
-    shiftButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        rotationStart += groupSize;
-
-        if (rotationStart > STUDENTS.length) {
-          rotationStart =
-            ((rotationStart - 1) % STUDENTS.length) + 1;
-        }
-
-        save("tjkt2-rotation-start", rotationStart);
-
-        renderRotation();
-
-        if (start) start.value = rotationStart;
-
-        notify(`Mulai dari nomor ${rotationStart}`);
-      });
-    });
-
-    saveButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        applyInputs();
-        notify("Pembagian disimpan");
-      });
-    });
-
-    nextButtons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        rotationStart += groupSize;
-
-        if (rotationStart > STUDENTS.length) {
-          rotationStart =
-            ((rotationStart - 1) % STUDENTS.length) + 1;
-        }
-
-        save("tjkt2-rotation-start", rotationStart);
-        renderRotation();
-
-        if (start) start.value = rotationStart;
-
-        notify("Jadwal minggu berikutnya dibuat");
-      });
-    });
-
-    [start, size].filter(Boolean).forEach(el => {
-      el.addEventListener("change", applyInputs);
-    });
-  }
-
-  /* =========================
-     RANDOM SISWA
-  ========================= */
-
-  function initRandomStudent() {
-    $$("[data-random]").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const student =
-          STUDENTS[Math.floor(Math.random() * STUDENTS.length)];
-
-        const target =
-          byIds(
-            "randomStudent",
-            "randomStudentResult",
-            "randomName",
-            "randomOutput"
-          ) || $('[data-random-output]');
-
-        setText(target, student);
-        notify(student);
-      });
-    });
-  }
-
-  /* =========================
-     IP CLASS CHECKER
-  ========================= */
-
-  function ipv4Parts(ip) {
-    const parts = ip.trim().split(".");
-
-    if (parts.length !== 4) return null;
-
-    const nums = parts.map(Number);
-
-    if (
-      nums.some(
-        n => !Number.isInteger(n) || n < 0 || n > 255
-      )
-    ) {
-      return null;
-    }
-
-    return nums;
-  }
-
-  function getIPClass(ip) {
-    const parts = ipv4Parts(ip);
-
-    if (!parts) return null;
-
-    const first = parts[0];
-
-    if (first >= 1 && first <= 126) {
-      return {
-        class: "A",
-        defaultMask: "255.0.0.0",
-        range: "1.0.0.0 – 126.255.255.255"
-      };
-    }
-
-    if (first >= 128 && first <= 191) {
-      return {
-        class: "B",
-        defaultMask: "255.255.0.0",
-        range: "128.0.0.0 – 191.255.255.255"
-      };
-    }
-
-    if (first >= 192 && first <= 223) {
-      return {
-        class: "C",
-        defaultMask: "255.255.255.0",
-        range: "192.0.0.0 – 223.255.255.255"
-      };
-    }
-
-    if (first >= 224 && first <= 239) {
-      return {
-        class: "D",
-        defaultMask: "-",
-        range: "224.0.0.0 – 239.255.255.255"
-      };
-    }
-
-    if (first >= 240 && first <= 255) {
-      return {
-        class: "E",
-        defaultMask: "-",
-        range: "240.0.0.0 – 255.255.255.255"
-      };
-    }
-
+  if (
+    nums.some(n =>
+      !Number.isInteger(n) ||
+      n < 0 ||
+      n > 255
+    )
+  ) {
     return null;
   }
 
-  function initIPChecker() {
-    const input =
-      byIds("ipInput", "ipAddress", "ipCheckerInput");
+  return nums;
+}
 
-    const button =
-      byIds("checkIP", "checkIp", "ipCheckButton") ||
-      $('[data-action="check-ip"]');
+function ipClass(ip) {
+  const parts = ipParts(ip);
+  if (!parts) return null;
 
-    const output =
-      byIds("ipResult", "ipCheckerResult");
+  const first = parts[0];
 
-    if (!input || !button) return;
+  if (first >= 1 && first <= 126) return "A";
+  if (first >= 128 && first <= 191) return "B";
+  if (first >= 192 && first <= 223) return "C";
+  if (first >= 224 && first <= 239) return "D";
+  if (first >= 240 && first <= 255) return "E";
 
-    button.addEventListener("click", () => {
-      const result = getIPClass(input.value);
+  return null;
+}
 
-      if (!result) {
-        setText(output, "IP tidak valid.");
-        notify("Format IPv4 tidak valid");
-        return;
-      }
+function initIpChecker() {
+  $("checkIpBtn").addEventListener("click", () => {
+    const ip = $("ipInput").value.trim();
+    const parts = ipParts(ip);
+    const cls = ipClass(ip);
 
-      if (output) {
-        output.innerHTML = `
-          <div><strong>Kelas:</strong> ${result.class}</div>
-          <div><strong>Default Mask:</strong> ${result.defaultMask}</div>
-          <div><strong>Range:</strong> ${result.range}</div>
-        `;
-      }
-
-      notify(`IP ${input.value} = Class ${result.class}`);
-    });
-  }
-
-  /* =========================
-     SUBNET HELPER
-  ========================= */
-
-  function maskToCIDR(mask) {
-    const parts = ipv4Parts(mask);
-
-    if (!parts) return null;
-
-    let binary = "";
-
-    for (const part of parts) {
-      binary += part.toString(2).padStart(8, "0");
+    if (!parts || !cls) {
+      $("ipResult").textContent = "IP tidak valid atau termasuk alamat khusus.";
+      showToast("Alamat IP tidak valid");
+      return;
     }
 
-    if (!/^1*0*$/.test(binary)) return null;
+    const masks = {
+      A: "255.0.0.0",
+      B: "255.255.0.0",
+      C: "255.255.255.0",
+      D: "-",
+      E: "-"
+    };
 
-    return binary.split("1").length - 1;
+    $("ipResult").innerHTML = `
+      <strong>Class ${cls}</strong><br>
+      Oktet pertama: ${parts[0]}<br>
+      Default mask: ${masks[cls]}
+    `;
+
+    showToast(`IP ${ip} = Class ${cls}`);
+  });
+}
+
+function cidrToMask(cidr) {
+  if (!Number.isInteger(cidr) || cidr < 0 || cidr > 32) {
+    return null;
   }
 
-  function cidrToMask(cidr) {
-    cidr = Number(cidr);
+  const bits = "1".repeat(cidr) + "0".repeat(32 - cidr);
+  const out = [];
 
-    if (
-      !Number.isInteger(cidr) ||
-      cidr < 0 ||
-      cidr > 32
-    ) {
-      return null;
+  for (let i = 0; i < 32; i += 8) {
+    out.push(parseInt(bits.slice(i, i + 8), 2));
+  }
+
+  return out.join(".");
+}
+
+function ipToInt(ip) {
+  const parts = ipParts(ip);
+  if (!parts) return null;
+
+  return (
+    ((parts[0] << 24) >>> 0) +
+    (parts[1] << 16) +
+    (parts[2] << 8) +
+    parts[3]
+  ) >>> 0;
+}
+
+function intToIp(value) {
+  return [
+    value >>> 24,
+    (value >>> 16) & 255,
+    (value >>> 8) & 255,
+    value & 255
+  ].join(".");
+}
+
+function initSubnet() {
+  $("checkSubnetBtn").addEventListener("click", () => {
+    const raw = $("subnetInput").value.trim();
+    const match = raw.match(/^(.+)\/(\d{1,2})$/);
+
+    if (!match) {
+      $("subnetResult").textContent = "Format harus seperti 192.168.10.0/24.";
+      showToast("Format CIDR salah");
+      return;
     }
 
-    let bits = "1".repeat(cidr) + "0".repeat(32 - cidr);
+    const ip = match[1];
+    const cidr = Number(match[2]);
 
-    const parts = [];
+    const ipInt = ipToInt(ip);
+    const mask = cidrToMask(cidr);
 
-    for (let i = 0; i < 32; i += 8) {
-      parts.push(parseInt(bits.slice(i, i + 8), 2));
+    if (ipInt === null || !mask) {
+      $("subnetResult").textContent = "Subnet tidak valid.";
+      showToast("Subnet tidak valid");
+      return;
     }
 
-    return parts.join(".");
-  }
+    const maskInt = ipToInt(mask);
+    const network = (ipInt & maskInt) >>> 0;
+    const wildcard = (~maskInt) >>> 0;
+    const broadcast = (network | wildcard) >>> 0;
+    const total = 2 ** (32 - cidr);
 
-  function ipToInt(ip) {
-    const p = ipv4Parts(ip);
-    if (!p) return null;
+    let usable = 0;
 
-    return (
-      ((p[0] << 24) >>> 0) +
-      (p[1] << 16) +
-      (p[2] << 8) +
-      p[3]
-    ) >>> 0;
-  }
-
-  function intToIP(int) {
-    return [
-      int >>> 24,
-      (int >>> 16) & 255,
-      (int >>> 8) & 255,
-      int & 255
-    ].join(".");
-  }
-
-  function initSubnet() {
-    const ipInput =
-      byIds("subnetIP", "networkIP", "subnetIpInput");
-
-    const cidrInput =
-      byIds("subnetCIDR", "cidrInput", "prefixInput");
-
-    const button =
-      byIds("calculateSubnet", "subnetCalculate") ||
-      $('[data-action="calculate-subnet"]');
-
-    const output =
-      byIds("subnetResult", "subnetOutput");
-
-    if (!ipInput || !cidrInput || !button) return;
-
-    button.addEventListener("click", () => {
-      const ipInt = ipToInt(ipInput.value);
-      const cidr = Number(cidrInput.value);
-
-      if (
-        ipInt === null ||
-        !Number.isInteger(cidr) ||
-        cidr < 0 ||
-        cidr > 32
-      ) {
-        setText(output, "Input subnet tidak valid.");
-        notify("Subnet tidak valid");
-        return;
-      }
-
-      const mask = cidrToMask(cidr);
-      const maskInt = ipToInt(mask);
-
-      const network = (ipInt & maskInt) >>> 0;
-      const broadcast =
-        (network | (~maskInt >>> 0)) >>> 0;
-
-      const total = 2 ** (32 - cidr);
-
-      const usable =
-        cidr <= 30 ? Math.max(0, total - 2) : total;
-
-      if (output) {
-        output.innerHTML = `
-          <div><strong>Network:</strong> ${intToIP(network)}</div>
-          <div><strong>Broadcast:</strong> ${intToIP(broadcast)}</div>
-          <div><strong>Mask:</strong> ${mask}</div>
-          <div><strong>Prefix:</strong> /${cidr}</div>
-          <div><strong>Total Address:</strong> ${total}</div>
-          <div><strong>Usable Host:</strong> ${usable}</div>
-        `;
-      }
-
-      notify("Subnet berhasil dihitung");
-    });
-  }
-
-  /* =========================
-     COUNTDOWN
-  ========================= */
-
-  let countdownTimer = null;
-
-  function initCountdown() {
-    const input =
-      byIds(
-        "countdownMinutes",
-        "countdownInput",
-        "timerMinutes"
-      );
-
-    const start =
-      byIds("startCountdown", "countdownStart") ||
-      $('[data-action="countdown-start"]');
-
-    const stop =
-      byIds("stopCountdown", "countdownStop") ||
-      $('[data-action="countdown-stop"]');
-
-    const output =
-      byIds(
-        "countdownDisplay",
-        "countdownResult",
-        "timerDisplay"
-      );
-
-    if (!start) return;
-
-    start.addEventListener("click", () => {
-      const minutes = Number(input?.value);
-
-      if (!Number.isFinite(minutes) || minutes <= 0) {
-        notify("Masukkan durasi countdown");
-        return;
-      }
-
-      let seconds = Math.floor(minutes * 60);
-
-      clearInterval(countdownTimer);
-
-      const draw = () => {
-        const m = Math.floor(seconds / 60);
-        const s = seconds % 60;
-
-        setText(
-          output,
-          `${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`
-        );
-
-        if (seconds <= 0) {
-          clearInterval(countdownTimer);
-          notify("Countdown selesai");
-          return;
-        }
-
-        seconds--;
-      };
-
-      draw();
-      countdownTimer = setInterval(draw, 1000);
-    });
-
-    stop?.addEventListener("click", () => {
-      clearInterval(countdownTimer);
-      notify("Countdown dihentikan");
-    });
-  }
-
-  /* =========================
-     CATATAN KELAS
-  ========================= */
-
-  function initNotes() {
-    const textarea =
-      byIds(
-        "classNotes",
-        "notes",
-        "notesArea",
-        "classNotesInput"
-      );
-
-    const saveButton =
-      byIds("saveNotes", "saveClassNotes") ||
-      $('[data-action="save-notes"]');
-
-    const clearButton =
-      byIds("clearNotes", "clearClassNotes") ||
-      $('[data-action="clear-notes"]');
-
-    if (!textarea) return;
-
-    textarea.value = load("tjkt2-notes", "");
-
-    saveButton?.addEventListener("click", () => {
-      save("tjkt2-notes", textarea.value);
-      notify("Catatan disimpan");
-    });
-
-    clearButton?.addEventListener("click", () => {
-      textarea.value = "";
-      save("tjkt2-notes", "");
-      notify("Catatan dikosongkan");
-    });
-  }
-
-  /* =========================
-     EXPORT JSON
-  ========================= */
-
-  function initExport() {
-    const buttons = $$(
-      "#exportData, #exportJSON, [data-action='export-json']"
-    );
-
-    buttons.forEach(btn => {
-      btn.addEventListener("click", () => {
-        const data = {
-          class: "XI TJKT 2",
-          exportedAt: new Date().toISOString(),
-          students: STUDENTS,
-          scheduleA: SCHEDULE_A,
-          scheduleB: SCHEDULE_B,
-          duty: DUTY,
-          rotation: {
-            start: rotationStart,
-            groupSize
-          },
-          notes: load("tjkt2-notes", "")
-        };
-
-        const blob = new Blob(
-          [JSON.stringify(data, null, 2)],
-          { type: "application/json" }
-        );
-
-        const url = URL.createObjectURL(blob);
-        const a = document.createElement("a");
-
-        a.href = url;
-        a.download = "XI-TJKT-2-data.json";
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-
-        URL.revokeObjectURL(url);
-
-        notify("Data JSON diekspor");
-      });
-    });
-  }
-
-  /* =========================
-     PRINT
-  ========================= */
-
-  function initPrint() {
-    $$(
-      "#printPage, #printData, [data-action='print']"
-    ).forEach(btn => {
-      btn.addEventListener("click", () => window.print());
-    });
-  }
-
-  /* =========================
-     CHART
-  ========================= */
-
-  function initChart() {
-    if (typeof Chart === "undefined") return;
-
-    const canvas =
-      byIds(
-        "dutyChart",
-        "classChart",
-        "trafficChart",
-        "activityChart"
-      );
-
-    if (!canvas) return;
-
-    const days = Object.keys(DUTY);
-    const values = days.map(day => DUTY[day].length);
-
-    try {
-      if (canvas._tjktChart) {
-        canvas._tjktChart.destroy();
-      }
-
-      canvas._tjktChart = new Chart(canvas, {
-        type: "bar",
-        data: {
-          labels: days,
-          datasets: [{
-            label: "Jumlah Siswa Piket",
-            data: values,
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          animation: false,
-          plugins: {
-            legend: {
-              display: true
-            }
-          },
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                precision: 0
-              }
-            }
-          }
-        }
-      });
-    } catch {
-      // Chart gagal tidak boleh mematikan fungsi lain.
+    if (cidr <= 30) {
+      usable = Math.max(0, total - 2);
+    } else {
+      usable = total;
     }
-  }
 
-  /* =========================
-     KEYBOARD
-  ========================= */
+    const firstHost = cidr <= 30 ? intToIp(network + 1) : intToIp(network);
+    const lastHost = cidr <= 30 ? intToIp(broadcast - 1) : intToIp(broadcast);
 
-  function initKeyboard() {
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") {
-        $$(".modal.open, .modal.active").forEach(modal => {
-          modal.classList.remove("open", "active");
-        });
+    $("subnetResult").innerHTML = `
+      <strong>Network:</strong> ${intToIp(network)}<br>
+      <strong>Broadcast:</strong> ${intToIp(broadcast)}<br>
+      <strong>Mask:</strong> ${mask}<br>
+      <strong>Host:</strong> ${firstHost} — ${lastHost}<br>
+      <strong>Total:</strong> ${total}<br>
+      <strong>Usable:</strong> ${usable}
+    `;
+
+    showToast("Subnet berhasil dihitung");
+  });
+}
+
+function formatTimer(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+
+  return `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+}
+
+function updateTimerDisplay() {
+  $("timerDisplay").textContent = formatTimer(timerRemaining);
+}
+
+function initTimer() {
+  $("startTimerBtn").addEventListener("click", () => {
+    const minutes = Number($("countdownMinutes").value);
+
+    if (!Number.isFinite(minutes) || minutes <= 0) {
+      showToast("Masukkan durasi menit");
+      return;
+    }
+
+    clearInterval(timer);
+    timerRemaining = Math.floor(minutes * 60);
+    updateTimerDisplay();
+
+    timer = setInterval(() => {
+      timerRemaining -= 1;
+      updateTimerDisplay();
+
+      if (timerRemaining <= 0) {
+        clearInterval(timer);
+        timer = null;
+        showToast("Countdown selesai");
       }
-    });
-  }
+    }, 1000);
+  });
 
-  /* =========================
-     GLOBAL EXPORT
-  ========================= */
+  $("stopTimerBtn").addEventListener("click", () => {
+    clearInterval(timer);
+    timer = null;
+    showToast("Countdown dihentikan");
+  });
+}
 
-  window.TJKT2 = {
-    STUDENTS,
-    SCHEDULE_A,
-    SCHEDULE_B,
-    DUTY,
-    getIPClass,
-    cidrToMask,
-    renderStudents,
-    renderRotation
+function updateNotesCounter() {
+  $("notesCount").textContent =
+    `${$("classNotes").value.length} karakter`;
+}
+
+function initNotes() {
+  $("classNotes").value = state.notes;
+  updateNotesCounter();
+
+  $("classNotes").addEventListener("input", () => {
+    state.notes = $("classNotes").value;
+    saveState();
+    updateNotesCounter();
+  });
+
+  $("clearNotesBtn").addEventListener("click", () => {
+    $("classNotes").value = "";
+    state.notes = "";
+    saveState();
+    updateNotesCounter();
+    showToast("Catatan dibersihkan");
+  });
+}
+
+function buildExportData() {
+  return {
+    className: "XI TJKT 2",
+    school: "SMK Negeri 1 Adiwerna",
+    academicYear: "2026/2027",
+    students: STUDENTS,
+    schedule: SCHEDULE,
+    duty: DUTY,
+    rotation: {
+      start: state.rotationStart,
+      size: state.rotationSize,
+      week: state.rotationWeek
+    },
+    notes: state.notes,
+    exportedAt: new Date().toISOString()
   };
+}
 
-  /* =========================
-     START
-  ========================= */
+function initExport() {
+  $("exportBtn").addEventListener("click", () => {
+    const data = JSON.stringify(buildExportData(), null, 2);
+    const blob = new Blob([data], { type: "application/json" });
+    const url = URL.createObjectURL(blob);
 
-  function boot() {
-    try { updateClock(); } catch {}
-    try { setInterval(updateClock, 1000); } catch {}
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = "XI-TJKT-2-data.json";
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
 
-    try { initTheme(); } catch {}
-    try { initNavigation(); } catch {}
-    try { initStudents(); } catch {}
-    try { updateStats(); } catch {}
-    try { initSchedule(); } catch {}
-    try { renderDuty(); } catch {}
-    try { initRotation(); } catch {}
-    try { initRandomStudent(); } catch {}
-    try { initIPChecker(); } catch {}
-    try { initSubnet(); } catch {}
-    try { initCountdown(); } catch {}
-    try { initNotes(); } catch {}
-    try { initExport(); } catch {}
-    try { initPrint(); } catch {}
-    try { initChart(); } catch {}
-    try { initKeyboard(); } catch {}
+    URL.revokeObjectURL(url);
+    showToast("Data berhasil diekspor");
+  });
 
-    document.documentElement.classList.add("tjkt2-ready");
-    document.body.classList.add("tjkt2-ready");
-  }
+  $("printBtn").addEventListener("click", () => {
+    window.print();
+  });
+}
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
-  } else {
-    boot();
-  }
+function initRandomTools() {
+  $("randomStudentBtn").addEventListener("click", () => {
+    const name = randomStudent("toolRandomResult");
+    $("randomStudentBox").textContent = `Siswa terpilih: ${name}`;
+    $("randomStudentBox").classList.remove("hidden");
+  });
 
-})();
+  $("toolRandomBtn").addEventListener("click", () => {
+    randomStudent("toolRandomResult");
+  });
+}
+
+function initKeyboard() {
+  document.addEventListener("keydown", event => {
+    if (event.key === "Escape") {
+      $("sidebar").classList.remove("open");
+    }
+  });
+}
+
+function boot() {
+  $("statStudents").textContent = STUDENTS.length;
+
+  updateClock();
+  setInterval(updateClock, 1000);
+
+  initTheme();
+  initNavigation();
+  renderStudents();
+  initSchedule();
+  renderDutyButtons();
+  renderDuty();
+  initRotation();
+  initIpChecker();
+  initSubnet();
+  initTimer();
+  initNotes();
+  initExport();
+  initRandomTools();
+  initKeyboard();
+
+  $("studentSearch").addEventListener("input", event => {
+    renderStudents(event.target.value);
+  });
+
+  showToast("XI TJKT 2 siap digunakan");
+}
+
+document.addEventListener("DOMContentLoaded", boot);
