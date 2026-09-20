@@ -112,8 +112,6 @@ const state = {
   theme: localStorage.getItem("tjkt2-theme") || "light",
   scheduleBlock: localStorage.getItem("tjkt2-schedule-block") || "A",
   dutyDay: localStorage.getItem("tjkt2-duty-day") || "Senin",
-  rotationStart: Number(localStorage.getItem("tjkt2-rotation-start") || 23),
-  rotationSize: Number(localStorage.getItem("tjkt2-rotation-size") || 18),
   rotationWeek: Number(localStorage.getItem("tjkt2-rotation-week") || 1),
   dutyChecks: JSON.parse(localStorage.getItem("tjkt2-duty-checks") || "{}"),
   notes: localStorage.getItem("tjkt2-notes") || ""
@@ -139,8 +137,6 @@ function saveState() {
   localStorage.setItem("tjkt2-theme", state.theme);
   localStorage.setItem("tjkt2-schedule-block", state.scheduleBlock);
   localStorage.setItem("tjkt2-duty-day", state.dutyDay);
-  localStorage.setItem("tjkt2-rotation-start", state.rotationStart);
-  localStorage.setItem("tjkt2-rotation-size", state.rotationSize);
   localStorage.setItem("tjkt2-rotation-week", state.rotationWeek);
   localStorage.setItem("tjkt2-duty-checks", JSON.stringify(state.dutyChecks));
   localStorage.setItem("tjkt2-notes", state.notes);
@@ -325,6 +321,10 @@ function renderDuty() {
       renderDuty();
     });
   });
+}
+
+function studentNumber(name) {
+  return STUDENTS.indexOf(name) + 1;
 }
 
 function getRotationPair() {
@@ -660,9 +660,9 @@ function buildExportData() {
     schedule: SCHEDULE,
     duty: DUTY,
     rotation: {
-      start: state.rotationStart,
-      size: state.rotationSize,
-      week: state.rotationWeek
+      system: "2 siswa per minggu",
+      week: state.rotationWeek,
+      totalWeeks: 18
     },
     notes: state.notes,
     exportedAt: new Date().toISOString()
@@ -717,19 +717,46 @@ function boot() {
   updateClock();
   setInterval(updateClock, 1000);
 
+  console.log("[BOOT] initTheme");
   initTheme();
+
+  console.log("[BOOT] initNavigation");
   initNavigation();
+
+  console.log("[BOOT] renderStudents");
   renderStudents();
+
+  console.log("[BOOT] initSchedule");
   initSchedule();
+
+  console.log("[BOOT] renderDutyButtons");
   renderDutyButtons();
+
+  console.log("[BOOT] renderDuty");
   renderDuty();
+
+  console.log("[BOOT] initRotation");
   initRotation();
+
+  console.log("[BOOT] initIpChecker");
   initIpChecker();
+
+  console.log("[BOOT] initSubnet");
   initSubnet();
+
+  console.log("[BOOT] initTimer");
   initTimer();
+
+  console.log("[BOOT] initNotes");
   initNotes();
+
+  console.log("[BOOT] initExport");
   initExport();
+
+  console.log("[BOOT] initRandomTools");
   initRandomTools();
+
+  console.log("[BOOT] initKeyboard");
   initKeyboard();
 
   $("studentSearch").addEventListener("input", event => {
