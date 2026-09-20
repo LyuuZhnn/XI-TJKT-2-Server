@@ -1,0 +1,687 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#08111f">
+  <meta name="description" content="Class Server XI TJKT 2">
+  <title>XI TJKT 2 — Class Server</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+  <div class="app-shell">
+
+    <aside class="sidebar" id="sidebar">
+      <div class="brand">
+        <div class="brand-mark">TJ</div>
+        <div>
+          <strong>XI TJKT 2</strong>
+          <span>CLASS SERVER</span>
+        </div>
+      </div>
+
+      <nav class="nav-menu">
+        <button class="nav-item active" data-dashboard="dashboard-home">
+          <span class="nav-icon">⌂</span>
+          <span>Class Hub</span>
+        </button>
+
+        <button class="nav-item" data-dashboard="dashboard-schedule">
+          <span class="nav-icon">▦</span>
+          <span>Jadwal & Piket</span>
+        </button>
+
+        <button class="nav-item" data-dashboard="dashboard-apel">
+          <span class="nav-icon">◈</span>
+          <span>Apel & Baris</span>
+        </button>
+
+        <button class="nav-item" data-dashboard="dashboard-tools">
+          <span class="nav-icon">⚙</span>
+          <span>TJKT Tools</span>
+        </button>
+      </nav>
+
+      <div class="sidebar-bottom">
+        <div class="mini-status">
+          <span class="status-dot"></span>
+          <div>
+            <strong>Class System</strong>
+            <small>Online • Local Ready</small>
+          </div>
+        </div>
+
+        <div class="sidebar-credit">
+          <span>XI TJKT 2</span>
+          <small>2026 / 2027</small>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+
+      <header class="topbar">
+        <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Buka menu">☰</button>
+
+        <div class="topbar-title">
+          <span class="eyebrow">SMK NEGERI 1 ADIWERNA</span>
+          <h1 id="pageTitle">Class Hub</h1>
+        </div>
+
+        <div class="topbar-actions">
+          <div class="clock-box">
+            <strong id="liveClock">00:00:00</strong>
+            <span id="liveDate">Memuat tanggal...</span>
+          </div>
+
+          <button class="icon-btn" id="themeToggle" title="Ganti tema">☀</button>
+        </div>
+      </header>
+
+      <section class="dashboard active" id="dashboard-home">
+
+        <div class="hero-card">
+          <div class="hero-copy">
+            <span class="hero-label">WELCOME TO</span>
+            <h2>XI TJKT 2<br><span>Class Command Center</span></h2>
+            <p>
+              Pusat informasi kelas untuk data siswa, jadwal, piket,
+              kegiatan apel, sampai tools jaringan yang bisa dipakai
+              langsung dari browser.
+            </p>
+
+            <div class="hero-actions">
+              <button class="primary-btn" data-jump="dashboard-schedule">Lihat Jadwal</button>
+              <button class="secondary-btn" data-jump="dashboard-apel">Buka Sistem Apel</button>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="orb orb-one"></div>
+            <div class="orb orb-two"></div>
+            <div class="hero-code">
+              <span>CLASS://TJKT2</span>
+              <strong>36</strong>
+              <small>STUDENTS</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="stats-grid">
+          <article class="stat-card">
+            <span class="stat-icon">👥</span>
+            <div>
+              <small>Total Siswa</small>
+              <strong id="statStudents">36</strong>
+              <span>XI TJKT 2</span>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">🧹</span>
+            <div>
+              <small>Kelompok Piket</small>
+              <strong id="statDuty">5</strong>
+              <span>Senin — Jumat</span>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">📢</span>
+            <div>
+              <small>Apel / Minggu</small>
+              <strong id="statApel">2</strong>
+              <span>Pembagian otomatis</span>
+            </div>
+          </article>
+
+          <article class="stat-card">
+            <span class="stat-icon">🖧</span>
+            <div>
+              <small>Mode Sistem</small>
+              <strong>READY</strong>
+              <span>Frontend Class Server</span>
+            </div>
+          </article>
+        </div>
+
+        <div class="content-grid two-col">
+
+          <article class="panel profile-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">PENGENALAN KELAS</span>
+                <h3>Tentang XI TJKT 2</h3>
+              </div>
+              <span class="tag cyan">2026 / 2027</span>
+            </div>
+
+            <p class="muted">
+              XI TJKT 2 merupakan kelas Teknik Jaringan Komputer dan
+              Telekomunikasi yang menggunakan server kelas ini sebagai
+              pusat informasi bersama.
+            </p>
+
+            <div class="info-list">
+              <div>
+                <span>Kelas</span>
+                <strong>XI TJKT 2</strong>
+              </div>
+              <div>
+                <span>Jumlah siswa</span>
+                <strong>36 orang</strong>
+              </div>
+              <div>
+                <span>Kegiatan apel</span>
+                <strong>2× / minggu</strong>
+              </div>
+              <div>
+                <span>Hari piket</span>
+                <strong>Senin — Jumat</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel pulse-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">CLASS PULSE</span>
+                <h3>Status Sistem Kelas</h3>
+              </div>
+              <span class="live-pill"><i></i> LIVE</span>
+            </div>
+
+            <div class="pulse-layout">
+              <div class="ring-meter">
+                <div class="ring-value">
+                  <strong>100%</strong>
+                  <span>READY</span>
+                </div>
+              </div>
+
+              <div class="pulse-data">
+                <div>
+                  <span>Data siswa</span>
+                  <strong>36 / 36</strong>
+                </div>
+                <div>
+                  <span>Jadwal</span>
+                  <strong>10 set</strong>
+                </div>
+                <div>
+                  <span>Piket</span>
+                  <strong>5 kelompok</strong>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="content-grid two-col">
+
+          <article class="panel chart-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">VISUAL DATA</span>
+                <h3>Kepadatan Jadwal Mingguan</h3>
+              </div>
+              <span class="tag purple">A + B</span>
+            </div>
+
+            <div class="bar-chart" id="weeklyChart"></div>
+          </article>
+
+          <article class="panel quick-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">QUICK ACCESS</span>
+                <h3>Akses Cepat</h3>
+              </div>
+            </div>
+
+            <div class="quick-grid">
+              <button class="quick-card" data-jump="dashboard-schedule">
+                <span>📚</span>
+                <strong>Jadwal</strong>
+                <small>Pelajaran harian</small>
+              </button>
+
+              <button class="quick-card" data-jump="dashboard-schedule">
+                <span>🧹</span>
+                <strong>Piket</strong>
+                <small>Daftar petugas</small>
+              </button>
+
+              <button class="quick-card" data-jump="dashboard-apel">
+                <span>📢</span>
+                <strong>Apel</strong>
+                <small>Rotasi kelompok</small>
+              </button>
+
+              <button class="quick-card" data-jump="dashboard-tools">
+                <span>🖧</span>
+                <strong>Network</strong>
+                <small>Tools TJKT</small>
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+        <article class="panel roster-panel">
+          <div class="panel-heading roster-heading">
+            <div>
+              <span class="panel-kicker">STUDENT DIRECTORY</span>
+              <h3>Daftar Siswa XI TJKT 2</h3>
+            </div>
+
+            <div class="roster-actions">
+              <button class="secondary-btn small" id="randomStudentBtn">🎲 Acak</button>
+              <input
+                type="search"
+                id="studentSearch"
+                class="search-input"
+                placeholder="Cari nama siswa..."
+                autocomplete="off"
+              >
+            </div>
+          </div>
+
+          <div id="randomStudentResult" class="random-result hidden"></div>
+
+          <div class="student-table-wrap">
+            <table class="student-table">
+              <thead>
+                <tr>
+                  <th>No</th>
+                  <th>Nama</th>
+                  <th>Status</th>
+                  <th>Aksi</th>
+                </tr>
+              </thead>
+              <tbody id="studentTableBody"></tbody>
+            </table>
+          </div>
+        </article>
+
+      </section>
+
+      <section class="dashboard" id="dashboard-schedule">
+
+        <div class="section-banner">
+          <div>
+            <span class="hero-label">DASHBOARD 02</span>
+            <h2>Jadwal Pelajaran & Piket</h2>
+            <p>Semua jadwal kelas XI TJKT 2 dalam satu tempat.</p>
+          </div>
+
+          <div class="banner-icon">▦</div>
+        </div>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">BLOK A</span>
+              <h3>Jadwal Pelajaran</h3>
+            </div>
+
+            <div class="switch-group">
+              <button class="switch-btn active" data-schedule="scheduleA">Blok A</button>
+              <button class="switch-btn" data-schedule="scheduleB">Blok B</button>
+            </div>
+          </div>
+
+          <div id="scheduleA" class="schedule-view active"></div>
+          <div id="scheduleB" class="schedule-view"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">TUGAS HARIAN</span>
+              <h3>Jadwal Piket Kelas</h3>
+            </div>
+
+            <span class="tag green">Senin — Jumat</span>
+          </div>
+
+          <div class="duty-grid" id="dutyGrid"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">CHECKLIST</span>
+              <h3>Monitoring Piket</h3>
+            </div>
+
+            <button class="secondary-btn small" id="resetDutyBtn">Reset Hari Ini</button>
+          </div>
+
+          <div id="dutyChecklist" class="checklist-list"></div>
+        </article>
+
+      </section>
+
+      <section class="dashboard" id="dashboard-apel">
+
+        <div class="section-banner apel-banner">
+          <div>
+            <span class="hero-label">DASHBOARD 03</span>
+            <h2>Apel & Baris-Berbaris</h2>
+            <p>Sistem pembagian otomatis untuk 36 siswa, 2 kelompok setiap minggu.</p>
+          </div>
+
+          <div class="banner-icon">◈</div>
+        </div>
+
+        <div class="content-grid two-col">
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">ROTATION ENGINE</span>
+                <h3>Pengaturan Pembagian</h3>
+              </div>
+              <span class="tag cyan">18 + 18</span>
+            </div>
+
+            <div class="form-grid">
+              <label>
+                <span>Nomor mulai</span>
+                <input type="number" id="rotationStart" min="1" max="36" value="23">
+              </label>
+
+              <label>
+                <span>Ukuran kelompok</span>
+                <input type="number" id="rotationSize" min="1" max="18" value="18">
+              </label>
+            </div>
+
+            <label class="full-field">
+              <span>Catatan minggu</span>
+              <input
+                type="text"
+                id="rotationNote"
+                placeholder="Contoh: Minggu ke-1 September"
+              >
+            </label>
+
+            <div class="button-row">
+              <button class="primary-btn" id="generateRotationBtn">Generate Pembagian</button>
+              <button class="secondary-btn" id="shiftRotationBtn">Geser +18</button>
+            </div>
+
+            <div class="rotation-info">
+              <div>
+                <span>Alur</span>
+                <strong>23 → 36 → 1 → 22</strong>
+              </div>
+              <div>
+                <span>Per minggu</span>
+                <strong>2 kelompok</strong>
+              </div>
+              <div>
+                <span>Total</span>
+                <strong>36 siswa</strong>
+              </div>
+            </div>
+          </article>
+
+          <article class="panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">WEEK CONTROL</span>
+                <h3>Kontrol Mingguan</h3>
+              </div>
+            </div>
+
+            <div class="week-actions">
+              <button class="control-card" id="saveRotationBtn">
+                <span>💾</span>
+                <strong>Simpan</strong>
+                <small>Simpan pembagian saat ini</small>
+              </button>
+
+              <button class="control-card" id="nextWeekBtn">
+                <span>➡</span>
+                <strong>Minggu Berikutnya</strong>
+                <small>Geser otomatis 18 nomor</small>
+              </button>
+
+              <button class="control-card" id="printRotationBtn">
+                <span>🖨</span>
+                <strong>Print</strong>
+                <small>Cetak pembagian apel</small>
+              </button>
+
+              <button class="control-card" id="copyRotationBtn">
+                <span>📋</span>
+                <strong>Salin</strong>
+                <small>Salin daftar kelompok</small>
+              </button>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="group-grid">
+          <article class="panel group-panel group-one">
+            <div class="group-header">
+              <div>
+                <span class="group-badge">APEL 01</span>
+                <h3>Kelompok Pertama</h3>
+              </div>
+              <strong id="groupOneCount">18 siswa</strong>
+            </div>
+
+            <div class="group-list" id="groupOneList"></div>
+          </article>
+
+          <article class="panel group-panel group-two">
+            <div class="group-header">
+              <div>
+                <span class="group-badge">APEL 02</span>
+                <h3>Kelompok Kedua</h3>
+              </div>
+              <strong id="groupTwoCount">18 siswa</strong>
+            </div>
+
+            <div class="group-list" id="groupTwoList"></div>
+          </article>
+        </div>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <span class="panel-kicker">SEQUENCE</span>
+              <h3>Urutan Nomor 1 — 36</h3>
+            </div>
+            <span class="tag purple" id="rotationStatus">Mulai #23</span>
+          </div>
+
+          <div class="sequence-strip" id="sequenceStrip"></div>
+        </article>
+
+      </section>
+
+      <section class="dashboard" id="dashboard-tools">
+
+        <div class="section-banner tools-banner">
+          <div>
+            <span class="hero-label">DASHBOARD 04</span>
+            <h2>TJKT Tools & Class Utilities</h2>
+            <p>Tools ringan yang berguna untuk kegiatan kelas dan praktik jaringan.</p>
+          </div>
+
+          <div class="banner-icon">⚙</div>
+        </div>
+
+        <div class="tools-grid">
+
+          <article class="panel tool-card">
+            <div class="tool-title">
+              <span class="tool-icon">🌐</span>
+              <div>
+                <h3>IP Class Checker</h3>
+                <small>Identifikasi class IPv4</small>
+              </div>
+            </div>
+
+            <input type="text" id="ipInput" class="tool-input" placeholder="Contoh: 192.168.1.10">
+
+            <button class="primary-btn full" id="checkIpBtn">Cek IP</button>
+
+            <div class="tool-result" id="ipResult">Belum ada hasil.</div>
+          </article>
+
+          <article class="panel tool-card">
+            <div class="tool-title">
+              <span class="tool-icon">🧮</span>
+              <div>
+                <h3>Subnet Helper</h3>
+                <small>Hitung host dan subnet</small>
+              </div>
+            </div>
+
+            <div class="inline-inputs">
+              <input type="text" id="subnetIpInput" class="tool-input" placeholder="192.168.1.0">
+              <input type="number" id="prefixInput" class="tool-input" min="0" max="32" value="24">
+            </div>
+
+            <button class="primary-btn full" id="calcSubnetBtn">Hitung Subnet</button>
+
+            <div class="tool-result" id="subnetResult">Belum ada hasil.</div>
+          </article>
+
+          <article class="panel tool-card">
+            <div class="tool-title">
+              <span class="tool-icon">🎲</span>
+              <div>
+                <h3>Random Student</h3>
+                <small>Pilih siswa secara acak</small>
+              </div>
+            </div>
+
+            <div class="random-tool-output" id="randomToolOutput">
+              <span>?</span>
+              <strong>Siapa yang terpilih?</strong>
+            </div>
+
+            <button class="primary-btn full" id="randomToolBtn">Acak Siswa</button>
+          </article>
+
+          <article class="panel tool-card">
+            <div class="tool-title">
+              <span class="tool-icon">⏱</span>
+              <div>
+                <h3>Class Countdown</h3>
+                <small>Timer kegiatan kelas</small>
+              </div>
+            </div>
+
+            <div class="timer-display" id="timerDisplay">00:00</div>
+
+            <div class="inline-inputs timer-inputs">
+              <input type="number" id="timerMinutes" class="tool-input" min="0" value="5" placeholder="Menit">
+              <input type="number" id="timerSeconds" class="tool-input" min="0" max="59" value="0" placeholder="Detik">
+            </div>
+
+            <div class="button-row">
+              <button class="primary-btn" id="startTimerBtn">Start</button>
+              <button class="secondary-btn" id="resetTimerBtn">Reset</button>
+            </div>
+          </article>
+
+        </div>
+
+        <div class="content-grid two-col">
+
+          <article class="panel notes-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">CLASS NOTES</span>
+                <h3>Catatan Kelas</h3>
+              </div>
+
+              <span class="tag cyan">Autosave</span>
+            </div>
+
+            <textarea
+              id="classNotes"
+              class="notes-area"
+              placeholder="Tulis catatan penting kelas di sini..."
+            ></textarea>
+
+            <div class="notes-footer">
+              <span id="notesStatus">Belum ada perubahan.</span>
+              <button class="secondary-btn small" id="clearNotesBtn">Hapus Catatan</button>
+            </div>
+          </article>
+
+          <article class="panel utility-panel">
+            <div class="panel-heading">
+              <div>
+                <span class="panel-kicker">SYSTEM ACTION</span>
+                <h3>Utilitas</h3>
+              </div>
+            </div>
+
+            <div class="utility-list">
+              <button class="utility-action" id="exportDataBtn">
+                <span>⬇</span>
+                <div>
+                  <strong>Export Data JSON</strong>
+                  <small>Unduh konfigurasi dan data kelas</small>
+                </div>
+              </button>
+
+              <button class="utility-action" id="printPageBtn">
+                <span>🖨</span>
+                <div>
+                  <strong>Print Dashboard</strong>
+                  <small>Cetak tampilan yang sedang aktif</small>
+                </div>
+              </button>
+
+              <button class="utility-action" id="resetStorageBtn">
+                <span>↺</span>
+                <div>
+                  <strong>Reset Penyimpanan</strong>
+                  <small>Kembalikan pengaturan lokal</small>
+                </div>
+              </button>
+            </div>
+
+            <div class="warning-box">
+              <strong>Catatan</strong>
+              <span>Data dashboard disimpan di browser perangkat ini menggunakan localStorage.</span>
+            </div>
+          </article>
+
+        </div>
+
+      </section>
+
+      <footer class="site-footer">
+        <span>XI TJKT 2 • Class Server</span>
+        <span>Built for class productivity & networking practice</span>
+      </footer>
+
+    </main>
+  </div>
+
+  <div class="toast-container" id="toastContainer"></div>
+
+  <div class="modal-overlay hidden" id="studentModal">
+    <div class="modal-card">
+      <button class="modal-close" id="closeStudentModal">×</button>
+      <div id="studentModalContent"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
