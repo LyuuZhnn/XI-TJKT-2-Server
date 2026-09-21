@@ -1,751 +1,1601 @@
+'use strict';
+
+/* =========================================================
+   XI TJKT 2 — COMMAND CENTER
+   Fresh JavaScript architecture
+========================================================= */
+
 const STUDENTS = [
-  "AHLIF ANNISA","ARINA MAZIYA","AULA SHABIRINA","BAITI CAHAYA ANDINI","CANDRA NILA OKTAVIANA","DAFFI AL HAMMAMI","DANIKA FARHANI","DONISAH","FARADILA MAULA","FARHAN AZHAR","HAFIZH AKMAL RIYADI","HANA MAHEERA MUTHIANIQA","LUTFIANAZWA RAMADHAN N","M. FAHRI JAVIER SATYA PRADITA","M. RAHMATUL ARIFIN","MISHEL RAMADHANI","MUHAMMAD RIFQI FAIZAL","MUHAMMAD RIZKI AKBAR","MUSYAFFA HANIF SUNNI","NADYA SHAFWAH","NASYA ANAYA PUTRI","NAWAL FAUZIATUL AWLIYA","NAYRA CELLIA ANKADIRA","NAZLIZA ARLIANA PUTRI","NUR NADYA ULYA","NURLIA AZIZAH","NURUL QONITA ASRIYA","RAFA ADITYA","RIFFI GUNAWAN","SELINAFYA ELDIANA","SITI NUR HIKMAH","SYIFA FADILLAH MURTONO","TALITA YUMNA AL - MUDZAKIRAH","TIARA ZENITA SARI","TITIN SOFIYATUN NISA","WAFIYATU SYAFA MAULIDA"
+  "AHLIF ANNISA",
+  "ARINA MAZIYA",
+  "AULA SHABIRINA",
+  "BAITI CAHAYA ANDINI",
+  "CANDRA NILA OKTAVIANA",
+  "DAFFI AL HAMMAMI",
+  "DANIKA FARHANI",
+  "DONISAH",
+  "FARADILA MAULA",
+  "FARHAN AZHAR",
+  "HAFIZH AKMAL RIYADI",
+  "HANA MAHEERA MUTHIANIQA",
+  "LUTFIANAZWA RAMADHAN N",
+  "M. FAHRI JAVIER SATYA PRADITA",
+  "M. RAHMATUL ARIFIN",
+  "MISHEL RAMADHANI",
+  "MUHAMMAD RIFQI FAIZAL",
+  "MUHAMMAD RIZKI AKBAR",
+  "MUSYAFFA HANIF SUNNI",
+  "NADYA SHAFWAH",
+  "NASYA ANAYA PUTRI",
+  "NAWAL FAUZIATUL AWLIYA",
+  "NAYRA CELLIA ANKADIRA",
+  "NAZLIZA ARLIANA PUTRI",
+  "NUR NADYA ULYA",
+  "NURLIA AZIZAH",
+  "NURUL QONITA ASRIYA",
+  "RAFA ADITYA",
+  "RIFFI GUNAWAN",
+  "SELINAFYA ELDIANA",
+  "SITI NUR HIKMAH",
+  "SYIFA FADILLAH MURTONO",
+  "TALITA YUMNA AL - MUDZAKIRAH",
+  "TIARA ZENITA SARI",
+  "TITIN SOFIYATUN NISA",
+  "WAFIYATU SYAFA MAULIDA"
 ];
 
 const SCHEDULE = {
-  A:{
-    Senin:["Matematika","PAI BP","Bahasa Inggris"],
-    Selasa:["Bahasa Indonesia","Bahasa Jawa","Sejarah","PP"],
-    Rabu:["Sejarah","PAI BP","Bahasa Jawa","Bahasa Inggris"],
-    Kamis:["Matematika","Bahasa Indonesia","KIK"],
-    Jumat:["KIK"]
+  A: {
+    Senin: ["Matematika", "PAI BP", "Bahasa Inggris"],
+    Selasa: ["Bahasa Indonesia", "Bahasa Jawa", "Sejarah", "PP"],
+    Rabu: ["Sejarah", "PAI BP", "Bahasa Jawa", "Bahasa Inggris"],
+    Kamis: ["Matematika", "Bahasa Indonesia", "KIK"],
+    Jumat: ["KIK"]
   },
-  B:{
-    Senin:["Kejuruan"],
-    Selasa:["Kejuruan","Mapil","PJOK"],
-    Rabu:["Kejuruan"],
-    Kamis:["Kejuruan Infra"],
-    Jumat:["Bahasa Jepang"]
+  B: {
+    Senin: ["Kejuruan"],
+    Selasa: ["Kejuruan", "Mapil", "PJOK"],
+    Rabu: ["Kejuruan"],
+    Kamis: ["Kejuruan Infra"],
+    Jumat: ["Bahasa Jepang"]
   }
 };
 
 const DUTY = {
-  Senin:["DAFFI AL HAMMAMI","FARHAN AZHAR","AHLIF ANNISA","ARINA MAZIYA","AULA SHABIRINA","BAITI CAHAYA ANDINI","CANDRA NILA OKTAVIANA"],
-  Selasa:["HAFIZH AKMAL RIYADI","M. FAHRI JAVIER SATYA PRADITA","DANIKA FARHANI","DONISAH","FARADILA MAULA","HANA MAHEERA MUTHIANIQA","LUTFIANAZWA RAMADHAN N"],
-  Rabu:["M. RAHMATUL ARIFIN","MISHEL RAMADHANI","NADYA SHAFWAH","NASYA ANAYA PUTRI","NAWAL FAUZIATUL AWLIYA","NAYRA CELLIA ANKADIRA","NAZLIZA ARLIANA PUTRI"],
-  Kamis:["MUHAMMAD RIFQI FAIZAL","MUHAMMAD RIZKI AKBAR","NUR NADYA ULYA","NURLIA AZIZAH","NURUL QONITA ASRIYA","RIFFI GUNAWAN","SELINAFYA ELDIANA"],
-  Jumat:["MUSYAFFA HANIF SUNNI","RAFA ADITYA","SITI NUR HIKMAH","SYIFA FADILLAH MURTONO","TALITA YUMNA AL - MUDZAKIRAH","TIARA ZENITA SARI","TITIN SOFIYATUN NISA","WAFIYATU SYAFA MAULIDA"]
+  Senin: [
+    "DAFFI AL HAMMAMI",
+    "FARHAN AZHAR",
+    "AHLIF ANNISA",
+    "ARINA MAZIYA",
+    "AULA SHABIRINA",
+    "BAITI CAHAYA ANDINI",
+    "CANDRA NILA OKTAVIANA"
+  ],
+  Selasa: [
+    "HAFIZH AKMAL RIYADI",
+    "M. FAHRI JAVIER SATYA PRADITA",
+    "DANIKA FARHANI",
+    "DONISAH",
+    "FARADILA MAULA",
+    "HANA MAHEERA MUTHIANIQA",
+    "LUTFIANAZWA RAMADHAN N"
+  ],
+  Rabu: [
+    "M. RAHMATUL ARIFIN",
+    "MISHEL RAMADHANI",
+    "NADYA SHAFWAH",
+    "NASYA ANAYA PUTRI",
+    "NAWAL FAUZIATUL AWLIYA",
+    "NAYRA CELLIA ANKADIRA",
+    "NAZLIZA ARLIANA PUTRI"
+  ],
+  Kamis: [
+    "MUHAMMAD RIFQI FAIZAL",
+    "MUHAMMAD RIZKI AKBAR",
+    "NUR NADYA ULYA",
+    "NURLIA AZIZAH",
+    "NURUL QONITA ASRIYA",
+    "RIFFI GUNAWAN",
+    "SELINAFYA ELDIANA"
+  ],
+  Jumat: [
+    "MUSYAFFA HANIF SUNNI",
+    "RAFA ADITYA",
+    "SITI NUR HIKMAH",
+    "SYIFA FADILLAH MURTONO",
+    "TALITA YUMNA AL - MUDZAKIRAH",
+    "TIARA ZENITA SARI",
+    "TITIN SOFIYATUN NISA",
+    "WAFIYATU SYAFA MAULIDA"
+  ]
 };
 
-const DAYS = ["Senin","Selasa","Rabu","Kamis","Jumat"];
+const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
 
-const QUOTES = [
-  '"Rapi di sistem, kompak di lapangan, kuat di jaringan."',
-  '"Satu kelas bukan cuma kumpulan nama—kita satu node."',
-  '"Belajar bareng, debug bareng, naik level bareng."',
-  '"Disiplin itu konfigurasi pertama sebelum jaringan berjalan."',
-  '"XI TJKT 2: terkoneksi, terarah, siap bergerak."'
+const APEL_PAIRS = Array.from(
+  { length: 18 },
+  (_, i) => [STUDENTS[i * 2], STUDENTS[i * 2 + 1]]
+);
+
+const PORTS = [
+  ["20", "FTP Data"],
+  ["21", "FTP Control"],
+  ["22", "SSH"],
+  ["23", "Telnet"],
+  ["25", "SMTP"],
+  ["53", "DNS"],
+  ["67/68", "DHCP"],
+  ["80", "HTTP"],
+  ["110", "POP3"],
+  ["143", "IMAP"],
+  ["443", "HTTPS"],
+  ["3306", "MySQL"],
+  ["3389", "RDP"],
+  ["8080", "HTTP Alternate"]
+];
+
+const OSI = [
+  ["7", "Application", "HTTP, DNS, FTP, SMTP"],
+  ["6", "Presentation", "Encoding, encryption, compression"],
+  ["5", "Session", "Session establishment & control"],
+  ["4", "Transport", "TCP, UDP, ports"],
+  ["3", "Network", "IP, routing"],
+  ["2", "Data Link", "Ethernet, MAC, switching"],
+  ["1", "Physical", "Cable, fiber, signal"]
+];
+
+const RJ45 = [
+  "White/Orange",
+  "Orange",
+  "White/Green",
+  "Blue",
+  "White/Blue",
+  "Green",
+  "White/Brown",
+  "Brown"
 ];
 
 const state = {
-  view: localStorage.getItem("tjkt2-view") || "dashboard1",
-  block: localStorage.getItem("tjkt2-block") || "A",
-  day: localStorage.getItem("tjkt2-day") || "Senin",
-  rotationWeek: Number(localStorage.getItem("tjkt2-rotation-week") || 1),
-  checkedDuty: loadJSON("tjkt2-duty-checks", {}),
-  notes: localStorage.getItem("tjkt2-notes") || ""
+  activeDashboard: 1,
+  scheduleType: "A",
+  scheduleDay: getDayName(),
+  studentSearch: "",
+  studentFilter: "all",
+  agendaTab: "schedule",
+  calendarDate: new Date(),
+  countdownTimer: null,
+  countdownSeconds: 0,
+  apelIndex: getApelIndex(),
+  announcements: loadJSON("xi-tjkt2-announcements", [
+    {
+      title: "Selamat datang di Class Command Center",
+      text: "Gunakan dashboard ini sebagai pusat informasi XI TJKT 2."
+    }
+  ]),
+  tasks: loadJSON("xi-tjkt2-tasks", []),
+  notes: localStorage.getItem("xi-tjkt2-notes") || ""
 };
 
-const $ = id => document.getElementById(id);
+/* =========================================================
+   HELPERS
+========================================================= */
 
-function loadJSON(key,fallback){
-  try{
-    return JSON.parse(localStorage.getItem(key) || "null") ?? fallback;
-  }catch{
+function $(id) {
+  return document.getElementById(id);
+}
+
+function $all(selector) {
+  return [...document.querySelectorAll(selector)];
+}
+
+function escapeHTML(value) {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function initials(name) {
+  return name
+    .split(/\s+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map(word => word[0])
+    .join("");
+}
+
+function loadJSON(key, fallback) {
+  try {
+    const value = JSON.parse(localStorage.getItem(key));
+    return value ?? fallback;
+  } catch {
     return fallback;
   }
 }
 
-function saveState(){
-  localStorage.setItem("tjkt2-view",state.view);
-  localStorage.setItem("tjkt2-block",state.block);
-  localStorage.setItem("tjkt2-day",state.day);
-  localStorage.setItem("tjkt2-rotation-week",String(state.rotationWeek));
-  localStorage.setItem("tjkt2-duty-checks",JSON.stringify(state.checkedDuty));
+function saveState() {
+  localStorage.setItem(
+    "xi-tjkt2-announcements",
+    JSON.stringify(state.announcements)
+  );
+  localStorage.setItem(
+    "xi-tjkt2-tasks",
+    JSON.stringify(state.tasks)
+  );
+  localStorage.setItem("xi-tjkt2-notes", state.notes);
 }
 
-function escapeHTML(value){
-  return String(value).replace(/[&<>'"]/g,char=>({
-    "&":"&amp;",
-    "<":"&lt;",
-    ">":"&gt;",
-    "'":"&#39;",
-    '"':"&quot;"
-  }[char]));
+function getDayName(date = new Date()) {
+  const map = [
+    "Minggu",
+    "Senin",
+    "Selasa",
+    "Rabu",
+    "Kamis",
+    "Jumat",
+    "Sabtu"
+  ];
+  return map[date.getDay()];
 }
 
-function studentNumber(name){
+function showToast(message) {
+  let container = $("toastContainer");
+
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toastContainer";
+    container.className = "toast-container";
+    document.body.appendChild(container);
+  }
+
+  const toast = document.createElement("div");
+  toast.className = "toast";
+  toast.textContent = message;
+  container.appendChild(toast);
+
+  setTimeout(() => toast.remove(), 3200);
+}
+
+/* =========================================================
+   DASHBOARD NAVIGATION
+========================================================= */
+
+function switchDashboard(number) {
+  state.activeDashboard = Number(number);
+
+  $all(".dashboard").forEach(section => {
+    section.classList.toggle(
+      "active",
+      section.id === `dashboard${state.activeDashboard}`
+    );
+  });
+
+  $all(".nav-item").forEach(button => {
+    button.classList.toggle(
+      "active",
+      Number(button.dataset.dashboard) === state.activeDashboard
+    );
+  });
+
+  const title = document.title;
+  if (!title.includes("XI TJKT 2")) {
+    document.title = "XI TJKT 2 — Command Center";
+  }
+
+  closeMobileSidebar();
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}
+
+function initNavigation() {
+  $all(".nav-item").forEach(button => {
+    button.addEventListener("click", () => {
+      switchDashboard(button.dataset.dashboard);
+    });
+  });
+
+  const mobileMenu = $("mobileMenuButton");
+
+  if (mobileMenu) {
+    mobileMenu.addEventListener("click", () => {
+      $("sidebar")?.classList.toggle("open");
+    });
+  }
+
+  $("sidebarClose")?.addEventListener("click", closeMobileSidebar);
+}
+
+function closeMobileSidebar() {
+  $("sidebar")?.classList.remove("open");
+}
+
+/* =========================================================
+   CLOCK / DATE
+========================================================= */
+
+function updateClock() {
+  const now = new Date();
+
+  const time = now.toLocaleTimeString("id-ID", {
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit"
+  });
+
+  const date = now.toLocaleDateString("id-ID", {
+    weekday: "long",
+    day: "numeric",
+    month: "long",
+    year: "numeric"
+  });
+
+  $all("[data-live-clock]").forEach(el => {
+    el.textContent = time;
+  });
+
+  $all("[data-live-date]").forEach(el => {
+    el.textContent = date;
+  });
+
+  const day = getDayName(now);
+  if (DAYS.includes(day) && state.scheduleDay !== day) {
+    state.scheduleDay = day;
+    renderSchedule();
+    renderDuty();
+    renderCommandCenter();
+  }
+
+  renderCalendarIfVisible();
+}
+
+/* =========================================================
+   COMMAND CENTER
+========================================================= */
+
+function renderCommandCenter() {
+  const day = DAYS.includes(state.scheduleDay)
+    ? state.scheduleDay
+    : "Senin";
+
+  const normalSubjects = SCHEDULE.A[day] || [];
+  const kejuruanSubjects = SCHEDULE.B[day] || [];
+  const duty = DUTY[day] || [];
+
+  const commandSchedule = $("ccTodaySchedule");
+
+  if (commandSchedule) {
+    commandSchedule.innerHTML = [
+      ...normalSubjects,
+      ...kejuruanSubjects
+    ]
+      .slice(0, 6)
+      .map(subject => `<div>${escapeHTML(subject)}</div>`)
+      .join("");
+  }
+
+  const dutyList = $("ccTodayDuty");
+
+  if (dutyList) {
+    dutyList.innerHTML = duty
+      .slice(0, 6)
+      .map(name => `<div>${escapeHTML(name)}</div>`)
+      .join("");
+  }
+
+  const apel = getCurrentApelPair();
+
+  if ($("ccApelToday")) {
+    $("ccApelToday").textContent = apel.today;
+  }
+
+  if ($("ccApelNext")) {
+    $("ccApelNext").textContent = apel.next;
+  }
+
+  if ($("ccStudentCount")) {
+    $("ccStudentCount").textContent = STUDENTS.length;
+  }
+
+  if ($("ccTaskCount")) {
+    $("ccTaskCount").textContent =
+      state.tasks.filter(task => !task.done).length;
+  }
+
+  renderAnnouncements();
+  renderTasks();
+  renderWeeklyAgenda();
+}
+
+/* =========================================================
+   STUDENTS
+========================================================= */
+
+function renderStudents() {
+  const grid = $("studentDirectory");
+
+  if (!grid) return;
+
+  const query = state.studentSearch.trim().toLowerCase();
+
+  let filtered = STUDENTS.map((name, index) => ({
+    name,
+    number: index + 1
+  }));
+
+  if (query) {
+    filtered = filtered.filter(student =>
+      student.name.toLowerCase().includes(query)
+    );
+  }
+
+  if (state.studentFilter === "odd") {
+    filtered = filtered.filter(student => student.number % 2 === 1);
+  }
+
+  if (state.studentFilter === "even") {
+    filtered = filtered.filter(student => student.number % 2 === 0);
+  }
+
+  grid.innerHTML = filtered
+    .map(student => {
+      const avatar = initials(student.name);
+
+      return `
+        <article class="student-card" data-student="${escapeHTML(student.name)}">
+          <div class="student-card-top">
+            <div class="student-number">#${String(student.number).padStart(2, "0")}</div>
+            <div class="student-avatar">${escapeHTML(avatar)}</div>
+          </div>
+          <h3>${escapeHTML(student.name)}</h3>
+          <p>XI TJKT 2 · Student Directory</p>
+        </article>
+      `;
+    })
+    .join("");
+
+  const counter = $("studentResultCount");
+
+  if (counter) {
+    counter.textContent = `${filtered.length} siswa`;
+  }
+
+  $all(".student-card").forEach(card => {
+    card.addEventListener("click", () => {
+      openStudentModal(card.dataset.student);
+    });
+  });
+
+  if ($("studentTotal")) {
+    $("studentTotal").textContent = STUDENTS.length;
+  }
+
+  if ($("studentVisible")) {
+    $("studentVisible").textContent = filtered.length;
+  }
+}
+
+function openStudentModal(name) {
   const index = STUDENTS.indexOf(name);
-  return index >= 0 ? String(index + 1).padStart(2,"0") : "--";
+  const modal = $("studentModal");
+
+  if (!modal || index < 0) return;
+
+  const nameElement = $("studentModalName");
+  const numberElement = $("studentModalNumber");
+  const avatarElement = $("studentModalAvatar");
+
+  if (nameElement) nameElement.textContent = name;
+  if (numberElement) {
+    numberElement.textContent =
+      `Nomor absen ${String(index + 1).padStart(2, "0")}`;
+  }
+  if (avatarElement) avatarElement.textContent = initials(name);
+
+  modal.classList.add("open");
 }
 
-function showToast(message){
-  const el = $("toast");
-  el.textContent = message;
-  el.classList.add("show");
-  clearTimeout(showToast.timer);
-  showToast.timer = setTimeout(()=>el.classList.remove("show"),2200);
+function closeStudentModal() {
+  $("studentModal")?.classList.remove("open");
 }
 
-const PAGE_TITLES = {
-  dashboard1:"Class Hub",
-  dashboard2:"Jadwal & Piket",
-  dashboard3:"Apel & Baris",
-  dashboard4:"TJKT Tools"
-};
+function randomStudent() {
+  const student =
+    STUDENTS[Math.floor(Math.random() * STUDENTS.length)];
 
-function switchView(view){
-  if(!PAGE_TITLES[view]) return;
+  openStudentModal(student);
+  showToast(`Random student: ${student}`);
+}
 
-  state.view = view;
+/* =========================================================
+   SCHEDULE + DUTY
+========================================================= */
 
-  document.querySelectorAll(".view").forEach(el=>{
-    el.classList.toggle("active",el.id===view);
+function renderSchedule() {
+  const day = state.scheduleDay;
+
+  $all("[data-schedule-type]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.scheduleType === state.scheduleType
+    );
   });
 
-  document.querySelectorAll(".nav-button").forEach(el=>{
-    el.classList.toggle("active",el.dataset.view===view);
+  $all("[data-schedule-day]").forEach(button => {
+    button.classList.toggle(
+      "active",
+      button.dataset.scheduleDay === day
+    );
   });
 
-  $("pageTitle").textContent = PAGE_TITLES[view];
-  saveState();
-  window.scrollTo({top:0,behavior:"smooth"});
-}
+  const target = $("scheduleList");
 
-document.querySelectorAll(".nav-button").forEach(button=>{
-  button.addEventListener("click",()=>switchView(button.dataset.view));
-});
+  if (!target) return;
 
-document.querySelectorAll("[data-jump]").forEach(button=>{
-  button.addEventListener("click",()=>switchView(button.dataset.jump));
-});
-
-function renderStats(){
-  const uniqueDuty = new Set(Object.values(DUTY).flat()).size;
-
-  $("classStats").innerHTML = [
-    ["36","TOTAL SISWA","Roster aktif"],
-    ["05","HARI","Senin — Jumat"],
-    ["18","PAIR APEL","Rotasi otomatis"],
-    [String(uniqueDuty),"PETUGAS PIKET","Coverage mingguan"]
-  ].map(([value,label,note])=>`
-    <article class="stat-card">
-      <span class="stat-label">${label}</span>
-      <strong class="stat-value">${value}</strong>
-      <small class="stat-note">${note}</small>
-    </article>
-  `).join("");
-
-  $("studentCountLabel").textContent = `${STUDENTS.length} TERDAFTAR`;
-}
-
-function renderStudentGrid(filter=""){
-  const needle = filter.trim().toLowerCase();
-
-  const filtered = STUDENTS
-    .map((name,index)=>({name,index}))
-    .filter(({name})=>name.toLowerCase().includes(needle));
-
-  $("studentGrid").innerHTML =
-    filtered.map(({name,index})=>`
-      <article class="student-card">
-        <span class="student-id">NODE ${String(index+1).padStart(2,"0")}</span>
-        <strong>${escapeHTML(name)}</strong>
-        <small>XI TJKT 2</small>
-      </article>
-    `).join("") ||
-    `<div class="empty-state">Nama tidak ditemukan.</div>`;
-
-  $("studentCountLabel").textContent = `${filtered.length} DITAMPILKAN`;
-}
-
-function renderDutyDistribution(){
-  const max = Math.max(...Object.values(DUTY).map(list=>list.length));
-
-  $("dutyDistribution").innerHTML = DAYS.map(day=>{
-    const count = DUTY[day].length;
+  target.innerHTML = DAYS.map(dayName => {
+    const subjects = SCHEDULE[state.scheduleType][dayName] || [];
+    const active = dayName === day;
 
     return `
-      <div class="bar-item">
-        <span class="bar-day">${day}</span>
-        <div class="bar-track">
-          <div class="bar-fill" style="width:${Math.round((count/max)*100)}%"></div>
+      <div class="schedule-day ${active ? "active" : ""}">
+        <strong>${dayName}</strong>
+        <div class="subjects">
+          ${subjects.map(subject =>
+            `<span class="subject">${escapeHTML(subject)}</span>`
+          ).join("")}
         </div>
-        <strong>${count}</strong>
       </div>
     `;
   }).join("");
 }
 
-function randomStudent(targetId){
-  const target = $(targetId);
-  const winner = STUDENTS[Math.floor(Math.random()*STUDENTS.length)];
+function renderDuty() {
+  const target = $("dutyGrid");
 
-  target.innerHTML = `
-    <span class="focus-label">RANDOMIZED · ${studentNumber(winner)}</span>
-    <strong>${escapeHTML(winner)}</strong>
-    <small>XI TJKT 2 • node ${studentNumber(winner)}</small>
-  `;
+  if (!target) return;
 
-  showToast(`${winner} terpilih`);
-}
-
-function initHub(){
-  renderStats();
-  renderStudentGrid();
-  renderDutyDistribution();
-
-  $("newQuote").addEventListener("click",()=>{
-    const quote = $("classQuote");
-    const current = quote.textContent;
-    let next = QUOTES[Math.floor(Math.random()*QUOTES.length)];
-
-    if(next===current){
-      next = QUOTES[(QUOTES.indexOf(current)+1)%QUOTES.length];
-    }
-
-    quote.textContent = next;
-  });
-
-  $("studentSearch").addEventListener("input",event=>{
-    renderStudentGrid(event.target.value);
-  });
-
-  $("randomStudentTop").addEventListener("click",()=>{
-    randomStudent("focusStudent");
-  });
-}
-
-function renderDaySwitcher(){
-  $("daySwitcher").innerHTML = DAYS.map(day=>`
-    <button class="${day===state.day?"active":""}" data-day="${day}">
-      ${day}
-    </button>
-  `).join("");
-
-  $("daySwitcher").querySelectorAll("button").forEach(button=>{
-    button.addEventListener("click",()=>{
-      state.day = button.dataset.day;
-      saveState();
-      renderSchedule();
-    });
-  });
-}
-
-function renderSchedule(){
-  document.querySelectorAll("#blockSwitcher button").forEach(button=>{
-    button.classList.toggle("active",button.dataset.block===state.block);
-  });
-
-  renderDaySwitcher();
-
-  const subjects = SCHEDULE[state.block][state.day];
-
-  $("scheduleEyebrow").textContent =
-    `BLOCK ${state.block} · ${state.day.toUpperCase()}`;
-
-  $("subjectTotal").textContent = `${subjects.length} MAPEL`;
-
-  $("scheduleList").innerHTML = subjects.map((subject,index)=>`
-    <div class="schedule-item">
-      <span class="schedule-index">${String(index+1).padStart(2,"0")}</span>
-      <strong>${escapeHTML(subject)}</strong>
-      <small>BLOCK ${state.block}</small>
+  target.innerHTML = DAYS.map(day => `
+    <div class="duty-day ${day === state.scheduleDay ? "active" : ""}">
+      <h4>${day}</h4>
+      <ol>
+        ${(DUTY[day] || [])
+          .map(name => `<li>${escapeHTML(name)}</li>`)
+          .join("")}
+      </ol>
     </div>
   `).join("");
+}
 
-  const list = DUTY[state.day];
+/* =========================================================
+   ANNOUNCEMENTS
+========================================================= */
 
-  $("dutyTitle").textContent = `Piket ${state.day}`;
-  $("dutyTotal").textContent = `${list.length} ORANG`;
+function renderAnnouncements() {
+  const targets = [
+    $("announcementList"),
+    $("ccAnnouncements")
+  ].filter(Boolean);
 
-  $("dutyList").innerHTML = list.map((name,index)=>{
-    const key = `${state.day}-${name}`;
-    const checked = Boolean(state.checkedDuty[key]);
+  targets.forEach(target => {
+    if (!state.announcements.length) {
+      target.innerHTML =
+        `<div class="empty-state">Belum ada pengumuman.</div>`;
+      return;
+    }
 
-    return `
-      <div class="duty-item ${checked?"checked":""}">
-        <input type="checkbox" id="duty-${index}" data-duty-key="${escapeHTML(key)}" ${checked?"checked":""}>
-        <label for="duty-${index}">${escapeHTML(name)}</label>
-      </div>
-    `;
-  }).join("");
-
-  $("dutyList").querySelectorAll("input").forEach(input=>{
-    input.addEventListener("change",()=>{
-      state.checkedDuty[input.dataset.dutyKey] = input.checked;
-      saveState();
-      renderDutyProgress();
-    });
+    target.innerHTML = state.announcements
+      .slice()
+      .reverse()
+      .slice(0, 5)
+      .map(item => `
+        <article class="announcement-item">
+          <strong>${escapeHTML(item.title)}</strong>
+          <p>${escapeHTML(item.text)}</p>
+        </article>
+      `)
+      .join("");
   });
-
-  renderDutyProgress();
 }
 
-function renderDutyProgress(){
-  const list = DUTY[state.day];
-  const done = list.filter(name=>state.checkedDuty[`${state.day}-${name}`]).length;
-  const percent = list.length ? Math.round((done/list.length)*100) : 0;
+function addAnnouncement() {
+  const title = $("announcementTitle")?.value.trim();
+  const text = $("announcementText")?.value.trim();
 
-  $("dutyDone").textContent = `${done} / ${list.length}`;
-  $("dutyProgress").style.width = `${percent}%`;
-}
-
-function initSchedule(){
-  document.querySelectorAll("#blockSwitcher button").forEach(button=>{
-    button.addEventListener("click",()=>{
-      state.block = button.dataset.block;
-      saveState();
-      renderSchedule();
-    });
-  });
-
-  renderSchedule();
-}
-
-function getRotationPair(week){
-  const weekIndex = ((week-1)%18+18)%18;
-  const firstIndex = weekIndex*2;
-
-  return {
-    today:STUDENTS[firstIndex],
-    next:STUDENTS[(firstIndex+1)%STUDENTS.length]
-  };
-}
-
-function renderRotation(){
-  state.rotationWeek = Math.min(18,Math.max(1,Number(state.rotationWeek)||1));
-
-  const pair = getRotationPair(state.rotationWeek);
-
-  $("rotationWeek").value = state.rotationWeek;
-  $("rotationWeekLabel").textContent =
-    String(state.rotationWeek).padStart(2,"0");
-
-  $("todayNumber").textContent = studentNumber(pair.today);
-  $("todayName").textContent = pair.today;
-  $("todayMeta").textContent = `Nomor siswa ${studentNumber(pair.today)}`;
-
-  $("nextNumber").textContent = studentNumber(pair.next);
-  $("nextName").textContent = pair.next;
-  $("nextMeta").textContent = `Nomor siswa ${studentNumber(pair.next)}`;
-
-  $("rotationStatus").textContent =
-    `Minggu ${state.rotationWeek}: ${pair.today} → ${pair.next}`;
-
-  $("pairRoadmap").innerHTML = Array.from({length:18},(_,i)=>{
-    const a = STUDENTS[i*2];
-    const b = STUDENTS[i*2+1];
-
-    return `
-      <div class="pair-chip ${i===state.rotationWeek-1?"active":""}">
-        <b>MINGGU ${String(i+1).padStart(2,"0")}</b>
-        <span>
-          ${studentNumber(a)} · ${escapeHTML(a)}<br>
-          ${studentNumber(b)} · ${escapeHTML(b)}
-        </span>
-      </div>
-    `;
-  }).join("");
-
-  saveState();
-}
-
-function stepRotation(delta){
-  state.rotationWeek += delta;
-
-  if(state.rotationWeek>18) state.rotationWeek = 1;
-  if(state.rotationWeek<1) state.rotationWeek = 18;
-
-  renderRotation();
-  showToast(`Masuk Minggu ${state.rotationWeek}`);
-}
-
-function initRotation(){
-  $("rotationPrev").addEventListener("click",()=>stepRotation(-1));
-  $("rotationNext").addEventListener("click",()=>stepRotation(1));
-
-  $("nextRotationHero").addEventListener("click",()=>stepRotation(1));
-
-  $("resetRotationHero").addEventListener("click",()=>{
-    state.rotationWeek = 1;
-    renderRotation();
-    showToast("Rotasi kembali ke Minggu 1");
-  });
-
-  $("resetRotation").addEventListener("click",()=>{
-    state.rotationWeek = 1;
-    renderRotation();
-    showToast("Rotasi kembali ke Minggu 1");
-  });
-
-  $("generateRotation").addEventListener("click",()=>{
-    state.rotationWeek =
-      Math.min(18,Math.max(1,Number($("rotationWeek").value)||1));
-
-    renderRotation();
-    showToast(`Minggu ${state.rotationWeek} dimuat`);
-  });
-
-  $("rotationWeek").addEventListener("change",()=>{
-    state.rotationWeek =
-      Math.min(18,Math.max(1,Number($("rotationWeek").value)||1));
-
-    renderRotation();
-  });
-
-  renderRotation();
-}
-
-function validIPv4(input){
-  const parts = String(input).trim().split(".");
-
-  if(parts.length!==4 || parts.some(part=>!/^\d+$/.test(part))){
-    return null;
-  }
-
-  const nums = parts.map(Number);
-
-  if(nums.some(n=>n<0 || n>255)){
-    return null;
-  }
-
-  return nums;
-}
-
-function classifyIPv4(nums){
-  if(
-    nums[0]===10 ||
-    (nums[0]===172 && nums[1]>=16 && nums[1]<=31) ||
-    (nums[0]===192 && nums[1]===168)
-  ){
-    return "PRIVATE";
-  }
-
-  if(nums[0]===127) return "LOOPBACK";
-  if(nums[0]>=224 && nums[0]<=239) return "MULTICAST";
-  if(nums[0]>=240) return "RESERVED";
-  if(nums[0]===169 && nums[1]===254) return "LINK-LOCAL";
-
-  return "PUBLIC / GENERAL";
-}
-
-function className(nums){
-  const first = nums[0];
-
-  if(first<=126) return "A";
-  if(first<=191) return "B";
-  if(first<=223) return "C";
-  if(first<=239) return "D";
-
-  return "E";
-}
-
-function checkIP(){
-  const nums = validIPv4($("ipInput").value);
-
-  if(!nums){
-    $("ipResult").innerHTML = `
-      <div><span>STATUS</span><strong>INVALID</strong></div>
-      <div><span>TYPE</span><strong>CHECK INPUT</strong></div>
-      <div><span>OCTETS</span><strong>—</strong></div>
-      <div><span>CLASS</span><strong>—</strong></div>
-    `;
-
-    showToast("Format IPv4 tidak valid");
+  if (!title || !text) {
+    showToast("Isi judul dan isi pengumuman dulu.");
     return;
   }
 
-  $("ipResult").innerHTML = `
-    <div><span>STATUS</span><strong>VALID</strong></div>
-    <div><span>TYPE</span><strong>${classifyIPv4(nums)}</strong></div>
-    <div><span>OCTETS</span><strong>${nums.join(" · ")}</strong></div>
-    <div><span>CLASS</span><strong>${className(nums)}</strong></div>
-  `;
+  state.announcements.push({ title, text });
+  saveState();
+  renderAnnouncements();
+
+  if ($("announcementTitle")) $("announcementTitle").value = "";
+  if ($("announcementText")) $("announcementText").value = "";
+
+  showToast("Pengumuman ditambahkan.");
 }
 
-function ipToInt(nums){
-  return (
-    ((nums[0]<<24)>>>0) +
-    (nums[1]<<16) +
-    (nums[2]<<8) +
-    nums[3]
+/* =========================================================
+   TASK MANAGER
+========================================================= */
+
+function renderTasks() {
+  const targets = [
+    $("taskList"),
+    $("ccTasks")
+  ].filter(Boolean);
+
+  targets.forEach(target => {
+    if (!state.tasks.length) {
+      target.innerHTML =
+        `<div class="empty-state">Belum ada tugas.</div>`;
+      return;
+    }
+
+    target.innerHTML = state.tasks
+      .map((task, index) => `
+        <article class="task-item ${task.done ? "done" : ""}">
+          <input
+            class="task-check"
+            type="checkbox"
+            data-task-index="${index}"
+            ${task.done ? "checked" : ""}
+          >
+          <div>
+            <strong>${escapeHTML(task.title)}</strong>
+            <p>${escapeHTML(task.deadline || "Tanpa deadline")}</p>
+          </div>
+        </article>
+      `)
+      .join("");
+  });
+
+  $all(".task-check").forEach(check => {
+    check.addEventListener("change", () => {
+      const index = Number(check.dataset.taskIndex);
+      if (state.tasks[index]) {
+        state.tasks[index].done = check.checked;
+        saveState();
+        renderTasks();
+        renderCommandCenter();
+      }
+    });
+  });
+}
+
+function addTask() {
+  const title = $("taskTitle")?.value.trim();
+  const deadline = $("taskDeadline")?.value.trim();
+
+  if (!title) {
+    showToast("Isi nama tugas dulu.");
+    return;
+  }
+
+  state.tasks.push({
+    title,
+    deadline,
+    done: false
+  });
+
+  saveState();
+  renderTasks();
+  renderCommandCenter();
+
+  if ($("taskTitle")) $("taskTitle").value = "";
+  if ($("taskDeadline")) $("taskDeadline").value = "";
+
+  showToast("Tugas ditambahkan.");
+}
+
+/* =========================================================
+   GLOBAL SEARCH
+========================================================= */
+
+function globalSearch(query) {
+  const target = $("globalSearchResults");
+
+  if (!target) return;
+
+  const q = query.trim().toLowerCase();
+
+  if (!q) {
+    target.innerHTML =
+      `<div class="empty-state">Ketik nama siswa, mapel, atau kata kunci.</div>`;
+    return;
+  }
+
+  const results = [];
+
+  STUDENTS.forEach((name, index) => {
+    if (name.toLowerCase().includes(q)) {
+      results.push({
+        type: "SISWA",
+        title: name,
+        detail: `Nomor ${index + 1}`
+      });
+    }
+  });
+
+  Object.entries(SCHEDULE).forEach(([type, days]) => {
+    Object.entries(days).forEach(([day, subjects]) => {
+      subjects.forEach(subject => {
+        if (subject.toLowerCase().includes(q)) {
+          results.push({
+            type: "JADWAL",
+            title: subject,
+            detail: `${day} · Block ${type}`
+          });
+        }
+      });
+    });
+  });
+
+  Object.entries(DUTY).forEach(([day, names]) => {
+    names.forEach(name => {
+      if (name.toLowerCase().includes(q)) {
+        results.push({
+          type: "PIKET",
+          title: name,
+          detail: `Piket ${day}`
+        });
+      }
+    });
+  });
+
+  if (!results.length) {
+    target.innerHTML =
+      `<div class="empty-state">Tidak ada hasil untuk "${escapeHTML(query)}".</div>`;
+    return;
+  }
+
+  target.innerHTML = results
+    .slice(0, 15)
+    .map(result => `
+      <article class="announcement-item">
+        <span class="badge">${escapeHTML(result.type)}</span>
+        <strong>${escapeHTML(result.title)}</strong>
+        <p>${escapeHTML(result.detail)}</p>
+      </article>
+    `)
+    .join("");
+}
+
+/* =========================================================
+   WEEKLY AGENDA
+========================================================= */
+
+function renderWeeklyAgenda() {
+  const target = $("weeklyAgenda");
+
+  if (!target) return;
+
+  target.innerHTML = DAYS.map(day => {
+    const normal = SCHEDULE.A[day] || [];
+    const kejuruan = SCHEDULE.B[day] || [];
+
+    return `
+      <div class="week-card ${day === state.scheduleDay ? "active" : ""}">
+        <span>${day.toUpperCase()}</span>
+        <strong>${normal.length + kejuruan.length} sesi</strong>
+        <p>${escapeHTML([...normal, ...kejuruan].slice(0, 3).join(" · "))}</p>
+      </div>
+    `;
+  }).join("");
+}
+
+/* =========================================================
+   APEL — 18 PAIRS
+========================================================= */
+
+function getApelIndex() {
+  const stored = Number(localStorage.getItem("xi-tjkt2-apel-index"));
+
+  if (
+    Number.isInteger(stored) &&
+    stored >= 0 &&
+    stored < APEL_PAIRS.length
+  ) {
+    return stored;
+  }
+
+  return 0;
+}
+
+function getCurrentApelPair() {
+  const todayPair = APEL_PAIRS[state.apelIndex];
+  const nextPair = APEL_PAIRS[(state.apelIndex + 1) % APEL_PAIRS.length];
+
+  return {
+    today: todayPair[0],
+    next: todayPair[1],
+    nextPair,
+    pair: todayPair
+  };
+}
+
+function renderApel() {
+  const current = getCurrentApelPair();
+
+  if ($("apelTodayName")) {
+    $("apelTodayName").textContent = current.today;
+  }
+
+  if ($("apelNextName")) {
+    $("apelNextName").textContent = current.next;
+  }
+
+  if ($("apelTodayAvatar")) {
+    $("apelTodayAvatar").textContent = initials(current.today);
+  }
+
+  if ($("apelNextAvatar")) {
+    $("apelNextAvatar").textContent = initials(current.next);
+  }
+
+  if ($("apelPairNumber")) {
+    $("apelPairNumber").textContent =
+      `PAIR ${state.apelIndex + 1}`;
+  }
+
+  if ($("apelCurrentPair")) {
+    $("apelCurrentPair").textContent =
+      `${current.pair[0]} + ${current.pair[1]}`;
+  }
+
+  const pairGrid = $("apelPairGrid");
+
+  if (pairGrid) {
+    pairGrid.innerHTML = APEL_PAIRS.map((pair, index) => `
+      <div class="apel-pair ${index === state.apelIndex ? "active" : ""}">
+        <span>WEEK ${index + 1}</span>
+        <strong>${escapeHTML(pair[0])}</strong>
+        <small>${escapeHTML(pair[1])}</small>
+      </div>
+    `).join("");
+  }
+}
+
+function nextApelPair() {
+  state.apelIndex =
+    (state.apelIndex + 1) % APEL_PAIRS.length;
+
+  localStorage.setItem(
+    "xi-tjkt2-apel-index",
+    String(state.apelIndex)
   );
+
+  renderApel();
+  renderCommandCenter();
+
+  showToast(`Apel berpindah ke Week ${state.apelIndex + 1}.`);
 }
 
-function intToIp(num){
+function resetApel() {
+  state.apelIndex = 0;
+
+  localStorage.setItem(
+    "xi-tjkt2-apel-index",
+    "0"
+  );
+
+  renderApel();
+  renderCommandCenter();
+
+  showToast("Siklus apel kembali ke Week 1.");
+}
+
+/* =========================================================
+   IPv4 ANALYZER
+========================================================= */
+
+function ipToNumber(ip) {
+  const parts = ip.split(".").map(Number);
+
+  if (
+    parts.length !== 4 ||
+    parts.some(
+      part => !Number.isInteger(part) || part < 0 || part > 255
+    )
+  ) {
+    return null;
+  }
+
+  return (
+    ((parts[0] << 24) >>> 0) +
+    (parts[1] << 16) +
+    (parts[2] << 8) +
+    parts[3]
+  ) >>> 0;
+}
+
+function numberToIp(number) {
   return [
-    (num>>>24)&255,
-    (num>>>16)&255,
-    (num>>>8)&255,
-    num&255
+    (number >>> 24) & 255,
+    (number >>> 16) & 255,
+    (number >>> 8) & 255,
+    number & 255
   ].join(".");
 }
 
-function maskFromPrefix(prefix){
-  return prefix===0 ? 0 : (0xFFFFFFFF<<(32-prefix))>>>0;
+function prefixToMask(prefix) {
+  if (prefix < 0 || prefix > 32) return null;
+
+  if (prefix === 0) return 0;
+
+  return (0xffffffff << (32 - prefix)) >>> 0;
 }
 
-function calcSubnet(){
-  const nums = validIPv4($("subnetInput").value);
-  const prefix = Number($("prefixInput").value);
+function analyzeIPv4(value) {
+  const input = value.trim();
+  const match = input.match(/^(\d+\.\d+\.\d+\.\d+)(?:\/(\d{1,2}))?$/);
 
-  if(!nums || !Number.isInteger(prefix) || prefix<0 || prefix>32){
-    $("subnetResult").innerHTML =
-      `<p>Masukkan IPv4 valid dan prefix 0–32.</p>`;
-
-    showToast("Subnet input tidak valid");
-    return;
+  if (!match) {
+    return "Format tidak valid. Contoh: 192.168.1.10/24";
   }
 
-  const ip = ipToInt(nums);
-  const mask = maskFromPrefix(prefix);
-  const network = (ip&mask)>>>0;
-  const broadcast = (network|(~mask>>>0))>>>0;
+  const ip = match[1];
+  const prefix = match[2] === undefined
+    ? 24
+    : Number(match[2]);
+
+  const ipNumber = ipToNumber(ip);
+  const mask = prefixToMask(prefix);
+
+  if (ipNumber === null || mask === null) {
+    return "IPv4 atau prefix tidak valid.";
+  }
+
+  const network = (ipNumber & mask) >>> 0;
+  const broadcast = (network | (~mask >>> 0)) >>> 0;
 
   const hosts =
-    prefix===32 ? 1 :
-    prefix===31 ? 2 :
-    Math.max(0,(2**(32-prefix))-2);
+    prefix >= 31
+      ? Math.pow(2, 32 - prefix)
+      : Math.max(0, Math.pow(2, 32 - prefix) - 2);
 
-  $("subnetResult").innerHTML = `
-    <div><strong>Network:</strong> ${intToIp(network)}/${prefix}</div>
-    <div><strong>Broadcast:</strong> ${intToIp(broadcast)}</div>
-    <div><strong>Subnet Mask:</strong> ${intToIp(mask)}</div>
-    <div><strong>Usable Hosts:</strong> ${hosts.toLocaleString("id-ID")}</div>
+  const firstHost =
+    prefix >= 31
+      ? numberToIp(network)
+      : numberToIp((network + 1) >>> 0);
+
+  const lastHost =
+    prefix >= 31
+      ? numberToIp(broadcast)
+      : numberToIp((broadcast - 1) >>> 0);
+
+  const binary =
+    ip.split(".")
+      .map(part => Number(part).toString(2).padStart(8, "0"))
+      .join(".");
+
+  return `
+    <strong>Network:</strong> ${numberToIp(network)}<br>
+    <strong>Broadcast:</strong> ${numberToIp(broadcast)}<br>
+    <strong>First Host:</strong> ${firstHost}<br>
+    <strong>Last Host:</strong> ${lastHost}<br>
+    <strong>Prefix:</strong> /${prefix}<br>
+    <strong>Usable / addresses:</strong> ${hosts.toLocaleString("id-ID")}<br>
+    <strong>Binary:</strong> ${binary}
   `;
 }
 
-let countdownTimer = null;
-let countdownRemaining = 300;
+function checkIp() {
+  const input = $("labIpInput")?.value || "";
+  const result = $("labIpResult");
 
-function formatTime(seconds){
-  const minutes = Math.floor(seconds/60);
-  const secs = seconds%60;
+  if (!result) return;
 
-  return `${String(minutes).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+  result.innerHTML = analyzeIPv4(input);
 }
 
-function syncCountdownInputs(){
-  const minutes = Math.max(0,Number($("countdownMinutes").value)||0);
-  const seconds = Math.min(
-    59,
-    Math.max(0,Number($("countdownSeconds").value)||0)
+/* =========================================================
+   SUBNET CALCULATOR
+========================================================= */
+
+function calculateSubnet() {
+  const ip = $("subnetIp")?.value.trim() || "";
+  const prefix = Number($("subnetPrefix")?.value || 24);
+  const result = $("subnetResult");
+
+  if (!result) return;
+
+  const ipNumber = ipToNumber(ip);
+  const mask = prefixToMask(prefix);
+
+  if (ipNumber === null || mask === null) {
+    result.textContent = "Masukkan IPv4 dan prefix yang valid.";
+    return;
+  }
+
+  const network = (ipNumber & mask) >>> 0;
+  const broadcast = (network | (~mask >>> 0)) >>> 0;
+  const total = Math.pow(2, 32 - prefix);
+  const usable = prefix <= 30 ? Math.max(total - 2, 0) : total;
+
+  result.innerHTML = `
+    Network: <strong>${numberToIp(network)}</strong><br>
+    Broadcast: <strong>${numberToIp(broadcast)}</strong><br>
+    Total addresses: <strong>${total}</strong><br>
+    Usable hosts: <strong>${usable}</strong>
+  `;
+}
+
+/* =========================================================
+   DECIMAL / BINARY
+========================================================= */
+
+function decimalToBinary() {
+  const input = $("decimalInput")?.value.trim() || "";
+  const result = $("binaryResult");
+
+  if (!result) return;
+
+  const number = Number(input);
+
+  if (!Number.isInteger(number) || number < 0) {
+    result.textContent = "Masukkan bilangan bulat positif.";
+    return;
+  }
+
+  result.textContent = number.toString(2);
+}
+
+function binaryToDecimal() {
+  const input = $("binaryInput")?.value.trim() || "";
+  const result = $("decimalResult");
+
+  if (!result) return;
+
+  if (!/^[01]+$/.test(input)) {
+    result.textContent = "Binary hanya boleh berisi 0 dan 1.";
+    return;
+  }
+
+  result.textContent = parseInt(input, 2).toString(10);
+}
+
+/* =========================================================
+   MAC FORMATTER
+========================================================= */
+
+function formatMac() {
+  const input = $("macInput")?.value || "";
+  const result = $("macResult");
+
+  if (!result) return;
+
+  const clean = input
+    .replace(/[^a-fA-F0-9]/g, "")
+    .slice(0, 12)
+    .toUpperCase();
+
+  if (clean.length !== 12) {
+    result.textContent = "MAC harus terdiri dari 12 digit hex.";
+    return;
+  }
+
+  const colon = clean.match(/.{2}/g).join(":");
+  const hyphen = clean.match(/.{2}/g).join("-");
+  const cisco = clean.match(/.{4}/g).join(".");
+
+  result.innerHTML = `
+    Colon: ${colon}<br>
+    Hyphen: ${hyphen}<br>
+    Cisco: ${cisco}
+  `;
+}
+
+/* =========================================================
+   PORT SEARCH
+========================================================= */
+
+function searchPort(query) {
+  const target = $("portResults");
+
+  if (!target) return;
+
+  const q = query.trim().toLowerCase();
+
+  const results = PORTS.filter(([port, service]) =>
+    `${port} ${service}`.toLowerCase().includes(q)
   );
 
-  countdownRemaining = minutes*60+seconds;
-  $("countdownDisplay").textContent = formatTime(countdownRemaining);
-}
-
-function stopCountdown(){
-  if(countdownTimer){
-    clearInterval(countdownTimer);
-    countdownTimer = null;
+  if (!results.length) {
+    target.innerHTML =
+      `<div class="empty-state compact">Port tidak ditemukan.</div>`;
+    return;
   }
+
+  target.innerHTML = results.map(([port, service]) => `
+    <div class="reference-row">
+      <b>${escapeHTML(port)}</b>
+      <span>${escapeHTML(service)}</span>
+    </div>
+  `).join("");
 }
 
-function randomStudentToolSpin(){
-  const spot = $("randomToolSpot");
-  const duration = 850;
-  const start = performance.now();
+/* =========================================================
+   HTTP STATUS
+========================================================= */
 
-  function tick(now){
-    const progress = Math.min(1,(now-start)/duration);
-    const current =
-      STUDENTS[Math.floor(Math.random()*STUDENTS.length)];
+const HTTP_STATUS = [
+  ["200", "OK"],
+  ["201", "Created"],
+  ["204", "No Content"],
+  ["301", "Moved Permanently"],
+  ["302", "Found"],
+  ["400", "Bad Request"],
+  ["401", "Unauthorized"],
+  ["403", "Forbidden"],
+  ["404", "Not Found"],
+  ["405", "Method Not Allowed"],
+  ["408", "Request Timeout"],
+  ["429", "Too Many Requests"],
+  ["500", "Internal Server Error"],
+  ["502", "Bad Gateway"],
+  ["503", "Service Unavailable"],
+  ["504", "Gateway Timeout"]
+];
 
-    spot.innerHTML = `
-      <span>SCANNING · ${Math.round(progress*100)}%</span>
-      <strong>${escapeHTML(current)}</strong>
-      <small>Routing class nodes...</small>
-    `;
+function searchHttpStatus(query = "") {
+  const target = $("httpStatusResults");
 
-    if(progress<1){
-      requestAnimationFrame(tick);
-    }else{
-      const winner =
-        STUDENTS[Math.floor(Math.random()*STUDENTS.length)];
+  if (!target) return;
 
-      spot.innerHTML = `
-        <span>SELECTED · ${studentNumber(winner)}</span>
-        <strong>${escapeHTML(winner)}</strong>
-        <small>XI TJKT 2 • random result</small>
-      `;
+  const q = query.trim().toLowerCase();
 
-      showToast(`${winner} terpilih`);
+  const results = HTTP_STATUS.filter(([code, text]) =>
+    `${code} ${text}`.toLowerCase().includes(q)
+  );
+
+  target.innerHTML = results.map(([code, text]) => `
+    <div class="reference-row">
+      <b>${code}</b>
+      <span>${text}</span>
+    </div>
+  `).join("");
+}
+
+/* =========================================================
+   DNS
+========================================================= */
+
+function showDnsInfo() {
+  const target = $("dnsResult");
+
+  if (!target) return;
+
+  target.innerHTML = `
+    <strong>A</strong> → IPv4 address<br>
+    <strong>AAAA</strong> → IPv6 address<br>
+    <strong>CNAME</strong> → Canonical name<br>
+    <strong>MX</strong> → Mail server<br>
+    <strong>NS</strong> → Authoritative nameserver<br>
+    <strong>TXT</strong> → Text / verification data
+  `;
+}
+
+/* =========================================================
+   NOTES
+========================================================= */
+
+function initNotes() {
+  const notes = $("notesArea");
+
+  if (!notes) return;
+
+  notes.value = state.notes;
+
+  notes.addEventListener("input", () => {
+    state.notes = notes.value;
+    localStorage.setItem("xi-tjkt2-notes", state.notes);
+  });
+}
+
+/* =========================================================
+   COUNTDOWN
+========================================================= */
+
+function renderCountdown() {
+  const target = $("countdownDisplay");
+
+  if (!target) return;
+
+  const total = Math.max(0, state.countdownSeconds);
+
+  const hours = Math.floor(total / 3600);
+  const minutes = Math.floor((total % 3600) / 60);
+  const seconds = total % 60;
+
+  target.textContent =
+    `${String(hours).padStart(2, "0")}:` +
+    `${String(minutes).padStart(2, "0")}:` +
+    `${String(seconds).padStart(2, "0")}`;
+}
+
+function startCountdown() {
+  const minutes = Number($("countdownMinutes")?.value || 0);
+  const seconds = Number($("countdownSeconds")?.value || 0);
+
+  state.countdownSeconds =
+    Math.max(0, Math.floor(minutes * 60 + seconds));
+
+  if (!state.countdownSeconds) {
+    showToast("Masukkan durasi countdown.");
+    return;
+  }
+
+  clearInterval(state.countdownTimer);
+
+  renderCountdown();
+
+  state.countdownTimer = setInterval(() => {
+    state.countdownSeconds--;
+
+    renderCountdown();
+
+    if (state.countdownSeconds <= 0) {
+      clearInterval(state.countdownTimer);
+      showToast("Countdown selesai.");
     }
-  }
-
-  requestAnimationFrame(tick);
+  }, 1000);
 }
 
-function exportClassData(){
-  const data = {
-    generatedAt:new Date().toISOString(),
-    className:"XI TJKT 2",
-    students:STUDENTS,
-    schedule:SCHEDULE,
-    duty:DUTY,
-    rotation:{
-      week:state.rotationWeek,
-      pairs:Array.from(
-        {length:18},
-        (_,i)=>[STUDENTS[i*2],STUDENTS[i*2+1]]
-      )
-    },
-    notes:state.notes
+function pauseCountdown() {
+  clearInterval(state.countdownTimer);
+  state.countdownTimer = null;
+}
+
+function resetCountdown() {
+  pauseCountdown();
+  state.countdownSeconds = 0;
+  renderCountdown();
+}
+
+/* =========================================================
+   CALENDAR
+========================================================= */
+
+function renderCalendar() {
+  const target = $("calendarGrid");
+
+  if (!target) return;
+
+  const year = state.calendarDate.getFullYear();
+  const month = state.calendarDate.getMonth();
+
+  const first = new Date(year, month, 1);
+  const last = new Date(year, month + 1, 0);
+
+  const startDay = (first.getDay() + 6) % 7;
+  const totalDays = last.getDate();
+
+  const previousMonthDays =
+    new Date(year, month, 0).getDate();
+
+  const cells = [];
+
+  for (let i = startDay - 1; i >= 0; i--) {
+    cells.push({
+      day: previousMonthDays - i,
+      muted: true
+    });
+  }
+
+  for (let day = 1; day <= totalDays; day++) {
+    cells.push({
+      day,
+      muted: false
+    });
+  }
+
+  while (cells.length % 7 !== 0) {
+    cells.push({
+      day: cells.length - totalDays - startDay + 1,
+      muted: true
+    });
+  }
+
+  target.innerHTML = cells.map(cell => {
+    const today = new Date();
+    const isToday =
+      !cell.muted &&
+      cell.day === today.getDate() &&
+      month === today.getMonth() &&
+      year === today.getFullYear();
+
+    return `
+      <div class="calendar-cell ${cell.muted ? "muted" : ""} ${isToday ? "today" : ""}">
+        <div class="calendar-number">${cell.day}</div>
+      </div>
+    `;
+  }).join("");
+
+  const title = $("calendarMonth");
+
+  if (title) {
+    title.textContent =
+      state.calendarDate.toLocaleDateString("id-ID", {
+        month: "long",
+        year: "numeric"
+      });
+  }
+}
+
+function renderCalendarIfVisible() {
+  if ($("dashboard3")?.classList.contains("active")) {
+    renderCalendar();
+  }
+}
+
+function changeCalendarMonth(offset) {
+  state.calendarDate = new Date(
+    state.calendarDate.getFullYear(),
+    state.calendarDate.getMonth() + offset,
+    1
+  );
+
+  renderCalendar();
+}
+
+function resetCalendar() {
+  state.calendarDate = new Date();
+  renderCalendar();
+}
+
+/* =========================================================
+   EXPORT / PRINT
+========================================================= */
+
+function exportClassData() {
+  const payload = {
+    class: "XI TJKT 2",
+    exportedAt: new Date().toISOString(),
+    students: STUDENTS,
+    schedule: SCHEDULE,
+    duty: DUTY,
+    apelPairs: APEL_PAIRS,
+    activeApelPair: state.apelIndex + 1,
+    announcements: state.announcements,
+    tasks: state.tasks,
+    notes: state.notes
   };
 
   const blob = new Blob(
-    [JSON.stringify(data,null,2)],
-    {type:"application/json"}
+    [JSON.stringify(payload, null, 2)],
+    { type: "application/json" }
   );
 
   const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
+  const anchor = document.createElement("a");
 
-  a.href = url;
-  a.download = "XI-TJKT-2-class-data.json";
-  a.click();
+  anchor.href = url;
+  anchor.download = "XI-TJKT-2-class-data.json";
+  anchor.click();
 
   URL.revokeObjectURL(url);
-  showToast("Data kelas berhasil diexport");
+
+  showToast("Data class berhasil diexport.");
 }
 
-function initTools(){
-  $("checkIp").addEventListener("click",checkIP);
+function printDashboard() {
+  window.print();
+}
 
-  $("ipInput").addEventListener("keydown",event=>{
-    if(event.key==="Enter") checkIP();
+/* =========================================================
+   STATIC REFERENCES
+========================================================= */
+
+function renderReferences() {
+  const osiTarget = $("osiReference");
+
+  if (osiTarget) {
+    osiTarget.innerHTML = OSI.map(([layer, name, detail]) => `
+      <div class="reference-row">
+        <b>L${layer}</b>
+        <span><strong>${name}</strong> · ${detail}</span>
+      </div>
+    `).join("");
+  }
+
+  const rjTarget = $("rj45Reference");
+
+  if (rjTarget) {
+    rjTarget.innerHTML = RJ45.map((wire, index) => `
+      <div class="rj45-pin">
+        <b>${index + 1}</b>
+        <span>${wire}</span>
+      </div>
+    `).join("");
+  }
+
+  searchPort("");
+
+  searchHttpStatus("");
+
+  showDnsInfo();
+}
+
+/* =========================================================
+   EVENT BINDINGS
+========================================================= */
+
+function bindEvents() {
+
+  $all("[data-schedule-type]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.scheduleType = button.dataset.scheduleType;
+      renderSchedule();
+    });
   });
 
-  $("calcSubnet").addEventListener("click",calcSubnet);
+  $all("[data-schedule-day]").forEach(button => {
+    button.addEventListener("click", () => {
+      state.scheduleDay = button.dataset.scheduleDay;
+      renderSchedule();
+      renderDuty();
+      renderCommandCenter();
+    });
+  });
 
-  $("randomStudentTool").addEventListener(
+  $("studentSearch")?.addEventListener("input", event => {
+    state.studentSearch = event.target.value;
+    renderStudents();
+  });
+
+  $("studentFilter")?.addEventListener("change", event => {
+    state.studentFilter = event.target.value;
+    renderStudents();
+  });
+
+  $("randomStudentButton")?.addEventListener(
     "click",
-    randomStudentToolSpin
+    randomStudent
   );
 
-  $("countdownMinutes").addEventListener("input",()=>{
-    if(!countdownTimer) syncCountdownInputs();
-  });
+  $("studentModalClose")?.addEventListener(
+    "click",
+    closeStudentModal
+  );
 
-  $("countdownSeconds").addEventListener("input",()=>{
-    if(!countdownTimer) syncCountdownInputs();
-  });
-
-  $("countdownStart").addEventListener("click",()=>{
-    if(countdownTimer) return;
-
-    if(countdownRemaining<=0){
-      syncCountdownInputs();
-    }
-
-    countdownTimer = setInterval(()=>{
-      countdownRemaining =
-        Math.max(0,countdownRemaining-1);
-
-      $("countdownDisplay").textContent =
-        formatTime(countdownRemaining);
-
-      if(countdownRemaining===0){
-        stopCountdown();
-        showToast("Countdown selesai");
-      }
-    },1000);
-
-    showToast("Countdown berjalan");
-  });
-
-  $("countdownPause").addEventListener("click",()=>{
-    stopCountdown();
-    showToast("Countdown dipause");
-  });
-
-  $("countdownReset").addEventListener("click",()=>{
-    stopCountdown();
-    syncCountdownInputs();
-    showToast("Countdown direset");
-  });
-
-  $("classNotes").value = state.notes;
-
-  $("classNotes").addEventListener("input",event=>{
-    state.notes = event.target.value;
-    localStorage.setItem("tjkt2-notes",state.notes);
-
-    $("notesState").textContent = "SAVED";
-
-    clearTimeout(initTools.notesTimer);
-
-    initTools.notesTimer = setTimeout(()=>{
-      $("notesState").textContent = "LOCAL";
-    },900);
-  });
-
-  $("clearNotes").addEventListener("click",()=>{
-    state.notes = "";
-    $("classNotes").value = "";
-    localStorage.removeItem("tjkt2-notes");
-    $("notesState").textContent = "CLEARED";
-
-    showToast("Catatan dibersihkan");
-
-    setTimeout(()=>{
-      $("notesState").textContent = "LOCAL";
-    },900);
-  });
-
-  $("exportData").addEventListener("click",exportClassData);
-  $("printPage").addEventListener("click",()=>window.print());
-
-  syncCountdownInputs();
-}
-
-function updateClock(){
-  const now = new Date();
-
-  $("liveClock").textContent =
-    now.toLocaleTimeString("id-ID",{hour12:false});
-
-  $("liveDate").textContent =
-    now.toLocaleDateString("id-ID",{
-      weekday:"long",
-      day:"2-digit",
-      month:"long",
-      year:"numeric"
-    });
-}
-
-function initMobile(){
-  $("mobileMenuButton").addEventListener("click",()=>{
-    const sidebar = $("sidebar");
-
-    sidebar.style.display =
-      sidebar.style.display==="block" ? "none" : "block";
-
-    if(sidebar.style.display==="block"){
-      sidebar.style.position = "fixed";
-      sidebar.style.width = "260px";
-      sidebar.style.zIndex = "150";
-      sidebar.style.top = "60px";
-      sidebar.style.bottom = "0";
-      sidebar.style.left = "0";
+  $("studentModal")?.addEventListener("click", event => {
+    if (event.target.classList.contains("modal-backdrop")) {
+      closeStudentModal();
     }
   });
+
+  $("addAnnouncementButton")?.addEventListener(
+    "click",
+    addAnnouncement
+  );
+
+  $("addTaskButton")?.addEventListener(
+    "click",
+    addTask
+  );
+
+  $("globalSearch")?.addEventListener(
+    "input",
+    event => globalSearch(event.target.value)
+  );
+
+  $("nextApelButton")?.addEventListener(
+    "click",
+    nextApelPair
+  );
+
+  $("resetApelButton")?.addEventListener(
+    "click",
+    resetApel
+  );
+
+  $("labIpButton")?.addEventListener(
+    "click",
+    checkIp
+  );
+
+  $("subnetButton")?.addEventListener(
+    "click",
+    calculateSubnet
+  );
+
+  $("decimalButton")?.addEventListener(
+    "click",
+    decimalToBinary
+  );
+
+  $("binaryButton")?.addEventListener(
+    "click",
+    binaryToDecimal
+  );
+
+  $("macButton")?.addEventListener(
+    "click",
+    formatMac
+  );
+
+  $("portSearch")?.addEventListener(
+    "input",
+    event => searchPort(event.target.value)
+  );
+
+  $("httpStatusSearch")?.addEventListener(
+    "input",
+    event => searchHttpStatus(event.target.value)
+  );
+
+  $("startCountdownButton")?.addEventListener(
+    "click",
+    startCountdown
+  );
+
+  $("pauseCountdownButton")?.addEventListener(
+    "click",
+    pauseCountdown
+  );
+
+  $("resetCountdownButton")?.addEventListener(
+    "click",
+    resetCountdown
+  );
+
+  $("calendarPrev")?.addEventListener(
+    "click",
+    () => changeCalendarMonth(-1)
+  );
+
+  $("calendarNext")?.addEventListener(
+    "click",
+    () => changeCalendarMonth(1)
+  );
+
+  $("calendarToday")?.addEventListener(
+    "click",
+    resetCalendar
+  );
+
+  $("exportButton")?.addEventListener(
+    "click",
+    exportClassData
+  );
+
+  $("printButton")?.addEventListener(
+    "click",
+    printDashboard
+  );
 }
 
-function init(){
-  initHub();
-  initSchedule();
-  initRotation();
-  initTools();
-  initMobile();
+/* =========================================================
+   INITIAL RENDER
+========================================================= */
+
+function init() {
+  initNavigation();
+  bindEvents();
+
+  renderStudents();
+  renderSchedule();
+  renderDuty();
+  renderApel();
+  renderCommandCenter();
+  renderCalendar();
+  renderReferences();
+  initNotes();
+  renderCountdown();
 
   updateClock();
-  setInterval(updateClock,1000);
 
-  switchView(state.view);
+  setInterval(updateClock, 1000);
+
+  switchDashboard(1);
+
+  console.log(
+    `%cXI TJKT 2%c Command Center initialized`,
+    "color:#38e8ff;font-weight:800",
+    "color:#a855ff;font-weight:800"
+  );
 }
 
-document.addEventListener("DOMContentLoaded",init);
+document.addEventListener("DOMContentLoaded", init);
