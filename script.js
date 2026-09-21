@@ -1,1601 +1,1622 @@
-'use strict';
+(() => {
+  "use strict";
 
-/* =========================================================
-   XI TJKT 2 — COMMAND CENTER
-   Fresh JavaScript architecture
-========================================================= */
-
-const STUDENTS = [
-  "AHLIF ANNISA",
-  "ARINA MAZIYA",
-  "AULA SHABIRINA",
-  "BAITI CAHAYA ANDINI",
-  "CANDRA NILA OKTAVIANA",
-  "DAFFI AL HAMMAMI",
-  "DANIKA FARHANI",
-  "DONISAH",
-  "FARADILA MAULA",
-  "FARHAN AZHAR",
-  "HAFIZH AKMAL RIYADI",
-  "HANA MAHEERA MUTHIANIQA",
-  "LUTFIANAZWA RAMADHAN N",
-  "M. FAHRI JAVIER SATYA PRADITA",
-  "M. RAHMATUL ARIFIN",
-  "MISHEL RAMADHANI",
-  "MUHAMMAD RIFQI FAIZAL",
-  "MUHAMMAD RIZKI AKBAR",
-  "MUSYAFFA HANIF SUNNI",
-  "NADYA SHAFWAH",
-  "NASYA ANAYA PUTRI",
-  "NAWAL FAUZIATUL AWLIYA",
-  "NAYRA CELLIA ANKADIRA",
-  "NAZLIZA ARLIANA PUTRI",
-  "NUR NADYA ULYA",
-  "NURLIA AZIZAH",
-  "NURUL QONITA ASRIYA",
-  "RAFA ADITYA",
-  "RIFFI GUNAWAN",
-  "SELINAFYA ELDIANA",
-  "SITI NUR HIKMAH",
-  "SYIFA FADILLAH MURTONO",
-  "TALITA YUMNA AL - MUDZAKIRAH",
-  "TIARA ZENITA SARI",
-  "TITIN SOFIYATUN NISA",
-  "WAFIYATU SYAFA MAULIDA"
-];
-
-const SCHEDULE = {
-  A: {
-    Senin: ["Matematika", "PAI BP", "Bahasa Inggris"],
-    Selasa: ["Bahasa Indonesia", "Bahasa Jawa", "Sejarah", "PP"],
-    Rabu: ["Sejarah", "PAI BP", "Bahasa Jawa", "Bahasa Inggris"],
-    Kamis: ["Matematika", "Bahasa Indonesia", "KIK"],
-    Jumat: ["KIK"]
-  },
-  B: {
-    Senin: ["Kejuruan"],
-    Selasa: ["Kejuruan", "Mapil", "PJOK"],
-    Rabu: ["Kejuruan"],
-    Kamis: ["Kejuruan Infra"],
-    Jumat: ["Bahasa Jepang"]
-  }
-};
-
-const DUTY = {
-  Senin: [
-    "DAFFI AL HAMMAMI",
-    "FARHAN AZHAR",
+  const STUDENTS = [
     "AHLIF ANNISA",
     "ARINA MAZIYA",
     "AULA SHABIRINA",
     "BAITI CAHAYA ANDINI",
-    "CANDRA NILA OKTAVIANA"
-  ],
-  Selasa: [
-    "HAFIZH AKMAL RIYADI",
-    "M. FAHRI JAVIER SATYA PRADITA",
+    "CANDRA NILA OKTAVIANA",
+    "DAFFI AL HAMMAMI",
     "DANIKA FARHANI",
     "DONISAH",
     "FARADILA MAULA",
+    "FARHAN AZHAR",
+    "HAFIZH AKMAL RIYADI",
     "HANA MAHEERA MUTHIANIQA",
-    "LUTFIANAZWA RAMADHAN N"
-  ],
-  Rabu: [
+    "LUTFIANAZWA RAMADHAN N",
+    "M. FAHRI JAVIER SATYA PRADITA",
     "M. RAHMATUL ARIFIN",
     "MISHEL RAMADHANI",
+    "MUHAMMAD RIFQI FAIZAL",
+    "MUHAMMAD RIZKI AKBAR",
+    "MUSYAFFA HANIF SUNNI",
     "NADYA SHAFWAH",
     "NASYA ANAYA PUTRI",
     "NAWAL FAUZIATUL AWLIYA",
     "NAYRA CELLIA ANKADIRA",
-    "NAZLIZA ARLIANA PUTRI"
-  ],
-  Kamis: [
-    "MUHAMMAD RIFQI FAIZAL",
-    "MUHAMMAD RIZKI AKBAR",
+    "NAZLIZA ARLIANA PUTRI",
     "NUR NADYA ULYA",
     "NURLIA AZIZAH",
     "NURUL QONITA ASRIYA",
-    "RIFFI GUNAWAN",
-    "SELINAFYA ELDIANA"
-  ],
-  Jumat: [
-    "MUSYAFFA HANIF SUNNI",
     "RAFA ADITYA",
+    "RIFFI GUNAWAN",
+    "SELINAFYA ELDIANA",
     "SITI NUR HIKMAH",
     "SYIFA FADILLAH MURTONO",
     "TALITA YUMNA AL - MUDZAKIRAH",
     "TIARA ZENITA SARI",
     "TITIN SOFIYATUN NISA",
     "WAFIYATU SYAFA MAULIDA"
-  ]
-};
-
-const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
-
-const APEL_PAIRS = Array.from(
-  { length: 18 },
-  (_, i) => [STUDENTS[i * 2], STUDENTS[i * 2 + 1]]
-);
-
-const PORTS = [
-  ["20", "FTP Data"],
-  ["21", "FTP Control"],
-  ["22", "SSH"],
-  ["23", "Telnet"],
-  ["25", "SMTP"],
-  ["53", "DNS"],
-  ["67/68", "DHCP"],
-  ["80", "HTTP"],
-  ["110", "POP3"],
-  ["143", "IMAP"],
-  ["443", "HTTPS"],
-  ["3306", "MySQL"],
-  ["3389", "RDP"],
-  ["8080", "HTTP Alternate"]
-];
-
-const OSI = [
-  ["7", "Application", "HTTP, DNS, FTP, SMTP"],
-  ["6", "Presentation", "Encoding, encryption, compression"],
-  ["5", "Session", "Session establishment & control"],
-  ["4", "Transport", "TCP, UDP, ports"],
-  ["3", "Network", "IP, routing"],
-  ["2", "Data Link", "Ethernet, MAC, switching"],
-  ["1", "Physical", "Cable, fiber, signal"]
-];
-
-const RJ45 = [
-  "White/Orange",
-  "Orange",
-  "White/Green",
-  "Blue",
-  "White/Blue",
-  "Green",
-  "White/Brown",
-  "Brown"
-];
-
-const state = {
-  activeDashboard: 1,
-  scheduleType: "A",
-  scheduleDay: getDayName(),
-  studentSearch: "",
-  studentFilter: "all",
-  agendaTab: "schedule",
-  calendarDate: new Date(),
-  countdownTimer: null,
-  countdownSeconds: 0,
-  apelIndex: getApelIndex(),
-  announcements: loadJSON("xi-tjkt2-announcements", [
-    {
-      title: "Selamat datang di Class Command Center",
-      text: "Gunakan dashboard ini sebagai pusat informasi XI TJKT 2."
-    }
-  ]),
-  tasks: loadJSON("xi-tjkt2-tasks", []),
-  notes: localStorage.getItem("xi-tjkt2-notes") || ""
-};
-
-/* =========================================================
-   HELPERS
-========================================================= */
-
-function $(id) {
-  return document.getElementById(id);
-}
-
-function $all(selector) {
-  return [...document.querySelectorAll(selector)];
-}
-
-function escapeHTML(value) {
-  return String(value)
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;")
-    .replaceAll('"', "&quot;")
-    .replaceAll("'", "&#039;");
-}
-
-function initials(name) {
-  return name
-    .split(/\s+/)
-    .filter(Boolean)
-    .slice(0, 2)
-    .map(word => word[0])
-    .join("");
-}
-
-function loadJSON(key, fallback) {
-  try {
-    const value = JSON.parse(localStorage.getItem(key));
-    return value ?? fallback;
-  } catch {
-    return fallback;
-  }
-}
-
-function saveState() {
-  localStorage.setItem(
-    "xi-tjkt2-announcements",
-    JSON.stringify(state.announcements)
-  );
-  localStorage.setItem(
-    "xi-tjkt2-tasks",
-    JSON.stringify(state.tasks)
-  );
-  localStorage.setItem("xi-tjkt2-notes", state.notes);
-}
-
-function getDayName(date = new Date()) {
-  const map = [
-    "Minggu",
-    "Senin",
-    "Selasa",
-    "Rabu",
-    "Kamis",
-    "Jumat",
-    "Sabtu"
   ];
-  return map[date.getDay()];
-}
 
-function showToast(message) {
-  let container = $("toastContainer");
+  const SCHEDULE = {
+    A: {
+      Senin: ["Matematika", "PAI BP", "Bahasa Inggris"],
+      Selasa: ["Bahasa Indonesia", "Bahasa Jawa", "Sejarah", "PP"],
+      Rabu: ["Sejarah", "PAI BP", "Bahasa Jawa", "Bahasa Inggris"],
+      Kamis: ["Matematika", "Bahasa Indonesia", "KIK"],
+      Jumat: ["KIK"]
+    },
+    B: {
+      Senin: ["Kejuruan"],
+      Selasa: ["Kejuruan", "Mapil", "PJOK"],
+      Rabu: ["Kejuruan"],
+      Kamis: ["Kejuruan Infra"],
+      Jumat: ["Bahasa Jepang"]
+    }
+  };
 
-  if (!container) {
-    container = document.createElement("div");
-    container.id = "toastContainer";
-    container.className = "toast-container";
-    document.body.appendChild(container);
-  }
-
-  const toast = document.createElement("div");
-  toast.className = "toast";
-  toast.textContent = message;
-  container.appendChild(toast);
-
-  setTimeout(() => toast.remove(), 3200);
-}
-
-/* =========================================================
-   DASHBOARD NAVIGATION
-========================================================= */
-
-function switchDashboard(number) {
-  state.activeDashboard = Number(number);
-
-  $all(".dashboard").forEach(section => {
-    section.classList.toggle(
-      "active",
-      section.id === `dashboard${state.activeDashboard}`
-    );
-  });
-
-  $all(".nav-item").forEach(button => {
-    button.classList.toggle(
-      "active",
-      Number(button.dataset.dashboard) === state.activeDashboard
-    );
-  });
-
-  const title = document.title;
-  if (!title.includes("XI TJKT 2")) {
-    document.title = "XI TJKT 2 — Command Center";
-  }
-
-  closeMobileSidebar();
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}
-
-function initNavigation() {
-  $all(".nav-item").forEach(button => {
-    button.addEventListener("click", () => {
-      switchDashboard(button.dataset.dashboard);
-    });
-  });
-
-  const mobileMenu = $("mobileMenuButton");
-
-  if (mobileMenu) {
-    mobileMenu.addEventListener("click", () => {
-      $("sidebar")?.classList.toggle("open");
-    });
-  }
-
-  $("sidebarClose")?.addEventListener("click", closeMobileSidebar);
-}
-
-function closeMobileSidebar() {
-  $("sidebar")?.classList.remove("open");
-}
-
-/* =========================================================
-   CLOCK / DATE
-========================================================= */
-
-function updateClock() {
-  const now = new Date();
-
-  const time = now.toLocaleTimeString("id-ID", {
-    hour: "2-digit",
-    minute: "2-digit",
-    second: "2-digit"
-  });
-
-  const date = now.toLocaleDateString("id-ID", {
-    weekday: "long",
-    day: "numeric",
-    month: "long",
-    year: "numeric"
-  });
-
-  $all("[data-live-clock]").forEach(el => {
-    el.textContent = time;
-  });
-
-  $all("[data-live-date]").forEach(el => {
-    el.textContent = date;
-  });
-
-  const day = getDayName(now);
-  if (DAYS.includes(day) && state.scheduleDay !== day) {
-    state.scheduleDay = day;
-    renderSchedule();
-    renderDuty();
-    renderCommandCenter();
-  }
-
-  renderCalendarIfVisible();
-}
-
-/* =========================================================
-   COMMAND CENTER
-========================================================= */
-
-function renderCommandCenter() {
-  const day = DAYS.includes(state.scheduleDay)
-    ? state.scheduleDay
-    : "Senin";
-
-  const normalSubjects = SCHEDULE.A[day] || [];
-  const kejuruanSubjects = SCHEDULE.B[day] || [];
-  const duty = DUTY[day] || [];
-
-  const commandSchedule = $("ccTodaySchedule");
-
-  if (commandSchedule) {
-    commandSchedule.innerHTML = [
-      ...normalSubjects,
-      ...kejuruanSubjects
+  const DUTY = {
+    Senin: [
+      "DAFFI AL HAMMAMI",
+      "FARHAN AZHAR",
+      "AHLIF ANNISA",
+      "ARINA MAZIYA",
+      "AULA SHABIRINA",
+      "BAITI CAHAYA ANDINI",
+      "CANDRA NILA OKTAVIANA"
+    ],
+    Selasa: [
+      "HAFIZH AKMAL RIYADI",
+      "M. FAHRI JAVIER SATYA PRADITA",
+      "DANIKA FARHANI",
+      "DONISAH",
+      "FARADILA MAULA",
+      "HANA MAHEERA MUTHIANIQA",
+      "LUTFIANAZWA RAMADHAN N"
+    ],
+    Rabu: [
+      "M. RAHMATUL ARIFIN",
+      "MISHEL RAMADHANI",
+      "NADYA SHAFWAH",
+      "NASYA ANAYA PUTRI",
+      "NAWAL FAUZIATUL AWLIYA",
+      "NAYRA CELLIA ANKADIRA",
+      "NAZLIZA ARLIANA PUTRI"
+    ],
+    Kamis: [
+      "MUHAMMAD RIFQI FAIZAL",
+      "MUHAMMAD RIZKI AKBAR",
+      "NUR NADYA ULYA",
+      "NURLIA AZIZAH",
+      "NURUL QONITA ASRIYA",
+      "RIFFI GUNAWAN",
+      "SELINAFYA ELDIANA"
+    ],
+    Jumat: [
+      "MUSYAFFA HANIF SUNNI",
+      "RAFA ADITYA",
+      "SITI NUR HIKMAH",
+      "SYIFA FADILLAH MURTONO",
+      "TALITA YUMNA AL - MUDZAKIRAH",
+      "TIARA ZENITA SARI",
+      "TITIN SOFIYATUN NISA",
+      "WAFIYATU SYAFA MAULIDA"
     ]
-      .slice(0, 6)
-      .map(subject => `<div>${escapeHTML(subject)}</div>`)
-      .join("");
+  };
+
+  const DAYS = ["Senin", "Selasa", "Rabu", "Kamis", "Jumat"];
+
+  const APEL_PAIRS = Array.from(
+    { length: 18 },
+    (_, index) => [
+      STUDENTS[index * 2],
+      STUDENTS[index * 2 + 1]
+    ]
+  );
+
+  const PORTS = [
+    [20, "FTP Data", "TCP"],
+    [21, "FTP Control", "TCP"],
+    [22, "SSH", "TCP"],
+    [23, "Telnet", "TCP"],
+    [25, "SMTP", "TCP"],
+    [53, "DNS", "TCP/UDP"],
+    [67, "DHCP Server", "UDP"],
+    [68, "DHCP Client", "UDP"],
+    [80, "HTTP", "TCP"],
+    [110, "POP3", "TCP"],
+    [123, "NTP", "UDP"],
+    [143, "IMAP", "TCP"],
+    [161, "SNMP", "UDP"],
+    [443, "HTTPS", "TCP"],
+    [445, "SMB", "TCP"],
+    [3389, "RDP", "TCP"]
+  ];
+
+  const HTTP = [
+    [100, "Continue", "Informational"],
+    [200, "OK", "Success"],
+    [201, "Created", "Success"],
+    [204, "No Content", "Success"],
+    [301, "Moved Permanently", "Redirection"],
+    [302, "Found", "Redirection"],
+    [304, "Not Modified", "Redirection"],
+    [400, "Bad Request", "Client Error"],
+    [401, "Unauthorized", "Client Error"],
+    [403, "Forbidden", "Client Error"],
+    [404, "Not Found", "Client Error"],
+    [408, "Request Timeout", "Client Error"],
+    [429, "Too Many Requests", "Client Error"],
+    [500, "Internal Server Error", "Server Error"],
+    [502, "Bad Gateway", "Server Error"],
+    [503, "Service Unavailable", "Server Error"]
+  ];
+
+  const OSI = [
+    [7, "Application", "HTTP, DNS, SMTP"],
+    [6, "Presentation", "Encoding, TLS, compression"],
+    [5, "Session", "Session management"],
+    [4, "Transport", "TCP, UDP"],
+    [3, "Network", "IP, routing"],
+    [2, "Data Link", "MAC, Ethernet"],
+    [1, "Physical", "Cable, signal, RJ45"]
+  ];
+
+  const RJ45 = [
+    ["T568A", "WG, G, WO, B, WB, O, WBr, Br"],
+    ["T568B", "WO, O, WG, B, WB, G, WBr, Br"],
+    ["Straight-through", "Kedua ujung memakai standar yang sama"],
+    ["Crossover", "Ujung memakai standar berbeda"]
+  ];
+
+  const DNS = [
+    ["A", "IPv4 address"],
+    ["AAAA", "IPv6 address"],
+    ["CNAME", "Alias name"],
+    ["MX", "Mail exchange"],
+    ["NS", "Authoritative name server"],
+    ["TXT", "Arbitrary text / verification"]
+  ];
+
+  const KEY = {
+    announcements: "xi-tjkt2-announcements",
+    tasks: "xi-tjkt2-tasks",
+    notes: "xi-tjkt2-notes",
+    apel: "xi-tjkt2-apel-index"
+  };
+
+  const state = {
+    scheduleType: "A",
+    calendar: new Date(),
+    announcements: loadJson(
+      KEY.announcements,
+      [{
+        id: "welcome",
+        title: "Selamat datang di Class Command Center",
+        text: "Gunakan dashboard ini untuk agenda dan kebutuhan XI TJKT 2.",
+        createdAt: Date.now()
+      }]
+    ),
+    tasks: loadJson(KEY.tasks, []),
+    notes: localStorage.getItem(KEY.notes) || "",
+    apelIndex: readApelIndex(),
+    countdown: null,
+    countdownLeft: 300,
+    countdownRunning: false
+  };
+
+  const $ = id => document.getElementById(id);
+
+  function esc(value) {
+    return String(value).replace(
+      /[&<>'"]/g,
+      character => ({
+        "&": "&amp;",
+        "<": "&lt;",
+        ">": "&gt;",
+        "'": "&#39;",
+        "\"": "&quot;"
+      }[character])
+    );
   }
 
-  const dutyList = $("ccTodayDuty");
-
-  if (dutyList) {
-    dutyList.innerHTML = duty
-      .slice(0, 6)
-      .map(name => `<div>${escapeHTML(name)}</div>`)
-      .join("");
+  function initials(index) {
+    return String(index + 1).padStart(2, "0");
   }
 
-  const apel = getCurrentApelPair();
-
-  if ($("ccApelToday")) {
-    $("ccApelToday").textContent = apel.today;
+  function loadJson(key, fallback) {
+    try {
+      return JSON.parse(localStorage.getItem(key)) ?? fallback;
+    } catch {
+      return fallback;
+    }
   }
 
-  if ($("ccApelNext")) {
-    $("ccApelNext").textContent = apel.next;
+  function readApelIndex() {
+    const number = Number(localStorage.getItem(KEY.apel));
+
+    if (
+      Number.isInteger(number) &&
+      number >= 0 &&
+      number < APEL_PAIRS.length
+    ) {
+      return number;
+    }
+
+    return 0;
   }
 
-  if ($("ccStudentCount")) {
+  function saveState() {
+    localStorage.setItem(
+      KEY.announcements,
+      JSON.stringify(state.announcements)
+    );
+
+    localStorage.setItem(
+      KEY.tasks,
+      JSON.stringify(state.tasks)
+    );
+
+    localStorage.setItem(KEY.notes, state.notes);
+    localStorage.setItem(KEY.apel, String(state.apelIndex));
+  }
+
+  function toast(message) {
+    const box = document.createElement("div");
+    box.className = "toast";
+    box.textContent = message;
+
+    const container = $("toastContainer") || document.body;
+    container.appendChild(box);
+
+    setTimeout(() => box.remove(), 2600);
+  }
+
+  function currentDay() {
+    const names = [
+      "Minggu",
+      "Senin",
+      "Selasa",
+      "Rabu",
+      "Kamis",
+      "Jumat",
+      "Sabtu"
+    ];
+
+    return names[new Date().getDay()];
+  }
+
+  function activeClassDay() {
+    const day = currentDay();
+    return DAYS.includes(day) ? day : "Senin";
+  }
+
+  function formatDate(date = new Date()) {
+    return new Intl.DateTimeFormat("id-ID", {
+      weekday: "long",
+      day: "2-digit",
+      month: "long",
+      year: "numeric"
+    }).format(date);
+  }
+
+  function shortDate(date) {
+    return new Intl.DateTimeFormat("id-ID", {
+      day: "2-digit",
+      month: "short"
+    }).format(date);
+  }
+
+  function switchDashboard(number) {
+    document.querySelectorAll(".dashboard").forEach(section => {
+      section.classList.toggle(
+        "active",
+        section.id === `dashboard${number}`
+      );
+    });
+
+    document.querySelectorAll(".nav-item").forEach(button => {
+      button.classList.toggle(
+        "active",
+        button.dataset.dashboard === String(number)
+      );
+    });
+
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+
+    if (String(number) === "5") {
+      renderLabReferences();
+    }
+  }
+
+  function bindNavigation() {
+    document.querySelectorAll("[data-dashboard]").forEach(button => {
+      button.addEventListener("click", () => {
+        switchDashboard(button.dataset.dashboard);
+      });
+    });
+
+    document.querySelectorAll("[data-jump]").forEach(button => {
+      button.addEventListener("click", () => {
+        switchDashboard(button.dataset.jump);
+      });
+    });
+  }
+
+  function renderClock() {
+    const now = new Date();
+
+    const time = now.toLocaleTimeString("id-ID", {
+      hour12: false
+    });
+
+    $("liveClock").textContent = time;
+    $("ccClock").textContent = time.slice(0, 5);
+    $("ccDate").textContent = formatDate(now);
+  }
+
+  function renderCommandCenter() {
+    const day = activeClassDay();
+    const general = SCHEDULE.A[day] || [];
+    const vocational = SCHEDULE.B[day] || [];
+
     $("ccStudentCount").textContent = STUDENTS.length;
-  }
-
-  if ($("ccTaskCount")) {
     $("ccTaskCount").textContent =
       state.tasks.filter(task => !task.done).length;
-  }
+    $("ccAnnouncementCount").textContent =
+      state.announcements.length;
+    $("ccApelWeek").textContent =
+      String(state.apelIndex + 1).padStart(2, "0");
+    $("ccTodayLabel").textContent = day.toUpperCase();
 
-  renderAnnouncements();
-  renderTasks();
-  renderWeeklyAgenda();
-}
-
-/* =========================================================
-   STUDENTS
-========================================================= */
-
-function renderStudents() {
-  const grid = $("studentDirectory");
-
-  if (!grid) return;
-
-  const query = state.studentSearch.trim().toLowerCase();
-
-  let filtered = STUDENTS.map((name, index) => ({
-    name,
-    number: index + 1
-  }));
-
-  if (query) {
-    filtered = filtered.filter(student =>
-      student.name.toLowerCase().includes(query)
-    );
-  }
-
-  if (state.studentFilter === "odd") {
-    filtered = filtered.filter(student => student.number % 2 === 1);
-  }
-
-  if (state.studentFilter === "even") {
-    filtered = filtered.filter(student => student.number % 2 === 0);
-  }
-
-  grid.innerHTML = filtered
-    .map(student => {
-      const avatar = initials(student.name);
-
-      return `
-        <article class="student-card" data-student="${escapeHTML(student.name)}">
-          <div class="student-card-top">
-            <div class="student-number">#${String(student.number).padStart(2, "0")}</div>
-            <div class="student-avatar">${escapeHTML(avatar)}</div>
-          </div>
-          <h3>${escapeHTML(student.name)}</h3>
-          <p>XI TJKT 2 · Student Directory</p>
-        </article>
-      `;
-    })
-    .join("");
-
-  const counter = $("studentResultCount");
-
-  if (counter) {
-    counter.textContent = `${filtered.length} siswa`;
-  }
-
-  $all(".student-card").forEach(card => {
-    card.addEventListener("click", () => {
-      openStudentModal(card.dataset.student);
-    });
-  });
-
-  if ($("studentTotal")) {
-    $("studentTotal").textContent = STUDENTS.length;
-  }
-
-  if ($("studentVisible")) {
-    $("studentVisible").textContent = filtered.length;
-  }
-}
-
-function openStudentModal(name) {
-  const index = STUDENTS.indexOf(name);
-  const modal = $("studentModal");
-
-  if (!modal || index < 0) return;
-
-  const nameElement = $("studentModalName");
-  const numberElement = $("studentModalNumber");
-  const avatarElement = $("studentModalAvatar");
-
-  if (nameElement) nameElement.textContent = name;
-  if (numberElement) {
-    numberElement.textContent =
-      `Nomor absen ${String(index + 1).padStart(2, "0")}`;
-  }
-  if (avatarElement) avatarElement.textContent = initials(name);
-
-  modal.classList.add("open");
-}
-
-function closeStudentModal() {
-  $("studentModal")?.classList.remove("open");
-}
-
-function randomStudent() {
-  const student =
-    STUDENTS[Math.floor(Math.random() * STUDENTS.length)];
-
-  openStudentModal(student);
-  showToast(`Random student: ${student}`);
-}
-
-/* =========================================================
-   SCHEDULE + DUTY
-========================================================= */
-
-function renderSchedule() {
-  const day = state.scheduleDay;
-
-  $all("[data-schedule-type]").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.scheduleType === state.scheduleType
-    );
-  });
-
-  $all("[data-schedule-day]").forEach(button => {
-    button.classList.toggle(
-      "active",
-      button.dataset.scheduleDay === day
-    );
-  });
-
-  const target = $("scheduleList");
-
-  if (!target) return;
-
-  target.innerHTML = DAYS.map(dayName => {
-    const subjects = SCHEDULE[state.scheduleType][dayName] || [];
-    const active = dayName === day;
-
-    return `
-      <div class="schedule-day ${active ? "active" : ""}">
-        <strong>${dayName}</strong>
-        <div class="subjects">
-          ${subjects.map(subject =>
-            `<span class="subject">${escapeHTML(subject)}</span>`
-          ).join("")}
+    $("ccTodaySchedule").innerHTML =
+      general.concat(vocational).map((subject, index) => `
+        <div>
+          <strong>${esc(subject)}</strong>
+          <small>${index < general.length ? "UMUM" : "KEJURUAN"}</small>
         </div>
-      </div>
-    `;
-  }).join("");
-}
+      `).join("") || `
+        <div><small>Tidak ada jadwal.</small></div>
+      `;
 
-function renderDuty() {
-  const target = $("dutyGrid");
+    $("ccTodayDuty").innerHTML =
+      (DUTY[day] || []).map(name => `
+        <span class="person-chip">${esc(name)}</span>
+      `).join("") || `
+        <small>Tidak ada data piket.</small>
+      `;
 
-  if (!target) return;
+    const todayPair = APEL_PAIRS[state.apelIndex];
+    const nextPair =
+      APEL_PAIRS[(state.apelIndex + 1) % APEL_PAIRS.length];
 
-  target.innerHTML = DAYS.map(day => `
-    <div class="duty-day ${day === state.scheduleDay ? "active" : ""}">
-      <h4>${day}</h4>
-      <ol>
-        ${(DUTY[day] || [])
-          .map(name => `<li>${escapeHTML(name)}</li>`)
-          .join("")}
-      </ol>
-    </div>
-  `).join("");
-}
+    $("ccApelToday").textContent = todayPair[0];
+    $("ccApelNext").textContent = nextPair[0];
 
-/* =========================================================
-   ANNOUNCEMENTS
-========================================================= */
+    $("ccAnnouncements").innerHTML =
+      state.announcements
+        .slice()
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .slice(0, 3)
+        .map(item => `
+          <div>
+            <strong>${esc(item.title)}</strong>
+            <small>${esc(item.text)}</small>
+          </div>
+        `).join("") || `
+          <div><small>Belum ada pengumuman.</small></div>
+        `;
 
-function renderAnnouncements() {
-  const targets = [
-    $("announcementList"),
-    $("ccAnnouncements")
-  ].filter(Boolean);
-
-  targets.forEach(target => {
-    if (!state.announcements.length) {
-      target.innerHTML =
-        `<div class="empty-state">Belum ada pengumuman.</div>`;
-      return;
-    }
-
-    target.innerHTML = state.announcements
-      .slice()
-      .reverse()
-      .slice(0, 5)
-      .map(item => `
-        <article class="announcement-item">
-          <strong>${escapeHTML(item.title)}</strong>
-          <p>${escapeHTML(item.text)}</p>
-        </article>
-      `)
-      .join("");
-  });
-}
-
-function addAnnouncement() {
-  const title = $("announcementTitle")?.value.trim();
-  const text = $("announcementText")?.value.trim();
-
-  if (!title || !text) {
-    showToast("Isi judul dan isi pengumuman dulu.");
-    return;
+    $("ccTasks").innerHTML =
+      state.tasks
+        .slice()
+        .sort((a, b) =>
+          (a.deadline || "9999").localeCompare(b.deadline || "9999")
+        )
+        .slice(0, 5)
+        .map(task => `
+          <div class="task-row ${task.done ? "done" : ""}">
+            <input
+              type="checkbox"
+              data-task-check="${esc(task.id)}"
+              ${task.done ? "checked" : ""}
+            >
+            <div>
+              <strong>${esc(task.title)}</strong>
+              <small>
+                ${
+                  task.deadline
+                    ? `Deadline ${esc(
+                        shortDate(new Date(`${task.deadline}T00:00:00`))
+                      )}`
+                    : "Tanpa deadline"
+                }
+              </small>
+            </div>
+            <span>${task.done ? "DONE" : "OPEN"}</span>
+          </div>
+        `).join("") || `
+          <div><small>Belum ada task.</small></div>
+        `;
   }
 
-  state.announcements.push({ title, text });
-  saveState();
-  renderAnnouncements();
+  function renderStudents() {
+    const query = $("studentSearch").value.trim().toLowerCase();
+    const filter = $("studentFilter").value;
 
-  if ($("announcementTitle")) $("announcementTitle").value = "";
-  if ($("announcementText")) $("announcementText").value = "";
+    const rows = STUDENTS
+      .map((name, index) => ({ name, index }))
+      .filter(({ name, index }) => {
+        const matchesSearch =
+          !query || name.toLowerCase().includes(query);
 
-  showToast("Pengumuman ditambahkan.");
-}
+        const odd = (index + 1) % 2 === 1;
 
-/* =========================================================
-   TASK MANAGER
-========================================================= */
+        const matchesFilter =
+          filter === "all" ||
+          (filter === "odd" && odd) ||
+          (filter === "even" && !odd);
 
-function renderTasks() {
-  const targets = [
-    $("taskList"),
-    $("ccTasks")
-  ].filter(Boolean);
+        return matchesSearch && matchesFilter;
+      });
 
-  targets.forEach(target => {
-    if (!state.tasks.length) {
-      target.innerHTML =
-        `<div class="empty-state">Belum ada tugas.</div>`;
+    $("studentTotal").textContent = STUDENTS.length;
+    $("studentVisible").textContent = rows.length;
+    $("studentResultCount").textContent = `${rows.length} hasil`;
+
+    $("studentDirectory").innerHTML =
+      rows.map(({ name, index }) => `
+        <article
+          class="student-card"
+          data-student-index="${index}"
+        >
+          <div class="student-top">
+            <div class="avatar">${initials(index)}</div>
+            <span class="student-no">ABSEN ${index + 1}</span>
+          </div>
+
+          <h4>${esc(name)}</h4>
+          <small>XI TJKT 2 • Student Node</small>
+        </article>
+      `).join("") || `
+        <div class="panel glass">
+          <p>Tidak ada siswa yang cocok.</p>
+        </div>
+      `;
+  }
+
+  function openStudent(index) {
+    const name = STUDENTS[index];
+
+    if (!name) {
       return;
     }
 
-    target.innerHTML = state.tasks
-      .map((task, index) => `
-        <article class="task-item ${task.done ? "done" : ""}">
-          <input
-            class="task-check"
-            type="checkbox"
-            data-task-index="${index}"
-            ${task.done ? "checked" : ""}
-          >
-          <div>
-            <strong>${escapeHTML(task.title)}</strong>
-            <p>${escapeHTML(task.deadline || "Tanpa deadline")}</p>
-          </div>
-        </article>
-      `)
-      .join("");
-  });
+    $("studentModalName").textContent = name;
+    $("studentModalNumber").textContent = index + 1;
+    $("studentModalAvatar").textContent = initials(index);
 
-  $all(".task-check").forEach(check => {
-    check.addEventListener("change", () => {
-      const index = Number(check.dataset.taskIndex);
-      if (state.tasks[index]) {
-        state.tasks[index].done = check.checked;
-        saveState();
-        renderTasks();
-        renderCommandCenter();
+    $("studentModal").classList.add("show");
+    $("studentModal").setAttribute("aria-hidden", "false");
+  }
+
+  function closeStudent() {
+    $("studentModal").classList.remove("show");
+    $("studentModal").setAttribute("aria-hidden", "true");
+  }
+
+  function renderSchedule() {
+    const today = activeClassDay();
+
+    $("scheduleList").innerHTML = DAYS.map(day => `
+      <div class="schedule-day ${day === today ? "active" : ""}">
+        <h4>${day}</h4>
+
+        ${
+          (SCHEDULE[state.scheduleType][day] || [])
+            .map(subject => `
+              <div class="subject">${esc(subject)}</div>
+            `)
+            .join("") || `<div class="subject">—</div>`
+        }
+      </div>
+    `).join("");
+  }
+
+  function renderDuty() {
+    const today = activeClassDay();
+
+    $("dutyGrid").innerHTML = DAYS.map(day => `
+      <div class="duty-day">
+        <h4>${day}${day === today ? " • TODAY" : ""}</h4>
+
+        ${(DUTY[day] || []).map(name => `
+          <div class="person-chip">${esc(name)}</div>
+        `).join("")}
+      </div>
+    `).join("");
+  }
+
+  function renderAnnouncements() {
+    $("announcementList").innerHTML =
+      state.announcements
+        .slice()
+        .sort((a, b) => b.createdAt - a.createdAt)
+        .map(item => `
+          <div class="manage-row">
+            <div class="grow">
+              <h4>${esc(item.title)}</h4>
+              <p>${esc(item.text)}</p>
+            </div>
+
+            <button
+              class="small-delete"
+              data-ann-delete="${esc(item.id)}"
+            >
+              ×
+            </button>
+          </div>
+        `).join("") || `
+          <div class="manage-row">
+            <div class="grow">
+              <p>Belum ada pengumuman.</p>
+            </div>
+          </div>
+        `;
+  }
+
+  function renderTasks() {
+    $("taskList").innerHTML =
+      state.tasks
+        .slice()
+        .sort((a, b) =>
+          (a.deadline || "9999").localeCompare(b.deadline || "9999")
+        )
+        .map(task => `
+          <div class="manage-row">
+            <div class="grow">
+              <h4>${esc(task.title)}</h4>
+              <p>
+                ${
+                  task.deadline
+                    ? `Deadline: ${esc(task.deadline)}`
+                    : "Tanpa deadline"
+                }
+                •
+                ${task.done ? "Selesai" : "Belum selesai"}
+              </p>
+            </div>
+
+            <div class="button-row">
+              <button
+                class="small-delete"
+                data-task-done="${esc(task.id)}"
+              >
+                ${task.done ? "↺" : "✓"}
+              </button>
+
+              <button
+                class="small-delete"
+                data-task-delete="${esc(task.id)}"
+              >
+                ×
+              </button>
+            </div>
+          </div>
+        `).join("") || `
+          <div class="manage-row">
+            <div class="grow">
+              <p>Belum ada task.</p>
+            </div>
+          </div>
+        `;
+  }
+
+  function addAnnouncement() {
+    const title = $("announcementTitle").value.trim();
+    const text = $("announcementText").value.trim();
+
+    if (!title || !text) {
+      toast("Judul dan isi pengumuman wajib diisi.");
+      return;
+    }
+
+    state.announcements.push({
+      id: makeId(),
+      title,
+      text,
+      createdAt: Date.now()
+    });
+
+    saveState();
+
+    $("announcementTitle").value = "";
+    $("announcementText").value = "";
+
+    renderAnnouncements();
+    renderCommandCenter();
+
+    toast("Pengumuman ditambahkan.");
+  }
+
+  function addTask() {
+    const title = $("taskTitle").value.trim();
+    const deadline = $("taskDeadline").value;
+
+    if (!title) {
+      toast("Nama tugas wajib diisi.");
+      return;
+    }
+
+    state.tasks.push({
+      id: makeId(),
+      title,
+      deadline,
+      done: false
+    });
+
+    saveState();
+
+    $("taskTitle").value = "";
+    $("taskDeadline").value = "";
+
+    renderTasks();
+    renderCommandCenter();
+
+    toast("Task ditambahkan.");
+  }
+
+  function makeId() {
+    if (
+      typeof crypto !== "undefined" &&
+      typeof crypto.randomUUID === "function"
+    ) {
+      return crypto.randomUUID();
+    }
+
+    return `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+  }
+
+  function renderGlobalSearch() {
+    const query = $("globalSearch").value.trim().toLowerCase();
+    const output = $("globalSearchResults");
+
+    if (!query) {
+      output.innerHTML = "";
+      return;
+    }
+
+    const results = [];
+
+    STUDENTS.forEach((name, index) => {
+      if (name.toLowerCase().includes(query)) {
+        results.push({
+          type: "SISWA",
+          title: name,
+          meta: `Nomor ${index + 1}`
+        });
       }
     });
-  });
-}
 
-function addTask() {
-  const title = $("taskTitle")?.value.trim();
-  const deadline = $("taskDeadline")?.value.trim();
-
-  if (!title) {
-    showToast("Isi nama tugas dulu.");
-    return;
-  }
-
-  state.tasks.push({
-    title,
-    deadline,
-    done: false
-  });
-
-  saveState();
-  renderTasks();
-  renderCommandCenter();
-
-  if ($("taskTitle")) $("taskTitle").value = "";
-  if ($("taskDeadline")) $("taskDeadline").value = "";
-
-  showToast("Tugas ditambahkan.");
-}
-
-/* =========================================================
-   GLOBAL SEARCH
-========================================================= */
-
-function globalSearch(query) {
-  const target = $("globalSearchResults");
-
-  if (!target) return;
-
-  const q = query.trim().toLowerCase();
-
-  if (!q) {
-    target.innerHTML =
-      `<div class="empty-state">Ketik nama siswa, mapel, atau kata kunci.</div>`;
-    return;
-  }
-
-  const results = [];
-
-  STUDENTS.forEach((name, index) => {
-    if (name.toLowerCase().includes(q)) {
-      results.push({
-        type: "SISWA",
-        title: name,
-        detail: `Nomor ${index + 1}`
+    Object.entries(SCHEDULE).forEach(([type, days]) => {
+      Object.entries(days).forEach(([day, subjects]) => {
+        subjects.forEach(subject => {
+          if (subject.toLowerCase().includes(query)) {
+            results.push({
+              type: "JADWAL",
+              title: subject,
+              meta: `${day} • ${type}`
+            });
+          }
+        });
       });
-    }
-  });
+    });
 
-  Object.entries(SCHEDULE).forEach(([type, days]) => {
-    Object.entries(days).forEach(([day, subjects]) => {
-      subjects.forEach(subject => {
-        if (subject.toLowerCase().includes(q)) {
+    Object.entries(DUTY).forEach(([day, names]) => {
+      names.forEach(name => {
+        if (name.toLowerCase().includes(query)) {
           results.push({
-            type: "JADWAL",
-            title: subject,
-            detail: `${day} · Block ${type}`
+            type: "PIKET",
+            title: name,
+            meta: day
           });
         }
       });
     });
-  });
 
-  Object.entries(DUTY).forEach(([day, names]) => {
-    names.forEach(name => {
-      if (name.toLowerCase().includes(q)) {
+    state.announcements.forEach(item => {
+      if (
+        `${item.title} ${item.text}`
+          .toLowerCase()
+          .includes(query)
+      ) {
         results.push({
-          type: "PIKET",
-          title: name,
-          detail: `Piket ${day}`
+          type: "INFO",
+          title: item.title,
+          meta: item.text
         });
       }
     });
-  });
 
-  if (!results.length) {
-    target.innerHTML =
-      `<div class="empty-state">Tidak ada hasil untuk "${escapeHTML(query)}".</div>`;
-    return;
+    output.innerHTML =
+      results.slice(0, 20).map(result => `
+        <div>
+          <span class="search-result-type">
+            ${esc(result.type)}
+          </span>
+          <strong>${esc(result.title)}</strong>
+          <small>${esc(result.meta)}</small>
+        </div>
+      `).join("") || `
+        <div><small>Tidak ada hasil.</small></div>
+      `;
   }
 
-  target.innerHTML = results
-    .slice(0, 15)
-    .map(result => `
-      <article class="announcement-item">
-        <span class="badge">${escapeHTML(result.type)}</span>
-        <strong>${escapeHTML(result.title)}</strong>
-        <p>${escapeHTML(result.detail)}</p>
-      </article>
-    `)
-    .join("");
-}
+  function renderApel() {
+    const todayPair = APEL_PAIRS[state.apelIndex];
+    const nextPair =
+      APEL_PAIRS[(state.apelIndex + 1) % APEL_PAIRS.length];
 
-/* =========================================================
-   WEEKLY AGENDA
-========================================================= */
+    const todayIndex = STUDENTS.indexOf(todayPair[0]);
+    const nextIndex = STUDENTS.indexOf(nextPair[0]);
 
-function renderWeeklyAgenda() {
-  const target = $("weeklyAgenda");
+    $("apelTodayName").textContent = todayPair[0];
+    $("apelNextName").textContent = nextPair[0];
 
-  if (!target) return;
+    $("apelTodayAvatar").textContent = initials(todayIndex);
+    $("apelNextAvatar").textContent = initials(nextIndex);
 
-  target.innerHTML = DAYS.map(day => {
-    const normal = SCHEDULE.A[day] || [];
-    const kejuruan = SCHEDULE.B[day] || [];
+    $("apelPairNumber").textContent =
+      `${String(state.apelIndex + 1).padStart(2, "0")} / 18`;
 
-    return `
-      <div class="week-card ${day === state.scheduleDay ? "active" : ""}">
-        <span>${day.toUpperCase()}</span>
-        <strong>${normal.length + kejuruan.length} sesi</strong>
-        <p>${escapeHTML([...normal, ...kejuruan].slice(0, 3).join(" · "))}</p>
+    $("apelCurrentPair").textContent =
+      `${todayPair[0]} × ${todayPair[1]}`;
+
+    $("apelPairGrid").innerHTML =
+      APEL_PAIRS.map((pair, index) => `
+        <div class="pair-card ${index === state.apelIndex ? "active" : ""}">
+          <div class="pair-top">
+            <span>WEEK ${String(index + 1).padStart(2, "0")}</span>
+            <span>${index === state.apelIndex ? "ACTIVE" : ""}</span>
+          </div>
+
+          <strong>${esc(pair[0])}</strong>
+          <small>→ selanjutnya: ${esc(pair[1])}</small>
+        </div>
+      `).join("");
+
+    saveState();
+    renderCommandCenter();
+  }
+
+  function nextApel() {
+    state.apelIndex =
+      (state.apelIndex + 1) % APEL_PAIRS.length;
+
+    renderApel();
+    toast(`Rotasi pindah ke pasangan ${state.apelIndex + 1}.`);
+  }
+
+  function resetApel() {
+    state.apelIndex = 0;
+    renderApel();
+    toast("Rotasi kembali ke pasangan 01.");
+  }
+
+  function parseIPv4(value) {
+    const parts = value.trim().split("/");
+    const ipPart = parts[0];
+    const prefixPart = parts[1];
+
+    const octets = ipPart.split(".").map(Number);
+
+    if (
+      octets.length !== 4 ||
+      octets.some(
+        octet =>
+          !Number.isInteger(octet) ||
+          octet < 0 ||
+          octet > 255
+      )
+    ) {
+      throw new Error("IPv4 tidak valid");
+    }
+
+    const prefix =
+      prefixPart === undefined ? 32 : Number(prefixPart);
+
+    if (
+      !Number.isInteger(prefix) ||
+      prefix < 0 ||
+      prefix > 32
+    ) {
+      throw new Error("Prefix harus 0–32");
+    }
+
+    return {
+      ipPart,
+      prefix,
+      octets
+    };
+  }
+
+  function ipToInt(octets) {
+    return (
+      (
+        ((octets[0] << 24) >>> 0) +
+        ((octets[1] << 16) >>> 0) +
+        ((octets[2] << 8) >>> 0) +
+        octets[3]
+      ) >>> 0
+    );
+  }
+
+  function intToIp(number) {
+    return [
+      (number >>> 24) & 255,
+      (number >>> 16) & 255,
+      (number >>> 8) & 255,
+      number & 255
+    ].join(".");
+  }
+
+  function prefixMask(prefix) {
+    if (prefix === 0) {
+      return 0;
+    }
+
+    return (0xFFFFFFFF << (32 - prefix)) >>> 0;
+  }
+
+  function hostsForPrefix(prefix) {
+    if (prefix === 31) {
+      return 2;
+    }
+
+    if (prefix === 32) {
+      return 1;
+    }
+
+    return Math.pow(2, 32 - prefix) - 2;
+  }
+
+  function ipClass(firstOctet) {
+    if (firstOctet < 128) return "A";
+    if (firstOctet < 192) return "B";
+    if (firstOctet < 224) return "C";
+    if (firstOctet < 240) return "D";
+    return "E";
+  }
+
+  function checkIp() {
+    try {
+      const parsed = parseIPv4($("labIpInput").value);
+      const ipNumber = ipToInt(parsed.octets);
+      const mask = prefixMask(parsed.prefix);
+      const network = (ipNumber & mask) >>> 0;
+      const broadcast =
+        (network | (~mask >>> 0)) >>> 0;
+
+      $("ipAnalysisResult").innerHTML = `
+        <div class="result-grid">
+          <div class="result-box">
+            <span>IP</span>
+            <strong>${intToIp(ipNumber)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Prefix</span>
+            <strong>/${parsed.prefix}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Mask</span>
+            <strong>${intToIp(mask)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Network</span>
+            <strong>${intToIp(network)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Broadcast</span>
+            <strong>${intToIp(broadcast)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Class</span>
+            <strong>${ipClass(parsed.octets[0])}</strong>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      $("ipAnalysisResult").innerHTML = `
+        <div class="result-box">
+          <strong>${esc(error.message)}</strong>
+        </div>
+      `;
+    }
+  }
+
+  function calculateSubnet() {
+    try {
+      const ip = $("subnetIp").value.trim();
+      const prefix = Number($("subnetPrefix").value);
+
+      const parsed = parseIPv4(`${ip}/${prefix}`);
+      const ipNumber = ipToInt(parsed.octets);
+      const mask = prefixMask(prefix);
+      const network = (ipNumber & mask) >>> 0;
+      const broadcast =
+        (network | (~mask >>> 0)) >>> 0;
+
+      $("subnetResult").innerHTML = `
+        <div class="result-grid">
+          <div class="result-box">
+            <span>Network</span>
+            <strong>${intToIp(network)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Broadcast</span>
+            <strong>${intToIp(broadcast)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Mask</span>
+            <strong>${intToIp(mask)}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Usable hosts</span>
+            <strong>${hostsForPrefix(prefix).toLocaleString("id-ID")}</strong>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      $("subnetResult").innerHTML = `
+        <div class="result-box">
+          <strong>${esc(error.message)}</strong>
+        </div>
+      `;
+    }
+  }
+
+  function cidrHelper() {
+    try {
+      const parsed = parseIPv4($("cidrInput").value);
+      const count = Math.pow(2, 32 - parsed.prefix);
+
+      $("cidrResult").innerHTML = `
+        <div class="result-grid">
+          <div class="result-box">
+            <span>Prefix</span>
+            <strong>/${parsed.prefix}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Mask</span>
+            <strong>${intToIp(prefixMask(parsed.prefix))}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Address count</span>
+            <strong>${count.toLocaleString("id-ID")}</strong>
+          </div>
+
+          <div class="result-box">
+            <span>Usable hosts</span>
+            <strong>${hostsForPrefix(parsed.prefix).toLocaleString("id-ID")}</strong>
+          </div>
+        </div>
+      `;
+    } catch (error) {
+      $("cidrResult").innerHTML = `
+        <div class="result-box">
+          <strong>${esc(error.message)}</strong>
+        </div>
+      `;
+    }
+  }
+
+  function decimalToBinary() {
+    const number = Number($("decimalInput").value);
+
+    if (
+      !Number.isInteger(number) ||
+      number < 0 ||
+      number > 4294967295
+    ) {
+      $("binaryResult").innerHTML = `
+        <div class="result-box">
+          <strong>Masukkan integer 0–4294967295.</strong>
+        </div>
+      `;
+      return;
+    }
+
+    $("binaryResult").innerHTML = `
+      <div class="result-box">
+        <span>Binary</span>
+        <strong>${number.toString(2).padStart(32, "0")}</strong>
       </div>
     `;
-  }).join("");
-}
-
-/* =========================================================
-   APEL — 18 PAIRS
-========================================================= */
-
-function getApelIndex() {
-  const stored = Number(localStorage.getItem("xi-tjkt2-apel-index"));
-
-  if (
-    Number.isInteger(stored) &&
-    stored >= 0 &&
-    stored < APEL_PAIRS.length
-  ) {
-    return stored;
   }
 
-  return 0;
-}
+  function binaryToDecimal() {
+    const raw = $("binaryInput").value.trim();
 
-function getCurrentApelPair() {
-  const todayPair = APEL_PAIRS[state.apelIndex];
-  const nextPair = APEL_PAIRS[(state.apelIndex + 1) % APEL_PAIRS.length];
+    if (!/^[01]{1,32}$/.test(raw)) {
+      $("decimalResult").innerHTML = `
+        <div class="result-box">
+          <strong>Binary harus 1–32 digit 0/1.</strong>
+        </div>
+      `;
+      return;
+    }
 
-  return {
-    today: todayPair[0],
-    next: todayPair[1],
-    nextPair,
-    pair: todayPair
-  };
-}
-
-function renderApel() {
-  const current = getCurrentApelPair();
-
-  if ($("apelTodayName")) {
-    $("apelTodayName").textContent = current.today;
-  }
-
-  if ($("apelNextName")) {
-    $("apelNextName").textContent = current.next;
-  }
-
-  if ($("apelTodayAvatar")) {
-    $("apelTodayAvatar").textContent = initials(current.today);
-  }
-
-  if ($("apelNextAvatar")) {
-    $("apelNextAvatar").textContent = initials(current.next);
-  }
-
-  if ($("apelPairNumber")) {
-    $("apelPairNumber").textContent =
-      `PAIR ${state.apelIndex + 1}`;
-  }
-
-  if ($("apelCurrentPair")) {
-    $("apelCurrentPair").textContent =
-      `${current.pair[0]} + ${current.pair[1]}`;
-  }
-
-  const pairGrid = $("apelPairGrid");
-
-  if (pairGrid) {
-    pairGrid.innerHTML = APEL_PAIRS.map((pair, index) => `
-      <div class="apel-pair ${index === state.apelIndex ? "active" : ""}">
-        <span>WEEK ${index + 1}</span>
-        <strong>${escapeHTML(pair[0])}</strong>
-        <small>${escapeHTML(pair[1])}</small>
+    $("decimalResult").innerHTML = `
+      <div class="result-box">
+        <span>Decimal</span>
+        <strong>${parseInt(raw, 2).toLocaleString("id-ID")}</strong>
       </div>
-    `).join("");
-  }
-}
-
-function nextApelPair() {
-  state.apelIndex =
-    (state.apelIndex + 1) % APEL_PAIRS.length;
-
-  localStorage.setItem(
-    "xi-tjkt2-apel-index",
-    String(state.apelIndex)
-  );
-
-  renderApel();
-  renderCommandCenter();
-
-  showToast(`Apel berpindah ke Week ${state.apelIndex + 1}.`);
-}
-
-function resetApel() {
-  state.apelIndex = 0;
-
-  localStorage.setItem(
-    "xi-tjkt2-apel-index",
-    "0"
-  );
-
-  renderApel();
-  renderCommandCenter();
-
-  showToast("Siklus apel kembali ke Week 1.");
-}
-
-/* =========================================================
-   IPv4 ANALYZER
-========================================================= */
-
-function ipToNumber(ip) {
-  const parts = ip.split(".").map(Number);
-
-  if (
-    parts.length !== 4 ||
-    parts.some(
-      part => !Number.isInteger(part) || part < 0 || part > 255
-    )
-  ) {
-    return null;
+    `;
   }
 
-  return (
-    ((parts[0] << 24) >>> 0) +
-    (parts[1] << 16) +
-    (parts[2] << 8) +
-    parts[3]
-  ) >>> 0;
-}
+  function formatMac() {
+    const raw = $("macInput").value
+      .replace(/[^a-fA-F0-9]/g, "");
 
-function numberToIp(number) {
-  return [
-    (number >>> 24) & 255,
-    (number >>> 16) & 255,
-    (number >>> 8) & 255,
-    number & 255
-  ].join(".");
-}
+    if (raw.length !== 12) {
+      $("macResult").innerHTML = `
+        <div class="result-box">
+          <strong>MAC harus memiliki 12 digit hex.</strong>
+        </div>
+      `;
+      return;
+    }
 
-function prefixToMask(prefix) {
-  if (prefix < 0 || prefix > 32) return null;
+    const upper = raw.toUpperCase();
+    const pairs = upper.match(/.{2}/g);
+    const quartets = upper.match(/.{4}/g);
 
-  if (prefix === 0) return 0;
+    $("macResult").innerHTML = `
+      <div class="result-grid">
+        <div class="result-box">
+          <span>Colon</span>
+          <strong>${pairs.join(":")}</strong>
+        </div>
 
-  return (0xffffffff << (32 - prefix)) >>> 0;
-}
+        <div class="result-box">
+          <span>Hyphen</span>
+          <strong>${pairs.join("-")}</strong>
+        </div>
 
-function analyzeIPv4(value) {
-  const input = value.trim();
-  const match = input.match(/^(\d+\.\d+\.\d+\.\d+)(?:\/(\d{1,2}))?$/);
+        <div class="result-box">
+          <span>Cisco</span>
+          <strong>${quartets.join(".")}</strong>
+        </div>
 
-  if (!match) {
-    return "Format tidak valid. Contoh: 192.168.1.10/24";
+        <div class="result-box">
+          <span>Raw</span>
+          <strong>${upper}</strong>
+        </div>
+      </div>
+    `;
   }
 
-  const ip = match[1];
-  const prefix = match[2] === undefined
-    ? 24
-    : Number(match[2]);
+  function renderPorts() {
+    const query = $("portSearch").value.trim().toLowerCase();
 
-  const ipNumber = ipToNumber(ip);
-  const mask = prefixToMask(prefix);
+    const rows = PORTS.filter(([port, name, protocol]) => {
+      return (
+        !query ||
+        String(port).includes(query) ||
+        name.toLowerCase().includes(query) ||
+        protocol.toLowerCase().includes(query)
+      );
+    });
 
-  if (ipNumber === null || mask === null) {
-    return "IPv4 atau prefix tidak valid.";
+    $("portResults").innerHTML =
+      rows.map(([port, name, protocol]) => `
+        <div class="reference-item">
+          <strong>${port} • ${esc(name)}</strong>
+          <small>${esc(protocol)}</small>
+        </div>
+      `).join("") || `
+        <div class="reference-item">
+          <small>Tidak ada hasil.</small>
+        </div>
+      `;
   }
 
-  const network = (ipNumber & mask) >>> 0;
-  const broadcast = (network | (~mask >>> 0)) >>> 0;
+  function renderHttp() {
+    const query =
+      $("httpStatusSearch").value.trim().toLowerCase();
 
-  const hosts =
-    prefix >= 31
-      ? Math.pow(2, 32 - prefix)
-      : Math.max(0, Math.pow(2, 32 - prefix) - 2);
+    const rows = HTTP.filter(([code, name, type]) => {
+      return (
+        !query ||
+        String(code).includes(query) ||
+        name.toLowerCase().includes(query) ||
+        type.toLowerCase().includes(query)
+      );
+    });
 
-  const firstHost =
-    prefix >= 31
-      ? numberToIp(network)
-      : numberToIp((network + 1) >>> 0);
-
-  const lastHost =
-    prefix >= 31
-      ? numberToIp(broadcast)
-      : numberToIp((broadcast - 1) >>> 0);
-
-  const binary =
-    ip.split(".")
-      .map(part => Number(part).toString(2).padStart(8, "0"))
-      .join(".");
-
-  return `
-    <strong>Network:</strong> ${numberToIp(network)}<br>
-    <strong>Broadcast:</strong> ${numberToIp(broadcast)}<br>
-    <strong>First Host:</strong> ${firstHost}<br>
-    <strong>Last Host:</strong> ${lastHost}<br>
-    <strong>Prefix:</strong> /${prefix}<br>
-    <strong>Usable / addresses:</strong> ${hosts.toLocaleString("id-ID")}<br>
-    <strong>Binary:</strong> ${binary}
-  `;
-}
-
-function checkIp() {
-  const input = $("labIpInput")?.value || "";
-  const result = $("labIpResult");
-
-  if (!result) return;
-
-  result.innerHTML = analyzeIPv4(input);
-}
-
-/* =========================================================
-   SUBNET CALCULATOR
-========================================================= */
-
-function calculateSubnet() {
-  const ip = $("subnetIp")?.value.trim() || "";
-  const prefix = Number($("subnetPrefix")?.value || 24);
-  const result = $("subnetResult");
-
-  if (!result) return;
-
-  const ipNumber = ipToNumber(ip);
-  const mask = prefixToMask(prefix);
-
-  if (ipNumber === null || mask === null) {
-    result.textContent = "Masukkan IPv4 dan prefix yang valid.";
-    return;
+    $("httpStatusResults").innerHTML =
+      rows.map(([code, name, type]) => `
+        <div class="reference-item">
+          <strong>${code} • ${esc(name)}</strong>
+          <small>${esc(type)}</small>
+        </div>
+      `).join("") || `
+        <div class="reference-item">
+          <small>Tidak ada hasil.</small>
+        </div>
+      `;
   }
 
-  const network = (ipNumber & mask) >>> 0;
-  const broadcast = (network | (~mask >>> 0)) >>> 0;
-  const total = Math.pow(2, 32 - prefix);
-  const usable = prefix <= 30 ? Math.max(total - 2, 0) : total;
+  function renderLabReferences() {
+    $("dnsResult").innerHTML =
+      DNS.map(([type, description]) => `
+        <div class="dns-card">
+          <strong>${type}</strong>
+          <small>${esc(description)}</small>
+        </div>
+      `).join("");
 
-  result.innerHTML = `
-    Network: <strong>${numberToIp(network)}</strong><br>
-    Broadcast: <strong>${numberToIp(broadcast)}</strong><br>
-    Total addresses: <strong>${total}</strong><br>
-    Usable hosts: <strong>${usable}</strong>
-  `;
-}
+    $("osiReference").innerHTML =
+      OSI.map(([number, name, example]) => `
+        <div class="layer-item">
+          <span class="layer-num">${number}</span>
 
-/* =========================================================
-   DECIMAL / BINARY
-========================================================= */
+          <div>
+            <strong>${esc(name)}</strong>
+            <small>${esc(example)}</small>
+          </div>
+        </div>
+      `).join("");
 
-function decimalToBinary() {
-  const input = $("decimalInput")?.value.trim() || "";
-  const result = $("binaryResult");
+    $("rj45Reference").innerHTML =
+      RJ45.map(([name, description]) => `
+        <div class="layer-item">
+          <span class="layer-num">⌁</span>
 
-  if (!result) return;
+          <div>
+            <strong>${esc(name)}</strong>
+            <small>${esc(description)}</small>
+          </div>
+        </div>
+      `).join("");
 
-  const number = Number(input);
-
-  if (!Number.isInteger(number) || number < 0) {
-    result.textContent = "Masukkan bilangan bulat positif.";
-    return;
+    renderPorts();
+    renderHttp();
   }
 
-  result.textContent = number.toString(2);
-}
+  function randomStudentLab() {
+    const index =
+      Math.floor(Math.random() * STUDENTS.length);
 
-function binaryToDecimal() {
-  const input = $("binaryInput")?.value.trim() || "";
-  const result = $("decimalResult");
-
-  if (!result) return;
-
-  if (!/^[01]+$/.test(input)) {
-    result.textContent = "Binary hanya boleh berisi 0 dan 1.";
-    return;
+    $("labRandomStudentResult").innerHTML = `
+      <div>
+        <strong>${esc(STUDENTS[index])}</strong>
+        <small>Nomor absen ${index + 1}</small>
+      </div>
+    `;
   }
 
-  result.textContent = parseInt(input, 2).toString(10);
-}
+  function renderCountdown() {
+    const total = Math.max(0, state.countdownLeft);
+    const minutes = Math.floor(total / 60);
+    const seconds = total % 60;
 
-/* =========================================================
-   MAC FORMATTER
-========================================================= */
-
-function formatMac() {
-  const input = $("macInput")?.value || "";
-  const result = $("macResult");
-
-  if (!result) return;
-
-  const clean = input
-    .replace(/[^a-fA-F0-9]/g, "")
-    .slice(0, 12)
-    .toUpperCase();
-
-  if (clean.length !== 12) {
-    result.textContent = "MAC harus terdiri dari 12 digit hex.";
-    return;
+    $("countdownDisplay").textContent =
+      `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
   }
 
-  const colon = clean.match(/.{2}/g).join(":");
-  const hyphen = clean.match(/.{2}/g).join("-");
-  const cisco = clean.match(/.{4}/g).join(".");
+  function readCountdownInput() {
+    const minutes =
+      Math.max(0, Number($("countdownMinutes").value) || 0);
 
-  result.innerHTML = `
-    Colon: ${colon}<br>
-    Hyphen: ${hyphen}<br>
-    Cisco: ${cisco}
-  `;
-}
+    const seconds =
+      Math.min(
+        59,
+        Math.max(0, Number($("countdownSeconds").value) || 0)
+      );
 
-/* =========================================================
-   PORT SEARCH
-========================================================= */
-
-function searchPort(query) {
-  const target = $("portResults");
-
-  if (!target) return;
-
-  const q = query.trim().toLowerCase();
-
-  const results = PORTS.filter(([port, service]) =>
-    `${port} ${service}`.toLowerCase().includes(q)
-  );
-
-  if (!results.length) {
-    target.innerHTML =
-      `<div class="empty-state compact">Port tidak ditemukan.</div>`;
-    return;
-  }
-
-  target.innerHTML = results.map(([port, service]) => `
-    <div class="reference-row">
-      <b>${escapeHTML(port)}</b>
-      <span>${escapeHTML(service)}</span>
-    </div>
-  `).join("");
-}
-
-/* =========================================================
-   HTTP STATUS
-========================================================= */
-
-const HTTP_STATUS = [
-  ["200", "OK"],
-  ["201", "Created"],
-  ["204", "No Content"],
-  ["301", "Moved Permanently"],
-  ["302", "Found"],
-  ["400", "Bad Request"],
-  ["401", "Unauthorized"],
-  ["403", "Forbidden"],
-  ["404", "Not Found"],
-  ["405", "Method Not Allowed"],
-  ["408", "Request Timeout"],
-  ["429", "Too Many Requests"],
-  ["500", "Internal Server Error"],
-  ["502", "Bad Gateway"],
-  ["503", "Service Unavailable"],
-  ["504", "Gateway Timeout"]
-];
-
-function searchHttpStatus(query = "") {
-  const target = $("httpStatusResults");
-
-  if (!target) return;
-
-  const q = query.trim().toLowerCase();
-
-  const results = HTTP_STATUS.filter(([code, text]) =>
-    `${code} ${text}`.toLowerCase().includes(q)
-  );
-
-  target.innerHTML = results.map(([code, text]) => `
-    <div class="reference-row">
-      <b>${code}</b>
-      <span>${text}</span>
-    </div>
-  `).join("");
-}
-
-/* =========================================================
-   DNS
-========================================================= */
-
-function showDnsInfo() {
-  const target = $("dnsResult");
-
-  if (!target) return;
-
-  target.innerHTML = `
-    <strong>A</strong> → IPv4 address<br>
-    <strong>AAAA</strong> → IPv6 address<br>
-    <strong>CNAME</strong> → Canonical name<br>
-    <strong>MX</strong> → Mail server<br>
-    <strong>NS</strong> → Authoritative nameserver<br>
-    <strong>TXT</strong> → Text / verification data
-  `;
-}
-
-/* =========================================================
-   NOTES
-========================================================= */
-
-function initNotes() {
-  const notes = $("notesArea");
-
-  if (!notes) return;
-
-  notes.value = state.notes;
-
-  notes.addEventListener("input", () => {
-    state.notes = notes.value;
-    localStorage.setItem("xi-tjkt2-notes", state.notes);
-  });
-}
-
-/* =========================================================
-   COUNTDOWN
-========================================================= */
-
-function renderCountdown() {
-  const target = $("countdownDisplay");
-
-  if (!target) return;
-
-  const total = Math.max(0, state.countdownSeconds);
-
-  const hours = Math.floor(total / 3600);
-  const minutes = Math.floor((total % 3600) / 60);
-  const seconds = total % 60;
-
-  target.textContent =
-    `${String(hours).padStart(2, "0")}:` +
-    `${String(minutes).padStart(2, "0")}:` +
-    `${String(seconds).padStart(2, "0")}`;
-}
-
-function startCountdown() {
-  const minutes = Number($("countdownMinutes")?.value || 0);
-  const seconds = Number($("countdownSeconds")?.value || 0);
-
-  state.countdownSeconds =
-    Math.max(0, Math.floor(minutes * 60 + seconds));
-
-  if (!state.countdownSeconds) {
-    showToast("Masukkan durasi countdown.");
-    return;
-  }
-
-  clearInterval(state.countdownTimer);
-
-  renderCountdown();
-
-  state.countdownTimer = setInterval(() => {
-    state.countdownSeconds--;
+    state.countdownLeft =
+      Math.round(minutes * 60 + seconds);
 
     renderCountdown();
+  }
 
-    if (state.countdownSeconds <= 0) {
-      clearInterval(state.countdownTimer);
-      showToast("Countdown selesai.");
+  function startCountdown() {
+    if (state.countdownRunning) {
+      return;
     }
-  }, 1000);
-}
 
-function pauseCountdown() {
-  clearInterval(state.countdownTimer);
-  state.countdownTimer = null;
-}
+    state.countdownRunning = true;
 
-function resetCountdown() {
-  pauseCountdown();
-  state.countdownSeconds = 0;
-  renderCountdown();
-}
+    state.countdown = setInterval(() => {
+      if (state.countdownLeft <= 0) {
+        clearInterval(state.countdown);
+        state.countdown = null;
+        state.countdownRunning = false;
+        renderCountdown();
+        toast("Countdown selesai.");
+        return;
+      }
 
-/* =========================================================
-   CALENDAR
-========================================================= */
-
-function renderCalendar() {
-  const target = $("calendarGrid");
-
-  if (!target) return;
-
-  const year = state.calendarDate.getFullYear();
-  const month = state.calendarDate.getMonth();
-
-  const first = new Date(year, month, 1);
-  const last = new Date(year, month + 1, 0);
-
-  const startDay = (first.getDay() + 6) % 7;
-  const totalDays = last.getDate();
-
-  const previousMonthDays =
-    new Date(year, month, 0).getDate();
-
-  const cells = [];
-
-  for (let i = startDay - 1; i >= 0; i--) {
-    cells.push({
-      day: previousMonthDays - i,
-      muted: true
-    });
+      state.countdownLeft -= 1;
+      renderCountdown();
+    }, 1000);
   }
 
-  for (let day = 1; day <= totalDays; day++) {
-    cells.push({
-      day,
-      muted: false
-    });
+  function pauseCountdown() {
+    if (state.countdown) {
+      clearInterval(state.countdown);
+      state.countdown = null;
+    }
+
+    state.countdownRunning = false;
   }
 
-  while (cells.length % 7 !== 0) {
-    cells.push({
-      day: cells.length - totalDays - startDay + 1,
-      muted: true
-    });
+  function resetCountdown() {
+    pauseCountdown();
+    readCountdownInput();
   }
 
-  target.innerHTML = cells.map(cell => {
-    const today = new Date();
-    const isToday =
-      !cell.muted &&
-      cell.day === today.getDate() &&
-      month === today.getMonth() &&
-      year === today.getFullYear();
+  function renderCalendar() {
+    const date = state.calendar;
+    const year = date.getFullYear();
+    const month = date.getMonth();
 
-    return `
-      <div class="calendar-cell ${cell.muted ? "muted" : ""} ${isToday ? "today" : ""}">
-        <div class="calendar-number">${cell.day}</div>
-      </div>
-    `;
-  }).join("");
-
-  const title = $("calendarMonth");
-
-  if (title) {
-    title.textContent =
-      state.calendarDate.toLocaleDateString("id-ID", {
+    const title =
+      new Intl.DateTimeFormat("id-ID", {
         month: "long",
         year: "numeric"
+      }).format(date);
+
+    $("calendarMonth").textContent = title;
+
+    const firstDay =
+      new Date(year, month, 1).getDay();
+
+    const offset = (firstDay + 6) % 7;
+    const totalDays =
+      new Date(year, month + 1, 0).getDate();
+
+    const today = new Date();
+
+    let html = [
+      "Sen",
+      "Sel",
+      "Rab",
+      "Kam",
+      "Jum",
+      "Sab",
+      "Min"
+    ]
+      .map(day => `<div class="dow">${day}</div>`)
+      .join("");
+
+    for (let index = 0; index < offset; index++) {
+      html += `<div class="calendar-day empty"></div>`;
+    }
+
+    for (let day = 1; day <= totalDays; day++) {
+      const isToday =
+        day === today.getDate() &&
+        month === today.getMonth() &&
+        year === today.getFullYear();
+
+      html += `
+        <div class="calendar-day ${isToday ? "today" : ""}">
+          ${day}
+        </div>
+      `;
+    }
+
+    $("calendarGrid").innerHTML = html;
+  }
+
+  function exportClassData() {
+    const data = {
+      class: "XI TJKT 2",
+      students: STUDENTS,
+      schedule: SCHEDULE,
+      duty: DUTY,
+      apelPairs: APEL_PAIRS,
+      announcements: state.announcements,
+      tasks: state.tasks,
+      notes: state.notes,
+      exportedAt: new Date().toISOString()
+    };
+
+    const blob = new Blob(
+      [JSON.stringify(data, null, 2)],
+      { type: "application/json" }
+    );
+
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+
+    anchor.href = url;
+    anchor.download = "xi-tjkt-2-class-data.json";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+
+    setTimeout(() => URL.revokeObjectURL(url), 1000);
+
+    toast("Data berhasil diexport.");
+  }
+
+  function bindEvents() {
+    $("studentSearch")
+      .addEventListener("input", renderStudents);
+
+    $("studentFilter")
+      .addEventListener("change", renderStudents);
+
+    $("randomStudentButton")
+      .addEventListener("click", () => {
+        openStudent(
+          Math.floor(Math.random() * STUDENTS.length)
+        );
+      });
+
+    $("studentModalClose")
+      .addEventListener("click", closeStudent);
+
+    $("studentModal")
+      .addEventListener("click", event => {
+        if (event.target.id === "studentModal") {
+          closeStudent();
+        }
+      });
+
+    $("studentDirectory")
+      .addEventListener("click", event => {
+        const card =
+          event.target.closest("[data-student-index]");
+
+        if (card) {
+          openStudent(
+            Number(card.dataset.studentIndex)
+          );
+        }
+      });
+
+    document.querySelectorAll(".schedule-type").forEach(button => {
+      button.addEventListener("click", () => {
+        state.scheduleType = button.dataset.scheduleType;
+
+        document
+          .querySelectorAll(".schedule-type")
+          .forEach(item => {
+            item.classList.toggle("active", item === button);
+          });
+
+        renderSchedule();
+      });
+    });
+
+    $("addAnnouncementButton")
+      .addEventListener("click", addAnnouncement);
+
+    $("addTaskButton")
+      .addEventListener("click", addTask);
+
+    $("announcementText")
+      .addEventListener("keydown", event => {
+        if (
+          (event.ctrlKey || event.metaKey) &&
+          event.key === "Enter"
+        ) {
+          addAnnouncement();
+        }
+      });
+
+    $("taskList")
+      .addEventListener("click", event => {
+        const done =
+          event.target.closest("[data-task-done]");
+
+        const deleted =
+          event.target.closest("[data-task-delete]");
+
+        if (done) {
+          const task =
+            state.tasks.find(
+              item => item.id === done.dataset.taskDone
+            );
+
+          if (task) {
+            task.done = !task.done;
+            saveState();
+            renderTasks();
+            renderCommandCenter();
+          }
+        }
+
+        if (deleted) {
+          state.tasks =
+            state.tasks.filter(
+              item => item.id !== deleted.dataset.taskDelete
+            );
+
+          saveState();
+          renderTasks();
+          renderCommandCenter();
+          toast("Task dihapus.");
+        }
+      });
+
+    $("announcementList")
+      .addEventListener("click", event => {
+        const deleted =
+          event.target.closest("[data-ann-delete]");
+
+        if (!deleted) {
+          return;
+        }
+
+        state.announcements =
+          state.announcements.filter(
+            item => item.id !== deleted.dataset.annDelete
+          );
+
+        saveState();
+        renderAnnouncements();
+        renderCommandCenter();
+        toast("Pengumuman dihapus.");
+      });
+
+    $("globalSearch")
+      .addEventListener("input", renderGlobalSearch);
+
+    $("ccTasks")
+      .addEventListener("click", event => {
+        const check =
+          event.target.closest("[data-task-check]");
+
+        if (!check) {
+          return;
+        }
+
+        const task =
+          state.tasks.find(
+            item => item.id === check.dataset.taskCheck
+          );
+
+        if (task) {
+          task.done = !task.done;
+          saveState();
+          renderTasks();
+          renderCommandCenter();
+        }
+      });
+
+    $("nextApelButton")
+      .addEventListener("click", nextApel);
+
+    $("resetApelButton")
+      .addEventListener("click", resetApel);
+
+    $("analyzeIpButton")
+      .addEventListener("click", checkIp);
+
+    $("labIpInput")
+      .addEventListener("keydown", event => {
+        if (event.key === "Enter") {
+          checkIp();
+        }
+      });
+
+    $("subnetButton")
+      .addEventListener("click", calculateSubnet);
+
+    $("cidrButton")
+      .addEventListener("click", cidrHelper);
+
+    $("decimalButton")
+      .addEventListener("click", decimalToBinary);
+
+    $("binaryButton")
+      .addEventListener("click", binaryToDecimal);
+
+    $("macButton")
+      .addEventListener("click", formatMac);
+
+    $("portSearch")
+      .addEventListener("input", renderPorts);
+
+    $("httpStatusSearch")
+      .addEventListener("input", renderHttp);
+
+    $("labRandomStudentButton")
+      .addEventListener("click", randomStudentLab);
+
+    $("notesArea")
+      .addEventListener("input", () => {
+        state.notes = $("notesArea").value;
+        localStorage.setItem(KEY.notes, state.notes);
+      });
+
+    $("startCountdownButton")
+      .addEventListener("click", startCountdown);
+
+    $("pauseCountdownButton")
+      .addEventListener("click", pauseCountdown);
+
+    $("resetCountdownButton")
+      .addEventListener("click", resetCountdown);
+
+    $("calendarPrev")
+      .addEventListener("click", () => {
+        state.calendar = new Date(
+          state.calendar.getFullYear(),
+          state.calendar.getMonth() - 1,
+          1
+        );
+
+        renderCalendar();
+      });
+
+    $("calendarNext")
+      .addEventListener("click", () => {
+        state.calendar = new Date(
+          state.calendar.getFullYear(),
+          state.calendar.getMonth() + 1,
+          1
+        );
+
+        renderCalendar();
+      });
+
+    $("calendarToday")
+      .addEventListener("click", () => {
+        state.calendar = new Date();
+        renderCalendar();
+      });
+
+    $("exportButton")
+      .addEventListener("click", exportClassData);
+
+    $("printButton")
+      .addEventListener("click", () => {
+        window.print();
       });
   }
-}
 
-function renderCalendarIfVisible() {
-  if ($("dashboard3")?.classList.contains("active")) {
+  function init() {
+    bindNavigation();
+    bindEvents();
+
+    renderClock();
+    setInterval(renderClock, 1000);
+
+    renderCommandCenter();
+    renderStudents();
+    renderSchedule();
+    renderDuty();
+    renderAnnouncements();
+    renderTasks();
+    renderApel();
+    renderLabReferences();
     renderCalendar();
-  }
-}
 
-function changeCalendarMonth(offset) {
-  state.calendarDate = new Date(
-    state.calendarDate.getFullYear(),
-    state.calendarDate.getMonth() + offset,
-    1
-  );
+    $("notesArea").value = state.notes;
 
-  renderCalendar();
-}
-
-function resetCalendar() {
-  state.calendarDate = new Date();
-  renderCalendar();
-}
-
-/* =========================================================
-   EXPORT / PRINT
-========================================================= */
-
-function exportClassData() {
-  const payload = {
-    class: "XI TJKT 2",
-    exportedAt: new Date().toISOString(),
-    students: STUDENTS,
-    schedule: SCHEDULE,
-    duty: DUTY,
-    apelPairs: APEL_PAIRS,
-    activeApelPair: state.apelIndex + 1,
-    announcements: state.announcements,
-    tasks: state.tasks,
-    notes: state.notes
-  };
-
-  const blob = new Blob(
-    [JSON.stringify(payload, null, 2)],
-    { type: "application/json" }
-  );
-
-  const url = URL.createObjectURL(blob);
-  const anchor = document.createElement("a");
-
-  anchor.href = url;
-  anchor.download = "XI-TJKT-2-class-data.json";
-  anchor.click();
-
-  URL.revokeObjectURL(url);
-
-  showToast("Data class berhasil diexport.");
-}
-
-function printDashboard() {
-  window.print();
-}
-
-/* =========================================================
-   STATIC REFERENCES
-========================================================= */
-
-function renderReferences() {
-  const osiTarget = $("osiReference");
-
-  if (osiTarget) {
-    osiTarget.innerHTML = OSI.map(([layer, name, detail]) => `
-      <div class="reference-row">
-        <b>L${layer}</b>
-        <span><strong>${name}</strong> · ${detail}</span>
-      </div>
-    `).join("");
+    readCountdownInput();
   }
 
-  const rjTarget = $("rj45Reference");
-
-  if (rjTarget) {
-    rjTarget.innerHTML = RJ45.map((wire, index) => `
-      <div class="rj45-pin">
-        <b>${index + 1}</b>
-        <span>${wire}</span>
-      </div>
-    `).join("");
-  }
-
-  searchPort("");
-
-  searchHttpStatus("");
-
-  showDnsInfo();
-}
-
-/* =========================================================
-   EVENT BINDINGS
-========================================================= */
-
-function bindEvents() {
-
-  $all("[data-schedule-type]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.scheduleType = button.dataset.scheduleType;
-      renderSchedule();
-    });
-  });
-
-  $all("[data-schedule-day]").forEach(button => {
-    button.addEventListener("click", () => {
-      state.scheduleDay = button.dataset.scheduleDay;
-      renderSchedule();
-      renderDuty();
-      renderCommandCenter();
-    });
-  });
-
-  $("studentSearch")?.addEventListener("input", event => {
-    state.studentSearch = event.target.value;
-    renderStudents();
-  });
-
-  $("studentFilter")?.addEventListener("change", event => {
-    state.studentFilter = event.target.value;
-    renderStudents();
-  });
-
-  $("randomStudentButton")?.addEventListener(
-    "click",
-    randomStudent
-  );
-
-  $("studentModalClose")?.addEventListener(
-    "click",
-    closeStudentModal
-  );
-
-  $("studentModal")?.addEventListener("click", event => {
-    if (event.target.classList.contains("modal-backdrop")) {
-      closeStudentModal();
-    }
-  });
-
-  $("addAnnouncementButton")?.addEventListener(
-    "click",
-    addAnnouncement
-  );
-
-  $("addTaskButton")?.addEventListener(
-    "click",
-    addTask
-  );
-
-  $("globalSearch")?.addEventListener(
-    "input",
-    event => globalSearch(event.target.value)
-  );
-
-  $("nextApelButton")?.addEventListener(
-    "click",
-    nextApelPair
-  );
-
-  $("resetApelButton")?.addEventListener(
-    "click",
-    resetApel
-  );
-
-  $("labIpButton")?.addEventListener(
-    "click",
-    checkIp
-  );
-
-  $("subnetButton")?.addEventListener(
-    "click",
-    calculateSubnet
-  );
-
-  $("decimalButton")?.addEventListener(
-    "click",
-    decimalToBinary
-  );
-
-  $("binaryButton")?.addEventListener(
-    "click",
-    binaryToDecimal
-  );
-
-  $("macButton")?.addEventListener(
-    "click",
-    formatMac
-  );
-
-  $("portSearch")?.addEventListener(
-    "input",
-    event => searchPort(event.target.value)
-  );
-
-  $("httpStatusSearch")?.addEventListener(
-    "input",
-    event => searchHttpStatus(event.target.value)
-  );
-
-  $("startCountdownButton")?.addEventListener(
-    "click",
-    startCountdown
-  );
-
-  $("pauseCountdownButton")?.addEventListener(
-    "click",
-    pauseCountdown
-  );
-
-  $("resetCountdownButton")?.addEventListener(
-    "click",
-    resetCountdown
-  );
-
-  $("calendarPrev")?.addEventListener(
-    "click",
-    () => changeCalendarMonth(-1)
-  );
-
-  $("calendarNext")?.addEventListener(
-    "click",
-    () => changeCalendarMonth(1)
-  );
-
-  $("calendarToday")?.addEventListener(
-    "click",
-    resetCalendar
-  );
-
-  $("exportButton")?.addEventListener(
-    "click",
-    exportClassData
-  );
-
-  $("printButton")?.addEventListener(
-    "click",
-    printDashboard
-  );
-}
-
-/* =========================================================
-   INITIAL RENDER
-========================================================= */
-
-function init() {
-  initNavigation();
-  bindEvents();
-
-  renderStudents();
-  renderSchedule();
-  renderDuty();
-  renderApel();
-  renderCommandCenter();
-  renderCalendar();
-  renderReferences();
-  initNotes();
-  renderCountdown();
-
-  updateClock();
-
-  setInterval(updateClock, 1000);
-
-  switchDashboard(1);
-
-  console.log(
-    `%cXI TJKT 2%c Command Center initialized`,
-    "color:#38e8ff;font-weight:800",
-    "color:#a855ff;font-weight:800"
-  );
-}
-
-document.addEventListener("DOMContentLoaded", init);
+  document.addEventListener("DOMContentLoaded", init);
+})();
